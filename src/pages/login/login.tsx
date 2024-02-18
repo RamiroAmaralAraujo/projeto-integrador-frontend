@@ -1,4 +1,44 @@
+import { Input } from "../../components/ui/input";
+import { FiMail } from "react-icons/fi";
+import { FiLock } from "react-icons/fi";
+
+import * as z from 'zod'
+import { useAuth } from "../../Context/AuthContext";
+
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Button } from "../../components/ui/button";
+
+
+const LogInSchema = z.object({
+    email: z
+        .string()
+        .nonempty({ message: 'E-mail é obrigatório' })
+        .email({ message: 'Informe um e-mail válido' }),
+    password: z.string().nonempty('Senha é obrigatório'),
+})
+
+type LogInData = z.infer<typeof LogInSchema>
+
+
 export function Login() {
+    const { signIn } = useAuth()
+
+    const {
+        handleSubmit,
+        register,
+        formState: { errors, isSubmitting },
+    } = useForm<LogInData>({
+        resolver: zodResolver(LogInSchema),
+
+    })
+
+    async function handleLogIn(data: LogInData) {
+        await signIn(data)
+    }
+
+
+
     return (
         <>
             <div className="relative min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8bg-no-repeat bg-cover ">
@@ -15,37 +55,26 @@ export function Login() {
                     </div>
 
 
-                    <form className="mt-8 space-y-6" action="#" method="POST">
+                    <form className="mt-8 space-y-6" action="#" method="POST" onSubmit={handleSubmit(handleLogIn)}>
                         <input type="hidden" name="remember" value="true" />
-                        <div className="w-full">
-                            <div className="relative w-full min-w-[200px] h-10">
-                                <input
-                                    type="email"
-                                    className="peer w-full h-full bg-transparent text-brand-blue-500 outline-none focus:outline-none disabled:bg-brand-blue-500 disabled:border-0 transition-all placeholder-shown:border placeholder-shown:border-brand-blue-500 placeholder-shown:border-t-brand-blue-500 border focus:border-2 border-t-transparent focus:border-t-transparent text-sm px-3 py-2.5 rounded-[7px] border-brand-blue-500 focus:border-brand-blue-500"
-                                    placeholder=" "
-                                />
-                                <label
-                                    className="flex w-full h-full select-none pointer-events-none absolute left-0 font-normal !overflow-visible truncate peer-placeholder-shown:text-brand-blue-500 leading-tight peer-focus:leading-tight peer-disabled:text-transparent peer-disabled:peer-placeholder-shown:text-brand-blue-500 transition-all -top-1.5 peer-placeholder-shown:text-sm text-[11px] peer-focus:text-[11px] before:content[' '] before:block before:box-border before:w-2.5 before:h-1.5 before:mt-[6.5px] before:mr-1 peer-placeholder-shown:before:border-transparent before:rounded-tl-[7px] before:border-t peer-focus:before:border-t-2 before:border-l peer-focus:before:border-l-2 before:pointer-events-none before:transition-all peer-disabled:before:border-transparent after:content[' '] after:block after:flex-grow after:box-border after:w-2.5 after:h-1.5 after:mt-[6.5px] after:ml-1 peer-placeholder-shown:after:border-transparent after:rounded-tr-[7px] after:border-t peer-focus:after:border-t-2 after:border-r peer-focus:after:border-r-2 after:pointer-events-none after:transition-all peer-disabled:after:border-transparent peer-placeholder-shown:leading-[3.75] text-brand-blue-500 peer-focus:text-brand-blue-500 before:border-brand-blue-500 peer-focus:before:!border-brand-blue-500 after:border-brand-blue-500 peer-focus:after:!border-brand-blue-500"
-                                >
-                                    Email
-                                </label>
-                            </div>
-                        </div>
 
-                        <div className="w-full">
-                            <div className="relative w-full min-w-[200px] h-10">
-                                <input
-                                    type="password"
-                                    className="peer w-full h-full bg-transparent text-brand-blue-500 outline-none focus:outline-none disabled:bg-brand-blue-500 disabled:border-0 transition-all placeholder-shown:border placeholder-shown:border-brand-blue-500 placeholder-shown:border-t-brand-blue-500 border focus:border-2 border-t-transparent focus:border-t-transparent text-sm px-3 py-2.5 rounded-[7px] border-brand-blue-500 focus:border-brand-blue-500"
-                                    placeholder=" "
-                                />
-                                <label
-                                    className="flex w-full h-full select-none pointer-events-none absolute left-0 font-normal !overflow-visible truncate peer-placeholder-shown:text-brand-blue-500 leading-tight peer-focus:leading-tight peer-disabled:text-transparent peer-disabled:peer-placeholder-shown:text-brand-blue-500 transition-all -top-1.5 peer-placeholder-shown:text-sm text-[11px] peer-focus:text-[11px] before:content[' '] before:block before:box-border before:w-2.5 before:h-1.5 before:mt-[6.5px] before:mr-1 peer-placeholder-shown:before:border-transparent before:rounded-tl-[7px] before:border-t peer-focus:before:border-t-2 before:border-l peer-focus:before:border-l-2 before:pointer-events-none before:transition-all peer-disabled:before:border-transparent after:content[' '] after:block after:flex-grow after:box-border after:w-2.5 after:h-1.5 after:mt-[6.5px] after:ml-1 peer-placeholder-shown:after:border-transparent after:rounded-tr-[7px] after:border-t peer-focus:after:border-t-2 after:border-r peer-focus:after:border-r-2 after:pointer-events-none after:transition-all peer-disabled:after:border-transparent peer-placeholder-shown:leading-[3.75] text-brand-blue-500 peer-focus:text-brand-blue-500 before:border-brand-blue-500 peer-focus:before:!border-brand-blue-500 after:border-brand-blue-500 peer-focus:after:!border-brand-blue-500"
-                                >
-                                    Senha
-                                </label>
-                            </div>
-                        </div>
+                        <Input
+                            type="email"
+                            label="Email"
+                            icon={<FiMail />}
+                            error={errors?.email}
+                            {...register('email')}
+
+                        />
+                        <Input
+                            type="password"
+                            label="Senha"
+                            icon={<FiLock />}
+                            error={errors?.password}
+                            {...register('password')}
+                        />
+
+
                         <div className="flex items-center justify-between">
                             <div className="flex items-center">
                                 <input id="remember_me" name="remember_me" type="checkbox"
@@ -61,10 +90,7 @@ export function Login() {
                             </div>
                         </div>
                         <div>
-                            <button type="submit"
-                                className="w-full flex justify-center bg-brand-blue-500 text-gray-100 p-2 rounded-[7px] tracking-wide font-semibold focus:outline-none focus:shadow-outline hover:bg-brand-blue-400 shadow-lg cursor-pointer transition ease-in duration-300">
-                                Login
-                            </button>
+                            <Button label="Login" type="submit" isLoading={isSubmitting} />
                         </div>
                         <p className="flex flex-col items-center justify-center mt-10 text-center text-md text-gray-500">
                             <span>Ainda não tem uma conta?</span>
