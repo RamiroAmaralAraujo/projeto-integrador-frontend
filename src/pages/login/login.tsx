@@ -8,6 +8,7 @@ import { useAuth } from "../../Context/AuthContext";
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from "../../components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 
 const LogInSchema = z.object({
@@ -23,6 +24,8 @@ type LogInData = z.infer<typeof LogInSchema>
 
 export function Login() {
     const { signIn } = useAuth()
+
+    const navigate = useNavigate()
 
     const {
         handleSubmit,
@@ -94,7 +97,8 @@ export function Login() {
                         </div>
                         <p className="flex flex-col items-center justify-center mt-10 text-center text-md text-gray-500">
                             <span>Ainda não tem uma conta?</span>
-                            <a href="#"
+                            <a
+                                onClick={() => navigate('/cadastro-usuario')}
                                 className="text-brand-blue-300 hover:text-brand-blue-500 no-underline hover:underline cursor-pointer transition ease-in duration-100">
                                 Cadastre-se
                             </a>

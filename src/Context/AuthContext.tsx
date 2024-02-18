@@ -85,13 +85,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       const token = response.data.access_token
       localStorage.setItem('token', token)
+      toast.success("Você será redirecionado a Pagina de usuário.");
 
       getUserFromToken(token)
 
       navigate('/dashboard')
+
     } catch (error: unknown) {
       if (axios.isAxiosError<Error>(error)) {
-        toast(error.response?.data.message)
+        toast.error(error.response?.data.message)
+
       }
     }
   }
