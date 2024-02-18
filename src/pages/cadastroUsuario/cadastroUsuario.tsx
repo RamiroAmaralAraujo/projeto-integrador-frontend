@@ -2,6 +2,9 @@ import { Input } from "../../components/ui/input";
 import { IoMdArrowBack } from "react-icons/io";
 import { FiMail } from "react-icons/fi";
 import { FiLock } from "react-icons/fi";
+import { FiUser } from "react-icons/fi";
+import { TiBusinessCard } from "react-icons/ti";
+import { IoBusinessOutline } from "react-icons/io5";
 
 import * as z from 'zod'
 
@@ -105,7 +108,7 @@ export function CadastroUsuario() {
             <Input
               type="text"
               label="Usuário*"
-              icon={<FiLock />}
+              icon={<FiUser />}
               error={errors?.usuario}
               {...register('usuario')}
             />
@@ -137,7 +140,7 @@ export function CadastroUsuario() {
             <Input
               type="text"
               label="Nome da Empresa*"
-              icon={<FiLock />}
+              icon={<IoBusinessOutline />}
               error={errors?.empresa}
               {...register('empresa')}
             />
@@ -145,7 +148,7 @@ export function CadastroUsuario() {
             <Input
               type="text"
               label="CNPJ/CPF*"
-              icon={<FiLock />}
+              icon={<TiBusinessCard />}
               error={errors?.cnpj_cpf}
               {...register('cnpj_cpf')}
             />
