@@ -31,7 +31,7 @@ type AuthContextData = {
 }
 
 type Response = {
-  access_token: string
+  accessToken: string
 }
 
 type Error = {
@@ -83,7 +83,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         password,
       })
 
-      const token = response.data.access_token
+      const token = response.data.accessToken
       localStorage.setItem('token', token)
       toast.success("Você será redirecionado a Pagina de usuário.");
 

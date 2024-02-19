@@ -1,5 +1,5 @@
 import { Input } from "../../components/ui/input";
-import { FiMail } from "react-icons/fi";
+import { FiMail, FiUnlock } from "react-icons/fi";
 import { FiLock } from "react-icons/fi";
 
 import * as z from 'zod'
@@ -16,7 +16,9 @@ const LogInSchema = z.object({
         .string()
         .nonempty({ message: 'E-mail é obrigatório' })
         .email({ message: 'Informe um e-mail válido' }),
-    password: z.string().nonempty('Senha é obrigatório'),
+    password: z.string().min(8, 'A senha deve conter no minimo 8 caracteres')
+        .nonempty({ message: 'Senha é obrigatório' })
+
 })
 
 type LogInData = z.infer<typeof LogInSchema>
@@ -64,7 +66,8 @@ export function Login() {
                         <Input
                             type="email"
                             label="Email"
-                            icon={<FiMail />}
+                            icon={<FiMail size={20} />}
+                            iconError={<FiMail size={20} />}
                             error={errors?.email}
                             {...register('email')}
 
@@ -72,7 +75,8 @@ export function Login() {
                         <Input
                             type="password"
                             label="Senha"
-                            icon={<FiLock />}
+                            icon={<FiLock size={20} />}
+                            iconError={<FiUnlock size={20} />}
                             error={errors?.password}
                             {...register('password')}
                         />

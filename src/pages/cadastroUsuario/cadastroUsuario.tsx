@@ -2,6 +2,7 @@ import { Input } from "../../components/ui/input";
 import { IoMdArrowBack } from "react-icons/io";
 import { FiMail } from "react-icons/fi";
 import { FiLock } from "react-icons/fi";
+import { FiUnlock } from "react-icons/fi";
 import { FiUser } from "react-icons/fi";
 import { TiBusinessCard } from "react-icons/ti";
 import { IoBusinessOutline } from "react-icons/io5";
@@ -41,6 +42,7 @@ const CadastroSchema = z
   .refine((data) => data.password === data.passwordConfirm, {
     path: ['passwordConfirm'],
     message: 'As senhas não são iguais',
+
   })
 
 type CadastroData = z.infer<typeof CadastroSchema>
@@ -86,9 +88,14 @@ export function CadastroUsuario() {
   }
 
 
+
+  const error = !!Object.keys(errors).length; // Verifica se há erros
+
+  const spaceClass = error ? 'space-y-4' : 'space-y-6';
+
   return (
     <>
-      <div className="relative min-h-screen h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8bg-no-repeat bg-cover ">
+      <div className="relative min-h-screen h-screen  flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8bg-no-repeat bg-cover ">
         <div className="absolute bg-base-background opacity-
                 0 inset-0 z-0"></div>
         <div className="max-w-md w-full space-y-8 p-10 bg-white rounded-xl z-10">
@@ -102,13 +109,14 @@ export function CadastroUsuario() {
           </div>
 
 
-          <form className="mt-8 space-y-6" action="#" method="POST" onSubmit={handleSubmit(handleCreateAccount)}>
-            <input type="hidden" name="remember" value="true" />
+          <form className={`mt-8 ${spaceClass}`} method="POST" onSubmit={handleSubmit(handleCreateAccount)}>
+
 
             <Input
               type="text"
               label="Usuário*"
-              icon={<FiUser />}
+              icon={<FiUser size={20} />}
+              iconError={<FiUser size={20} />}
               error={errors?.usuario}
               {...register('usuario')}
             />
@@ -116,7 +124,8 @@ export function CadastroUsuario() {
             <Input
               type="email"
               label="Email*"
-              icon={<FiMail />}
+              icon={<FiMail size={20} />}
+              iconError={<FiMail size={20} />}
               error={errors?.email}
               {...register('email')}
 
@@ -124,15 +133,17 @@ export function CadastroUsuario() {
             <Input
               type="password"
               label="Senha*"
-              icon={<FiLock />}
+              icon={<FiLock size={20} />}
               error={errors?.password}
+              iconError={<FiUnlock size={20} />}
               {...register('password')}
             />
 
             <Input
               type="password"
               label="Confirme a Senha*"
-              icon={<FiLock />}
+              icon={<FiLock size={20} />}
+              iconError={<FiUnlock size={20} />}
               error={errors?.passwordConfirm}
               {...register('passwordConfirm')}
             />
@@ -140,7 +151,8 @@ export function CadastroUsuario() {
             <Input
               type="text"
               label="Nome da Empresa*"
-              icon={<IoBusinessOutline />}
+              icon={<IoBusinessOutline size={20} />}
+              iconError={<IoBusinessOutline size={20} />}
               error={errors?.empresa}
               {...register('empresa')}
             />
@@ -148,18 +160,19 @@ export function CadastroUsuario() {
             <Input
               type="text"
               label="CNPJ/CPF*"
-              icon={<TiBusinessCard />}
+              icon={<TiBusinessCard size={20} />}
+              iconError={<TiBusinessCard size={20} />}
               error={errors?.cnpj_cpf}
               {...register('cnpj_cpf')}
             />
 
-            <Button label="Login" type="submit" isLoading={isSignUp} />
+            <Button label="Cadastrar-se" type="submit" isLoading={isSignUp} />
 
             <a onClick={() => navigate('/')}>
               <div className="mt-10 flex justify-center flex-row items-center text-brand-blue-300 hover:text-brand-blue-500 no-underline hover:underline cursor-pointer transition ease-in duration-100">
 
                 <IoMdArrowBack />
-                <span >Retornar a tela de Login.</span>
+                <span>Retornar a tela de Login.</span>
 
               </div>
             </a>
