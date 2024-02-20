@@ -9,9 +9,10 @@ export function App() {
 
   return (
     <>
-      <ToastContainer />
+
       <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />
+        <ToastContainer />
       </QueryClientProvider>
     </>
   )

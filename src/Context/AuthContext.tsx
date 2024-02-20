@@ -14,7 +14,9 @@ import { useNavigate } from 'react-router-dom'
 
 type User = {
   userId: string
+  userNome: string
   empresaNome: string
+  userCNPJCPF: string
 }
 
 type SignInCredentials = {
@@ -47,7 +49,7 @@ export const AuthContext = createContext({} as AuthContextData)
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User>()
-  const [isAuthenticating, setAuthenticating] = useState(true)
+  const [isAuthenticating, setAuthenticating] = useState(false)
 
   const isAuthenticated = !!user
   const navigate = useNavigate()
@@ -59,17 +61,20 @@ export function AuthProvider({ children }: AuthProviderProps) {
       getUserFromToken(storedToken)
     }
 
-    setAuthenticating(false)
+    setAuthenticating(true)
   }, [])
 
   function getUserFromToken(token: string) {
     const decodedToken = jwtDecode<JwtPayload>(token)
     const userData = decodedToken?.sub as User | undefined
+    console.log({ userData, decodedToken })
 
     if (userData) {
       setUser({
-        empresaNome: userData.empresaNome,
         userId: userData.userId,
+        userNome: userData.userNome,
+        empresaNome: userData.empresaNome,
+        userCNPJCPF: userData.userCNPJCPF,
       })
     }
 
@@ -89,6 +94,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       getUserFromToken(token)
 
+
       navigate('/dashboard')
 
     } catch (error: unknown) {
@@ -97,6 +103,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       }
     }
+
+
   }
 
   function signOut() {
@@ -113,6 +121,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
       {children}
     </AuthContext.Provider>
   )
+
+
 }
 
 export const useAuth = () => useContext(AuthContext)
