@@ -1,4 +1,4 @@
-import { ReactNode, useContext, createContext, useState } from "react";
+import { ReactNode, createContext, useState } from "react";
 import { ChevronLeft, ChevronRight, MoreVertical, UserRound } from "lucide-react";
 import LogoSemFundoAzul from "../../../assets/LogoSemFundoAzul.svg"
 
@@ -8,14 +8,9 @@ interface SidebarProps {
   children: ReactNode;
 }
 
-interface SidebarItemProps {
-  icon: ReactNode;
-  text: string;
-  active?: boolean;
-  alert?: boolean;
-}
 
-const SidebarContext = createContext<{ expanded: boolean }>({ expanded: true });
+
+export const SidebarContext = createContext<{ expanded: boolean }>({ expanded: true });
 
 export default function SidebarForm({ children }: SidebarProps) {
 
@@ -49,7 +44,7 @@ export default function SidebarForm({ children }: SidebarProps) {
             </SidebarContext.Provider>
 
             <button>
-              <div className={`border-t flex w-full justify-center p-3 hover:bg-gray-200 ${expanded ? "justify-center items-center" : ""}`}>
+              <div className={`border-t flex w-full justify-center p-3 hover:bg-gray-200 shadow-md ${expanded ? "justify-center items-center" : ""}`}>
                 <div className="w-10 h-10 p-3 rounded-full bg-brand-blue-500 text-white flex items-center justify-center">
                   <UserRound />
                 </div>
@@ -79,27 +74,3 @@ export default function SidebarForm({ children }: SidebarProps) {
   );
 }
 
-export function SidebarItem({ icon, text, active, alert }: SidebarItemProps) {
-  const { expanded } = useContext(SidebarContext);
-
-  return (
-    <li
-      className={`
-        gap-1 mb-2 relative flex items-center py-2 px-3 my-1 font-medium rounded-xl cursor-pointer transition-colors group justify-center 
-        ${active ? "bg-brand-blue-400 text-brand-blue-200 " : " bg-brand-blue-200 text-brand-blue-400"}
-      `}
-    >
-      {icon}
-      <span className={`overflow-hidden transition-all flex justify-between ${expanded ? "w-60 ml-3 " : "w-0"}`}>{text}</span>
-      {alert && (
-        <div className={`absolute right-2 w-2 h-2 rounded-full bg-brand-blue-200 ${expanded ? "" : "top-2"}`} />
-      )}
-
-      {!expanded && (
-        <div className={`absolute left-full rounded-xl px-2 py-1 ml-6 bg-brand-blue-100 text-brand-blue-500 text-sm invisible opacity-20 -translate-x-3 transition-all group-hover:visible group-hover:opacity-100 group-hover:translate-x-0`}>
-          {text}
-        </div>
-      )}
-    </li>
-  );
-}

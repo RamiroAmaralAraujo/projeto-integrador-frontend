@@ -1,9 +1,9 @@
 import { TituloPag } from "../../components/TituloPagina/TituloPag";
 
-export function Dashboard() {
+export function Recebiveis() {
   return (
     <div className="">
-      <TituloPag titulo="Dashboard" />
+      <TituloPag titulo="Recebiveis" />
     </div>
   );
 }

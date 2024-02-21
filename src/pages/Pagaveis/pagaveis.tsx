@@ -1,9 +1,9 @@
 import { TituloPag } from "../../components/TituloPagina/TituloPag";
 
-export function Dashboard() {
+export function Pagaveis() {
   return (
     <div className="">
-      <TituloPag titulo="Dashboard" />
+      <TituloPag titulo="Pagaveis" />
     </div>
   );
 }

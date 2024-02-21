@@ -6,7 +6,10 @@ import { AuthenticatedLayout } from './layout/AuthenticatedLayout'
 import { Dashboard } from './pages/Dashboard/dashboard'
 import { Login } from './pages/login/login'
 import { CadastroUsuario } from './pages/cadastroUsuario/cadastroUsuario'
-import { Sidebar } from './components/Sidebar'
+import { Produtos } from './pages/Produtos/Produtos'
+import { Pedidos } from './pages/Pedidos/pedidos'
+import { Pagaveis } from './pages/Pagaveis/pagaveis'
+import { Recebiveis } from './pages/Recebiveis/Recebiveis'
 
 
 export const router = createBrowserRouter([
@@ -41,7 +44,23 @@ export const router = createBrowserRouter([
     children: [
       {
         path: '/dashboard',
-        element: <Sidebar />
+        element: <Dashboard />
+      },
+      {
+        path: '/produtos',
+        element: <Produtos />
+      },
+      {
+        path: '/pedidos',
+        element: <Pedidos />
+      },
+      {
+        path: '/pagaveis',
+        element: <Pagaveis />
+      },
+      {
+        path: '/recebiveis',
+        element: <Recebiveis />
       },
     ],
   },
