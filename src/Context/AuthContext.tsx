@@ -17,6 +17,7 @@ type User = {
   userNome: string
   empresaNome: string
   userCNPJCPF: string
+  userEmail: string
 }
 
 type SignInCredentials = {
@@ -51,6 +52,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User>()
   const [isAuthenticating, setAuthenticating] = useState(false)
 
+
   const isAuthenticated = !!user
   const navigate = useNavigate()
 
@@ -75,6 +77,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         userNome: userData.userNome,
         empresaNome: userData.empresaNome,
         userCNPJCPF: userData.userCNPJCPF,
+        userEmail: userData.userEmail
       })
     }
 

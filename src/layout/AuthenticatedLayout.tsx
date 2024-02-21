@@ -8,7 +8,7 @@ export function AuthenticatedLayout() {
 
   const location = useLocation()
 
-  if (isAuthenticating) {
+  if (!isAuthenticating) {
     return <LoadingFullscreen />
   }
 

@@ -6,6 +6,8 @@ import { AuthenticatedLayout } from './layout/AuthenticatedLayout'
 import { Dashboard } from './pages/Dashboard/dashboard'
 import { Login } from './pages/login/login'
 import { CadastroUsuario } from './pages/cadastroUsuario/cadastroUsuario'
+import { Sidebar } from './components/Sidebar'
+
 
 export const router = createBrowserRouter([
   {
@@ -32,13 +34,14 @@ export const router = createBrowserRouter([
   {
     element: (
       <AuthProvider>
-        <AuthenticatedLayout />
+        <AuthenticatedLayout>
+        </AuthenticatedLayout>
       </AuthProvider>
     ),
     children: [
       {
         path: '/dashboard',
-        element: <Dashboard />
+        element: <Sidebar />
       },
     ],
   },
