@@ -3,11 +3,10 @@ import { AxiosError } from 'axios'
 import { api } from '../../service/api'
 
 type User = {
-  usuario: string
+  userName: string
   email: string
+  cpf: string
   password: string
-  empresa: string
-  cnpj_cpf: string
 }
 
 async function signUp(data: User) {

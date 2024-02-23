@@ -13,11 +13,10 @@ import { api } from '../service/api'
 import { useNavigate } from 'react-router-dom'
 
 type User = {
-  userId: string
-  userNome: string
-  empresaNome: string
-  userCNPJCPF: string
-  userEmail: string
+  id: string
+  userName: string
+  cpf: string
+  email: string
 }
 
 type SignInCredentials = {
@@ -73,11 +72,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     if (userData) {
       setUser({
-        userId: userData.userId,
-        userNome: userData.userNome,
-        empresaNome: userData.empresaNome,
-        userCNPJCPF: userData.userCNPJCPF,
-        userEmail: userData.userEmail
+        id: userData.id,
+        userName: userData.userName,
+        cpf: userData.cpf,
+        email: userData.email
       })
     }
 
@@ -97,7 +95,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       getUserFromToken(token)
 
-
       navigate('/dashboard')
 
     } catch (error: unknown) {
@@ -106,8 +103,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       }
     }
-
-
   }
 
   function signOut() {
@@ -124,8 +119,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
       {children}
     </AuthContext.Provider>
   )
-
-
 }
 
 export const useAuth = () => useContext(AuthContext)

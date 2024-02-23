@@ -5,7 +5,6 @@ import { FiLock } from "react-icons/fi";
 import { FiUnlock } from "react-icons/fi";
 import { FiUser } from "react-icons/fi";
 import { TiBusinessCard } from "react-icons/ti";
-import { IoBusinessOutline } from "react-icons/io5";
 
 import * as z from 'zod'
 
@@ -20,7 +19,7 @@ import axios from "axios";
 
 const CadastroSchema = z
   .object({
-    usuario: z.string().nonempty({ message: 'Nome é obrigatório' }),
+    usuario: z.string().nonempty({ message: 'Nome de usuário é obrigatório' }),
     email: z
       .string()
       .nonempty({ message: 'E-mail é obrigatório' })
@@ -32,12 +31,9 @@ const CadastroSchema = z
     passwordConfirm: z
       .string()
       .nonempty({ message: 'Confirmar a senha é obrigatório' }),
-    empresa: z
+    cpf: z
       .string()
-      .nonempty({ message: 'Nome da empresa é obrigatório' }),
-    cnpj_cpf: z
-      .string()
-      .nonempty({ message: 'CNPJ ou CPF é obrigatório' }),
+      .nonempty({ message: 'informar o CPF é obrigatório' }),
   })
   .refine((data) => data.password === data.passwordConfirm, {
     path: ['passwordConfirm'],
@@ -66,11 +62,11 @@ export function CadastroUsuario() {
     try {
       const newData = {
 
-        usuario: data.usuario,
+        userName: data.usuario,
         email: data.email,
-        password: data.password,
-        empresa: data.empresa,
-        cnpj_cpf: data.cnpj_cpf
+        cpf: data.cpf,
+        password: data.password
+
 
       }
 
@@ -150,20 +146,11 @@ export function CadastroUsuario() {
 
             <Input
               type="text"
-              label="Nome da Empresa*"
-              icon={<IoBusinessOutline size={20} />}
-              iconError={<IoBusinessOutline size={20} />}
-              error={errors?.empresa}
-              {...register('empresa')}
-            />
-
-            <Input
-              type="text"
-              label="CNPJ/CPF*"
+              label="CPF*"
               icon={<TiBusinessCard size={20} />}
               iconError={<TiBusinessCard size={20} />}
-              error={errors?.cnpj_cpf}
-              {...register('cnpj_cpf')}
+              error={errors?.cpf}
+              {...register('cpf')}
             />
 
             <Button label="Cadastrar-se" type="submit" isLoading={isSignUp} />
