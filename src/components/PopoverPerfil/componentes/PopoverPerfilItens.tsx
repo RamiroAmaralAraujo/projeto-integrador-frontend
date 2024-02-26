@@ -1,14 +1,15 @@
-import { ReactNode, useContext } from "react";
+import { ReactNode, useContext, MouseEventHandler } from "react";
 import { SidebarContext } from "../../Sidebar/Componentes/SidebarForm";
 
 
 interface PopoverItensProps {
   icon: ReactNode
   text: string;
+  action?: MouseEventHandler<HTMLLIElement>;
 }
 
 
-export function PopoverPerfilItens({ icon, text }: PopoverItensProps) {
+export function PopoverPerfilItens({ icon, text, action }: PopoverItensProps) {
 
   const { expanded } = useContext(SidebarContext);
 
@@ -16,7 +17,7 @@ export function PopoverPerfilItens({ icon, text }: PopoverItensProps) {
     <>
       <li
         className={`gap-1 mb-2 relative flex items-center py-2 px-3 my-1 font-medium rounded-xl cursor-pointer transition-colors group justify-center hover:bg-brand-blue-300 shadow-md`}
-
+        onClick={action}
       >
         {icon}
         <span className={`overflow-hidden transition-all flex justify-between ${expanded ? "w-60 ml-3 " : "w-0"}`}>{text}</span>

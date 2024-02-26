@@ -15,6 +15,7 @@ import { useSignUp } from "../../hook/queries/useSingUp";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { useState } from "react";
 
 
 const CadastroSchema = z
@@ -47,6 +48,7 @@ type CadastroData = z.infer<typeof CadastroSchema>
 export function CadastroUsuario() {
 
   const { mutateAsync: signUp, isLoading: isSignUp } = useSignUp()
+  const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
 
   const {
     handleSubmit,
@@ -88,6 +90,7 @@ export function CadastroUsuario() {
   const error = !!Object.keys(errors).length; // Verifica se há erros
 
   const spaceClass = error ? 'space-y-4' : 'space-y-6';
+  console.log(isCheckboxChecked)
 
   return (
     <>
@@ -153,7 +156,19 @@ export function CadastroUsuario() {
               {...register('cpf')}
             />
 
-            <Button label="Cadastrar-se" type="submit" isLoading={isSignUp} />
+            <div className="flex items-start gap-2">
+              <input type="checkbox"
+                onChange={(e) => setIsCheckboxChecked(e.target.checked)}
+
+                className="accent-brand-blue-500 h-4 w-4 mt-1 hover:accent-brand-blue-300 border-gray-300 rounded" />
+              <label className="font-medium text-brand-blue-200">
+                Concordo com os <span className=" text-brand-blue-300 hover:text-brand-blue-500 cursor-pointer hover:underline ease-in">Termos de Uso</span>  e com a <span className=" text-brand-blue-300 hover:text-brand-blue-500 cursor-pointer hover:underline ease-in">Politica de privacidade da empresa</span>.
+              </label>
+            </div>
+
+
+
+            <Button label="Cadastrar-se" type="submit" isLoading={isSignUp} disabled={!isCheckboxChecked} />
 
             <a onClick={() => navigate('/')}>
               <div className="mt-10 flex justify-center flex-row items-center text-brand-blue-300 hover:text-brand-blue-500 no-underline hover:underline cursor-pointer transition ease-in duration-100">
@@ -168,5 +183,7 @@ export function CadastroUsuario() {
       </div>
 
     </>
+
   )
+
 }
