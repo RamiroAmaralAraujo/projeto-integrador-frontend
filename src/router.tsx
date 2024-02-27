@@ -10,6 +10,7 @@ import { Produtos } from './pages/Produtos/Produtos'
 import { Pedidos } from './pages/Pedidos/pedidos'
 import { Pagaveis } from './pages/Pagaveis/pagaveis'
 import { Recebiveis } from './pages/Recebiveis/Recebiveis'
+import { NotFound } from './pages/NotFound/NotFound'
 
 
 export const router = createBrowserRouter([
@@ -22,7 +23,7 @@ export const router = createBrowserRouter([
     children: [
       {
         path: '*',
-        element: <h1>Page Not Found</h1>,
+        element: <NotFound />,
       },
       {
         path: '/',
