@@ -27,7 +27,7 @@ export function SidebarItem({ icon, text, alert, url }: SidebarItemProps) {
   return (
     <li
       className={`
-        gap-1 mb-2 relative flex items-center py-2 px-3 my-1 font-medium rounded-xl cursor-pointer transition-colors group justify-center hover:bg-brand-blue-300 shadow-md
+         mb-2 relative flex items-center py-2 px-3 my-1 font-medium rounded-xl cursor-pointer transition-colors group justify-center hover:bg-brand-blue-300 shadow-md
         ${activeLink ? "bg-brand-blue-400 text-brand-blue-200 " : " bg-brand-blue-200 text-brand-blue-400"} 
       `}
       onClick={handleNavigateTo}

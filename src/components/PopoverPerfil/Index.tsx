@@ -16,9 +16,9 @@ export function PopoverPerfil() {
   return (
     <>
       <PopoverPerfilForm >
-        <PopoverPerfilItens text="Empresas" icon={<Store />} />
-        <PopoverPerfilItens text="Configurações" icon={<UserRoundCog />} />
-        <PopoverPerfilItens text="Logout" icon={<LogOut />} action={handleLogout} />
+        <PopoverPerfilItens text="Empresas" icon={<Store />} url="/empresas" />
+        <PopoverPerfilItens text="Configurações" icon={<UserRoundCog />} url="/configuracoes" />
+        <PopoverPerfilItens text="Logout" icon={<LogOut />} action={handleLogout} url="" />
       </PopoverPerfilForm>
     </>
   )

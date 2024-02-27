@@ -11,6 +11,8 @@ import { Pedidos } from './pages/Pedidos/pedidos'
 import { Pagaveis } from './pages/Pagaveis/pagaveis'
 import { Recebiveis } from './pages/Recebiveis/Recebiveis'
 import { NotFound } from './pages/NotFound/NotFound'
+import { Empresas } from './pages/Empresas/Empresas'
+import { Configuracoes } from './pages/Configuracoes/Configuracoes'
 
 
 export const router = createBrowserRouter([
@@ -62,6 +64,14 @@ export const router = createBrowserRouter([
       {
         path: '/recebiveis',
         element: <Recebiveis />
+      },
+      {
+        path: '/empresas',
+        element: <Empresas />
+      },
+      {
+        path: '/configuracoes',
+        element: <Configuracoes />
       },
     ],
   },
