@@ -27,7 +27,7 @@ export function PopoverPerfilItens({ icon, text, action, url }: PopoverItensProp
   return (
     <>
       <li
-        className={`gap-1 mb-2 relative flex items-center py-2 px-3 my-1 font-medium rounded-xl cursor-pointer transition-colors group justify-center hover:bg-gray-300 shadow-md ${activeLink ? "bg-brand-blue-400 text-brand-blue-200 " : " bg-gray-200 text-brand-blue-400"}`}
+        className={`gap-1 mb-2 relative flex items-center py-2 px-3 my-1 font-medium rounded-xl cursor-pointer transition-colors group justify-center hover:bg-gray-300 shadow-md ${activeLink ? "bg-gray-500 text-brand-blue-100 " : " bg-gray-200 text-brand-blue-400"}`}
         onClick={action || handleNavigateTo}
       >
         {icon}
