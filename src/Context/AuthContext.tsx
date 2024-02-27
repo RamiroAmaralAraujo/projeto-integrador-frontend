@@ -13,10 +13,10 @@ import { api } from '../service/api'
 import { useNavigate } from 'react-router-dom'
 
 type User = {
-  id: string
+  sub: string
   userName: string
-  cpf: string
-  email: string
+  userCPF: string
+  userEmail: string
 }
 
 type SignInCredentials = {
@@ -67,16 +67,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   function getUserFromToken(token: string) {
     const decodedToken = jwtDecode<JwtPayload>(token)
-    const userData = decodedToken?.sub as User | undefined
+    const userData = decodedToken as User | undefined
     console.log({ userData, decodedToken })
 
     if (userData) {
       setUser({
-        id: userData.id,
+        sub: userData.sub,
         userName: userData.userName,
-        cpf: userData.cpf,
-        email: userData.email
+        userCPF: userData.userCPF,
+        userEmail: userData.userEmail
       })
+
+      console.log({ user })
     }
 
     api.defaults.headers.common.Authorization = `Bearer ${token}`

@@ -2,8 +2,12 @@ import { UserRound } from "lucide-react";
 
 import { useContext, useState } from "react";
 import { SidebarContext } from "../../Sidebar/Componentes/SidebarForm";
+import { AuthContext } from "../../../Context/AuthContext";
 
 export function PopoverPerfilForm({ children }: { children: React.ReactNode }) {
+
+  const { user } = useContext(AuthContext)
+
 
   const { expanded } = useContext(SidebarContext);
 
@@ -27,8 +31,8 @@ export function PopoverPerfilForm({ children }: { children: React.ReactNode }) {
             </div>
             <div className={`flex justify-between items-center overflow-hidden transition-all ${expanded ? "w-52 ml-3" : "w-0 "}`}>
               <div className="leading-4">
-                <h4 className="font-semibold">Ramiro Araujo</h4>
-                <span className="text-xs text-gray-600">ramiro.zello@hotmail.com</span>
+                <h4 className="font-semibold">{user?.userName}</h4>
+                <span className="text-xs text-gray-600">{user?.userEmail}</span>
               </div>
             </div>
           </div>
