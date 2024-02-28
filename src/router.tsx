@@ -11,7 +11,7 @@ import { Pedidos } from './pages/Pedidos/pedidos'
 import { Pagaveis } from './pages/Pagaveis/pagaveis'
 import { Recebiveis } from './pages/Recebiveis/Recebiveis'
 import { NotFound } from './pages/NotFound/NotFound'
-import { Empresas } from './pages/Empresas/Empresas'
+import { Empresas } from './pages/Empresas/Index'
 import { Configuracoes } from './pages/Configuracoes/Configuracoes'
 
 
