@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
-import { FileQuestion } from 'lucide-react';
 import { Input } from "@/components/ui/input"
+
+import NotResult from "../../assets/NotResult.svg"
+
 import {
   ColumnDef,
   flexRender,
@@ -57,7 +59,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className="flex items-center py-4">
+      <div className="flex items-center py-4 ">
         <Input
           label='Filtro de Empresas'
           value={(table.getColumn("empresaNome")?.getFilterValue() as string) ?? ""}
@@ -66,7 +68,7 @@ export function DataTable<TData, TValue>({
           }
         />
       </div>
-      <div className="overflow-x-auto shadow-md rounded-2xl mt-8 mr-14 max-h-[350px] overflow-y-auto  ">
+      <div className="overflow-x-auto shadow-md rounded-2xl mr-14 max-h-[350px] overflow-y-auto  ">
         <table className="w-full text-sm text-left text-base-text ">
           <thead className="text-base-subtitle uppercase bg-gray-100 ">
             {table.getHeaderGroups().map((headerGroup) => {
@@ -141,8 +143,8 @@ export function DataTable<TData, TValue>({
         </table>
         {!isLoading && table.getRowModel().rows?.length === 0 && (
           <div className="w-full p-8 text-center bg-white ">
-            <FileQuestion width={100} height={100} className="m-auto mb-2" />
-            <span>Nenhum resultado</span>
+            <img src={NotResult} width={185} className='m-auto mb-2' />
+            <span className='font-semibold text-brand-blue-500'>Huum... não foi possível encontrar o que procura.</span>
           </div>
         )}
       </div>

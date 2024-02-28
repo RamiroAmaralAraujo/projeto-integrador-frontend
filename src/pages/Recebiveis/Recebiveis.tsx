@@ -1,9 +1,11 @@
-import { TituloPag } from "../../components/TituloPagina/TituloPag";
+import { Page } from '@/components/Page'
 
 export function Recebiveis() {
   return (
-    <div className="">
-      <TituloPag titulo="Recebiveis" />
-    </div>
+    <Page.Root>
+      <Page.Header>
+        <Page.Title title="Recebiveis" />
+      </Page.Header>
+    </Page.Root>
   );
 }
