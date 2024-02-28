@@ -12,6 +12,8 @@ import { Input } from '@/components/ui/input'
 
 import { z } from 'zod'
 import { useEmpresas } from '@/hook/queries/useEmpresas'
+import { useContext } from 'react'
+import { AuthContext } from '@/Context/AuthContext'
 
 
 
@@ -23,6 +25,8 @@ const CreateEmpresasSchema = z.object({
   cidade: z.string().optional(),
   uf: z.string().optional(),
   cep: z.string().optional(),
+  usuarioID: z.string().optional(),
+
 })
 
 export type CreateEmpresasData = z.infer<typeof CreateEmpresasSchema>
@@ -31,6 +35,10 @@ export type UpdateEmpresasData = CreateEmpresasData & {
 }
 
 export function Form() {
+
+  const { user } = useContext(AuthContext)
+  console.log({ user })
+
   const {
     handleSubmit,
     register,
@@ -58,7 +66,13 @@ export function Form() {
       return
     }
 
-    await createEmpresas(newEmpresas)
+    const empresasDataWithUserId = {
+      ...newEmpresas,
+      usuarioID: user?.sub
+    };
+
+
+    await createEmpresas(empresasDataWithUserId)
     handleCloseDialog()
   }
 

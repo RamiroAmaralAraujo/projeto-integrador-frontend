@@ -4,6 +4,7 @@ import { api } from '../../service/api'
 import { AuthContext } from '@/Context/AuthContext'
 import { useContext } from 'react'
 import { CreateEmpresasData } from '@/pages/Empresas/Components/Form'
+import { toast } from 'react-toastify'
 
 export interface EmpresasData {
   id: string
@@ -45,6 +46,7 @@ export function useCreate() {
   return useMutation<any, AxiosError, CreateEmpresasData>(create, {
     onSuccess(_: CreateEmpresasData) {
       queryCliente.invalidateQueries({ queryKey: ['EMPRESAS'] })
+      toast.success('Empresa Cadastrada com sucesso!')
     },
     onError() {},
   })
