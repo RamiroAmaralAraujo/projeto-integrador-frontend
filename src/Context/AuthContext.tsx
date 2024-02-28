@@ -68,7 +68,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
   function getUserFromToken(token: string) {
     const decodedToken = jwtDecode<JwtPayload>(token)
     const userData = decodedToken as User | undefined
-    console.log({ userData, decodedToken })
 
     if (userData) {
       setUser({
@@ -77,8 +76,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
         userCPF: userData.userCPF,
         userEmail: userData.userEmail
       })
-
-      console.log({ user })
     }
 
     api.defaults.headers.common.Authorization = `Bearer ${token}`

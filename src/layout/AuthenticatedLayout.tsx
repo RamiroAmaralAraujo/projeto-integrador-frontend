@@ -7,7 +7,6 @@ import { SidebarItem } from '../components/Sidebar/Componentes/SidebarItem';
 
 export function AuthenticatedLayout() {
   const { isAuthenticated, isAuthenticating } = useAuth()
-  console.log({ isAuthenticating, isAuthenticated })
 
   const location = useLocation()
 

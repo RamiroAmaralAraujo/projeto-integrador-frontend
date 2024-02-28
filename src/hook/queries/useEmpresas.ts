@@ -14,25 +14,25 @@ export interface EmpresasData {
   uf: String
   cep: String
   usuarioID: String
-
 }
 
-
-async function read() {
-  const response = await api.get('empresas', {params: {usuarioID: "3407be36-ee0d-4db9-8239-84c2ff66fb2d"}})
+async function read(usuarioID: string) {
+  const response = await api.get('empresas',{params: {usuarioID}})
+  
   return response.data
 }
 
-
 export function useRead() {
+  const { user } = useContext(AuthContext)
+ 
+
   return useQuery<EmpresasData[]>({
     queryKey: ['EMPRESAS'],
-    queryFn: read,
+    queryFn: () => read(user?.sub || ''),
     onSuccess() {},
     onError() {},
   })
 }
-
 
 export function useEmpresas() {
   return {
