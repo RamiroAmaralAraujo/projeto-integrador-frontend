@@ -12,9 +12,8 @@ import { Input } from '@/components/ui/input'
 
 import { z } from 'zod'
 import { useEmpresas } from '@/hook/queries/useEmpresas'
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import { AuthContext } from '@/Context/AuthContext'
-import { Empresas } from '../Index'
 
 
 
@@ -41,6 +40,7 @@ export function Form() {
   const {
     handleSubmit,
     register,
+    reset,
     formState: { errors },
   } = useForm<CreateEmpresasData>({
     resolver: zodResolver(CreateEmpresasSchema),
@@ -76,13 +76,19 @@ export function Form() {
   const isLoadingCreateOrUpdateEmpresas =
     isLoadingCreateEmpresas || isLoadingUpdateCategory
 
+  useEffect(() => {
+    if (!isOpen) {
+      reset();
+    }
+  }, [isOpen, reset]);
+
   return (
     <Dialog.Root open={isOpen} onOpenChange={handleCloseDialog}>
       <Dialog.Content>
         <FormRoot onSubmit={handleSubmit(submitEmpresas)}>
 
           <Input
-            // defaultValue={data?.empresaNome}
+            defaultValue={data?.empresaNome}
             icon={<ListChecksIcon size={20} />}
             label='Empresa Nome*'
             {...register('empresaNome')}
@@ -90,8 +96,10 @@ export function Form() {
           />
 
           <Input
+            defaultValue={data ? data.cnpj_cpf?.toString() ?? '' : ''}
             icon={<ListChecksIcon size={20} />}
             label='CNPJ/CPF*'
+            maskType='cnpj'
             {...register('cnpj_cpf')}
             error={errors.cnpj_cpf}
           />
@@ -99,15 +107,17 @@ export function Form() {
           <div className='grid-cols-2 flex gap-2'>
             <div className='w-full'>
               <Input
+                defaultValue={data ? data.endereco?.toString() ?? '' : ''}
                 icon={<ListChecksIcon size={20} />}
-                label='endereco'
+                label='Endereço'
                 {...register('endereco')}
                 error={errors.endereco}
               />
             </div>
             <Input
+              defaultValue={data ? data.bairro?.toString() ?? '' : ''}
               icon={<ListChecksIcon size={20} />}
-              label='bairro'
+              label='Bairro'
               {...register('bairro')}
               error={errors.bairro}
             />
@@ -115,23 +125,28 @@ export function Form() {
           <div className='grid-cols-2 flex gap-2'>
             <div className='w-full'>
               <Input
+                defaultValue={data ? data.cidade?.toString() ?? '' : ''}
                 icon={<ListChecksIcon size={20} />}
-                label='cidade'
+                label='Cidade'
                 {...register('cidade')}
                 error={errors.cidade}
               />
             </div>
 
             <Input
+              defaultValue={data ? data.uf?.toString() ?? '' : ''}
               icon={<ListChecksIcon size={20} />}
-              label='uf'
+              label='UF'
+              maxLength={2}
               {...register('uf')}
               error={errors.uf}
             />
 
             <Input
+              defaultValue={data ? data.cep?.toString() ?? '' : ''}
               icon={<ListChecksIcon size={20} />}
-              label='cep'
+              label='CEP'
+              maskType='cep'
               {...register('cep')}
               error={errors.cep}
             />

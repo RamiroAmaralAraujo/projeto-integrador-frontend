@@ -113,7 +113,7 @@ export function CadastroUsuario() {
 
             <Input
               type="text"
-              label="Usuário*"
+              label="Nome de Usuário*"
               icon={<FiUser size={20} />}
               iconError={<FiUser size={20} />}
               error={errors?.usuario}
@@ -149,6 +149,7 @@ export function CadastroUsuario() {
 
             <Input
               type="text"
+              maskType="cpf"
               label="CPF*"
               icon={<TiBusinessCard size={20} />}
               iconError={<TiBusinessCard size={20} />}

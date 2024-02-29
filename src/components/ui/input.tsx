@@ -1,26 +1,45 @@
-import { InputHTMLAttributes, ReactElement, forwardRef } from 'react';
+import { InputHTMLAttributes, ReactElement, forwardRef, useEffect, useState } from 'react';
 import { FieldError } from 'react-hook-form';
+import InputMask from 'react-input-mask'
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-  icon?: ReactElement;
-  iconError?: ReactElement;
-  error?: FieldError;
-  label?: string;
+  icon?: ReactElement
+  iconError?: ReactElement
+  error?: FieldError
+  label?: string
+  maxLength?: number
+  maskType?: 'cpf' | 'cnpj' | 'cep'
 }
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, icon, iconError, error, label, ...props }, ref) => {
+  ({ className, type, icon, iconError, error, label, maskType, maxLength, ...props }, ref) => {
+
+    const [mask, setMask] = useState<string>('')
+
+    useEffect(() => {
+      if (maskType === 'cpf') {
+        setMask('999.999.999-99');
+      } else if (maskType === 'cnpj') {
+        setMask('99.999.999/9999-99');
+      } else if (maskType === 'cep') {
+        setMask('99999-999')
+      }
+    }, [maskType]);
+
 
     return (
       <div>
 
         <div className="w-full flex justify-center items-center ">
           <div className="relative w-full min-w-[200px] h-10 flex justify-center items-center">
-            <input
+            <InputMask
+              maxLength={maxLength}
               type={type}
+              mask={mask}
+              maskPlaceholder={null}
               className={`peer w-full h-full bg-transparent text-brand-blue-500 outline-none focus:outline-none disabled:bg-brand-blue-500 disabled:border-0 transition-all placeholder-shown:border placeholder-shown:border-brand-blue-500 placeholder-shown:border-t-brand-blue-500 border focus:border-2 border-t-transparent focus:border-t-transparent text-sm px-3 py-2.5 rounded-[7px] border-brand-blue-500 focus:border-brand-blue-500 `}
               placeholder=" "
-              ref={ref}
+              inputRef={ref}
               {...props}
             />
 
