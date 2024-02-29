@@ -14,10 +14,12 @@ import { z } from 'zod'
 import { useEmpresas } from '@/hook/queries/useEmpresas'
 import { useContext } from 'react'
 import { AuthContext } from '@/Context/AuthContext'
+import { Empresas } from '../Index'
 
 
 
 const CreateEmpresasSchema = z.object({
+  id: z.string().optional(),
   empresaNome: z.string().nonempty({ message: 'Nome da Empresa é obrigatório' }),
   cnpj_cpf: z.string().nonempty({ message: 'CNPJ ou CPF é obrigatório' }),
   endereco: z.string().optional(),
@@ -30,14 +32,11 @@ const CreateEmpresasSchema = z.object({
 })
 
 export type CreateEmpresasData = z.infer<typeof CreateEmpresasSchema>
-export type UpdateEmpresasData = CreateEmpresasData & {
-  id: string
-}
+export type UpdateEmpresasData = CreateEmpresasData
 
 export function Form() {
 
   const { user } = useContext(AuthContext)
-  console.log({ user })
 
   const {
     handleSubmit,
@@ -54,30 +53,28 @@ export function Form() {
       isOpen: state.isOpen,
     }
   })
-  const { useCreate } = useEmpresas()
+  const { useCreate, useUpdate } = useEmpresas()
   const { mutateAsync: createEmpresas, isLoading: isLoadingCreateEmpresas } = useCreate()
+  const { mutateAsync: updateEmpresas, isLoading: isLoadingUpdateCategory } = useUpdate()
+
 
   async function submitEmpresas(newEmpresas: CreateEmpresasData) {
     const empresasId = data?.id
+    const usuarioID = user?.sub
 
     if (empresasId) {
-
+      await updateEmpresas({ id: empresasId, ...newEmpresas })
       handleCloseDialog()
       return
     }
 
-    const empresasDataWithUserId = {
-      ...newEmpresas,
-      usuarioID: user?.sub
-    };
 
-
-    await createEmpresas(empresasDataWithUserId)
+    await createEmpresas({ usuarioID: usuarioID, ...newEmpresas })
     handleCloseDialog()
   }
 
   const isLoadingCreateOrUpdateEmpresas =
-    isLoadingCreateEmpresas
+    isLoadingCreateEmpresas || isLoadingUpdateCategory
 
   return (
     <Dialog.Root open={isOpen} onOpenChange={handleCloseDialog}>
@@ -85,7 +82,7 @@ export function Form() {
         <FormRoot onSubmit={handleSubmit(submitEmpresas)}>
 
           <Input
-            defaultValue={data?.empresaNome}
+            // defaultValue={data?.empresaNome}
             icon={<ListChecksIcon size={20} />}
             label='Empresa Nome*'
             {...register('empresaNome')}
@@ -93,7 +90,6 @@ export function Form() {
           />
 
           <Input
-            defaultValue={data?.empresaNome}
             icon={<ListChecksIcon size={20} />}
             label='CNPJ/CPF*'
             {...register('cnpj_cpf')}
@@ -103,7 +99,6 @@ export function Form() {
           <div className='grid-cols-2 flex gap-2'>
             <div className='w-full'>
               <Input
-                defaultValue={data?.empresaNome}
                 icon={<ListChecksIcon size={20} />}
                 label='endereco'
                 {...register('endereco')}
@@ -111,7 +106,6 @@ export function Form() {
               />
             </div>
             <Input
-              defaultValue={data?.empresaNome}
               icon={<ListChecksIcon size={20} />}
               label='bairro'
               {...register('bairro')}
@@ -121,7 +115,6 @@ export function Form() {
           <div className='grid-cols-2 flex gap-2'>
             <div className='w-full'>
               <Input
-                defaultValue={data?.empresaNome}
                 icon={<ListChecksIcon size={20} />}
                 label='cidade'
                 {...register('cidade')}
@@ -130,7 +123,6 @@ export function Form() {
             </div>
 
             <Input
-              defaultValue={data?.empresaNome}
               icon={<ListChecksIcon size={20} />}
               label='uf'
               {...register('uf')}
@@ -138,7 +130,6 @@ export function Form() {
             />
 
             <Input
-              defaultValue={data?.empresaNome}
               icon={<ListChecksIcon size={20} />}
               label='cep'
               {...register('cep')}

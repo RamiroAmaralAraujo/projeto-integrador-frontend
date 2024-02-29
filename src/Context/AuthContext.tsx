@@ -50,6 +50,7 @@ export const AuthContext = createContext({} as AuthContextData)
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User>()
   const [isAuthenticating, setAuthenticating] = useState(false)
+  console.log({ user })
 
 
   const isAuthenticated = !!user

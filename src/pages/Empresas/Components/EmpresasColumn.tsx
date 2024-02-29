@@ -1,11 +1,19 @@
+import { ActionsTable } from "@/components/ActionsTableCell"
+import AlertDelete from "@/components/AlertDelete"
 import { DataTable } from "@/components/DataTable"
-import { EmpresasData, useEmpresas } from "@/hook/queries/useEmpresas"
+import { EmpresasData, useEmpresas, useRemove } from "@/hook/queries/useEmpresas"
+import { useDeleteAlertStore } from "@/store/DeleteAlertStore"
+import { useEmpresasStore } from "@/store/Empresas/Index"
 import { ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown } from "lucide-react"
 
+
 export function TableEmpresas() {
   const { useRead } = useEmpresas()
+  const { mutateAsync: removeCategory } = useRemove()
   const { data: empresas, isLoading, isFetching } = useRead()
+  const handleChange = useEmpresasStore((state) => state.actions.handleChange)
+  const openDeleteAlert = useDeleteAlertStore((state) => state.actions.onOpenAlert,)
 
 
 
@@ -49,6 +57,23 @@ export function TableEmpresas() {
       accessorKey: "cep",
       header: "CEP",
     },
+    {
+      header: 'Ações',
+      accessorKey: 'id',
+      size: 120,
+      cell: ({ getValue }) => {
+        const empresaId = getValue() as string
+        const empresa = empresas?.find(
+          (empresa) => empresa.id === empresaId,
+        )
+        return (
+          <ActionsTable.Root
+            onEdit={() => handleChange(empresa || null)}
+            onDelete={() => openDeleteAlert(empresa?.id)}
+          />
+        )
+      },
+    },
   ]
 
   return (
@@ -59,6 +84,7 @@ export function TableEmpresas() {
         data={empresas || []}
         isLoading={isLoading || isFetching}
       />
+      <AlertDelete onDelete={removeCategory} />
     </>
   )
 }

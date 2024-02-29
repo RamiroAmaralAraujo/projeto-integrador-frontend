@@ -6,9 +6,7 @@ import { Form } from "./Components/Form";
 
 export function Empresas() {
 
-  const handleOpenDialog = useEmpresasStore(
-    (state) => state.actions.handleOpenDialog,
-  )
+  const handleOpenDialog = useEmpresasStore((state) => state.actions.handleOpenDialog)
 
   return (
     <>
@@ -31,7 +29,7 @@ export function Empresas() {
         <Page.Actions>
           <div className="flex justify-center items-center -mt-16">
             <Page.Action
-              label="Adiconar Empresa"
+              label="Adicionar Empresa"
               icon={<PlusCircle size={30} />}
               onClick={handleOpenDialog}
             />
