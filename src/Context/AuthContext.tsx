@@ -11,6 +11,7 @@ import { JwtPayload, jwtDecode } from 'jwt-decode'
 import axios from 'axios'
 import { api } from '../service/api'
 import { useNavigate } from 'react-router-dom'
+import { EmpresasData } from '@/hook/queries/useEmpresas'
 
 type User = {
   sub: string
@@ -30,6 +31,8 @@ type AuthContextData = {
   user?: User
   isAuthenticated: boolean
   isAuthenticating: boolean
+  empresaSelecionada?: EmpresasData
+  setEmpresaSelecionada?: (empresa: EmpresasData) => void
 }
 
 type Response = {
@@ -48,6 +51,7 @@ interface AuthProviderProps {
 export const AuthContext = createContext({} as AuthContextData)
 
 export function AuthProvider({ children }: AuthProviderProps) {
+  const [empresaSelecionada, setEmpresaSelecionada] = useState<EmpresasData>()
   const [user, setUser] = useState<User>()
   const [isAuthenticating, setAuthenticating] = useState(false)
   console.log({ user })
@@ -107,14 +111,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   function signOut() {
     localStorage.removeItem('token')
+    setEmpresaSelecionada(undefined)
     setUser(undefined)
     api.defaults.headers.common.Authorization = undefined
     navigate('/')
   }
 
+
+
+
   return (
     <AuthContext.Provider
-      value={{ signIn, signOut, user, isAuthenticated, isAuthenticating }}
+      value={{ signIn, signOut, user, isAuthenticated, isAuthenticating, empresaSelecionada, setEmpresaSelecionada }}
     >
       {children}
     </AuthContext.Provider>

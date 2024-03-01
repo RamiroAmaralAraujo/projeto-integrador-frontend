@@ -40,6 +40,12 @@ async function update(data: UpdateEmpresasData) {
   return response.data
 }
 
+async function readempresa(data: EmpresasData) {
+  const id = data.id
+  const response = await api.get(`empresas/${id}`)
+  return response.data
+}
+
 
 
 
@@ -94,10 +100,23 @@ export function useUpdate() {
   })
 }
 
+
+export function useSelectEmpresa() {
+  const queryCliente = useQueryClient()
+  return useMutation<any, AxiosError, EmpresasData>(readempresa, {
+    onSuccess(_: EmpresasData) {
+      queryCliente.invalidateQueries({ queryKey: ['EMPRESA'] })
+      toast.success('Empresa selecionada com sucesso!')
+    },
+    onError() {console.log("erro")},
+  })
+}
+
 export function useEmpresas() {
   return {
     useRead,
     useCreate,
     useUpdate,
+    useSelectEmpresa
   }
 }
