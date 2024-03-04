@@ -28,7 +28,7 @@ export function TableEmpresas() {
       header: ({ column }) => {
         return (
           <button
-            className="flex p-2 justify-center items-center hover:bg-gray-400 rounded-xl"
+            className="flex p-2 justify-center items-center hover:bg-gray-400 rounded-xl w-full text-center"
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             EMPRESA NOME

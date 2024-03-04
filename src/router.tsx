@@ -8,11 +8,10 @@ import { Login } from './pages/login/login'
 import { CadastroUsuario } from './pages/cadastroUsuario/cadastroUsuario'
 import { Produtos } from './pages/Produtos/Produtos'
 import { Pedidos } from './pages/Pedidos/pedidos'
-import { Pagaveis } from './pages/Pagaveis/index'
-import { Recebiveis } from './pages/Recebiveis/Recebiveis'
 import { NotFound } from './pages/NotFound/NotFound'
 import { Empresas } from './pages/Empresas/Index'
 import { Configuracoes } from './pages/Configuracoes/Configuracoes'
+import { Finaceiro } from './pages/Pagaveis'
 
 
 export const router = createBrowserRouter([
@@ -58,12 +57,8 @@ export const router = createBrowserRouter([
         element: <Pedidos />
       },
       {
-        path: '/pagaveis',
-        element: <Pagaveis />
-      },
-      {
-        path: '/recebiveis',
-        element: <Recebiveis />
+        path: '/financeiro',
+        element: <Finaceiro />
       },
       {
         path: '/empresas',

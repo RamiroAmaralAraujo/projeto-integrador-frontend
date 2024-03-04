@@ -34,17 +34,20 @@ export default function AlertSelectEmpresa(props: AlertSelectEmpresaDProps) {
   } = useSelectEmpresaStore()
 
   function handleSubmit() {
-    try {
-      if (empresas && setEmpresaSelecionada) {
-        setEmpresaSelecionada(empresas)
+    if (empresas && setEmpresaSelecionada) {
+
+      try {
+        localStorage.setItem('EmpresaStorage', empresas.id)
         onSelectEmpresa(empresas)
+        setEmpresaSelecionada(empresas)
       }
-    }
-    catch {
-      console.log("erro")
-    }
-    finally {
-      handleCloseDialog()
+      catch {
+        console.log("erro")
+      }
+      finally {
+
+        handleCloseDialog()
+      }
     }
   }
   console.log({ empresaSelecionada })

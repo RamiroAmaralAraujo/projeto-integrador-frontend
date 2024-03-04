@@ -5,7 +5,7 @@ import { FormDuplicatas } from "./Components/Form";
 import { TablePagaveis } from './Components/PagaveisColumn';
 import { useDuplicatasStore } from '@/store/Duplicatas/Index';
 
-export function Pagaveis() {
+export function Finaceiro() {
 
   const handleOpenDialog = useDuplicatasStore((state) => state.actions.handleOpenDialog)
 
@@ -13,7 +13,7 @@ export function Pagaveis() {
     <>
       <Page.Root>
         <Page.Header>
-          <Page.Title title="Pagaveis/Recebiveis" />
+          <Page.Title title="Financeiro - Pagaveis e Recebiveis" />
         </Page.Header>
 
         <FormDuplicatas />

@@ -1,8 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { AxiosError } from 'axios'
 import { api } from '../../service/api'
-import { AuthContext } from '@/Context/AuthContext'
-import { useContext } from 'react'
 
 import { toast } from 'react-toastify'
 import { CreateDuplicatasData, UpdateDuplicatasData } from '@/pages/Pagaveis/Components/Form'
@@ -60,13 +58,12 @@ async function update(data: UpdateDuplicatasData) {
 
 
 export function useRead() {
-  const { empresaSelecionada } = useContext(AuthContext)
+  const storedEmpresa = localStorage.getItem('EmpresaStorage')
   
- 
 
   return useQuery<DuplicatasData[]>({
     queryKey: ['DUPLICATAS'],
-    queryFn: () => read(empresaSelecionada?.id || ''),
+    queryFn: () => read(storedEmpresa || ''),
     onSuccess() {},
     onError() {},
   })

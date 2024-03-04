@@ -61,9 +61,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   useEffect(() => {
     const storedToken = localStorage.getItem('token')
+    const storedEmpresa = localStorage.getItem('EmpresaStorage')
 
     if (storedToken) {
       getUserFromToken(storedToken)
+    }
+
+    if (storedEmpresa) {
+      getEmpresaFromStorage(storedEmpresa)
     }
 
     setAuthenticating(true)
@@ -116,6 +121,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
     navigate('/')
   }
 
+
+  async function getEmpresaFromStorage(storedEmpresa: string) {
+    const id = storedEmpresa
+    const response = await api.get(`empresas/${id}`)
+    const empresaSelecionada = response.data
+    setEmpresaSelecionada(empresaSelecionada)
+    console.log({ empresaSelecionada })
+  }
 
 
 
