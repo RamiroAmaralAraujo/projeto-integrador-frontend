@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { ListChecksIcon } from 'lucide-react'
+import { ListChecksIcon, ClipboardPlus } from 'lucide-react'
 
 
 
@@ -90,7 +90,7 @@ export function FormDuplicatas() {
 
   return (
     <Dialog.Root open={isOpen} onOpenChange={handleCloseDialog}>
-      <Dialog.Content>
+      <Dialog.Content title='Cadastro Duplicatas' icon={<ClipboardPlus />}>
         <FormRoot onSubmit={handleSubmit(submitDuplicatas)}>
 
           <Input

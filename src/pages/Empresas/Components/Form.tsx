@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { ListChecksIcon } from 'lucide-react'
+import { ListChecksIcon, Store } from 'lucide-react'
 
 import { useEmpresasStore } from '@/store/Empresas/Index'
 
@@ -84,7 +84,7 @@ export function Form() {
 
   return (
     <Dialog.Root open={isOpen} onOpenChange={handleCloseDialog}>
-      <Dialog.Content>
+      <Dialog.Content title='Cadastro Empresa' icon={<Store />}>
         <FormRoot onSubmit={handleSubmit(submitEmpresas)}>
 
           <Input
@@ -158,6 +158,6 @@ export function Form() {
           <Dialog.Actions isLoading={isLoadingCreateOrUpdateEmpresas} />
         </FormRoot>
       </Dialog.Content>
-    </Dialog.Root>
+    </Dialog.Root >
   )
 }

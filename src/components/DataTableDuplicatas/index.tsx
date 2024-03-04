@@ -68,7 +68,7 @@ export function DataTableDuplicatas<TData, TValue>({
           }
         />
       </div>
-      <div className="overflow-x-auto shadow-md rounded-2xl mr-14 max-h-[600px] overflow-y-auto  ">
+      <div className="overflow-x-auto shadow-md rounded-2xl mr-14 max-h-[500px] overflow-y-auto  ">
         <table className="w-full text-sm text-left text-base-text  ">
           <thead className="text-base-subtitle uppercase bg-gray-100 text-center">
             {table.getHeaderGroups().map((headerGroup) => {
