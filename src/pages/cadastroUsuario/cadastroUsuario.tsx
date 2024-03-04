@@ -73,7 +73,6 @@ export function CadastroUsuario() {
       }
 
       await signUp(newData);
-      console.log(newData)
 
       navigate('/dashboard');
       toast.success("Cadastro realizado com sucesso!");

@@ -3,10 +3,10 @@ import { Transition } from '@headlessui/react'
 import { AlertTriangle } from 'lucide-react'
 import { UseMutateAsyncFunction } from 'react-query'
 import { AxiosError } from 'axios'
-import { useDeleteAlertStore } from '@/store/DeleteAlertStore'
+import { useDeleteAlertDuplicatasStore } from '@/store/DeleteAlertDuplicatasStore'
 
 
-interface AlertDeleteDuplicatasProps {
+interface AlertDeleteDuplicataProps {
   onDelete: UseMutateAsyncFunction<
     any,
     AxiosError<unknown, any>,
@@ -15,7 +15,7 @@ interface AlertDeleteDuplicatasProps {
   >
 }
 
-export default function AlertDeleteDuplicata(props: AlertDeleteDuplicatasProps) {
+export default function AlertDeleteDuplicata(props: AlertDeleteDuplicataProps) {
   const { onDelete } = props
 
 
@@ -26,7 +26,7 @@ export default function AlertDeleteDuplicata(props: AlertDeleteDuplicatasProps) 
     id,
     isOpen,
     actions: { onCloseAlert, setLoading },
-  } = useDeleteAlertStore()
+  } = useDeleteAlertDuplicatasStore()
 
 
   function handleSubmit() {
@@ -73,7 +73,7 @@ export default function AlertDeleteDuplicata(props: AlertDeleteDuplicatasProps) 
                     <AlertTriangle className="h-6 w-6 text-red-600" aria-hidden="true" />
                   </div>
                   <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                    <h3 className="text-lg leading-6 font-medium text-gray-900">EXCLUIR EMPRESA</h3>
+                    <h3 className="text-lg leading-6 font-medium text-gray-900">EXCLUIR DUPLICATA</h3>
                     <div className="mt-2">
                       <p className="text-sm text-gray-500">
                         A exlcusão apaga todos os registros da empresa no Banco de Dados, assim todas as informações referentes a essa empresa serão deletadas.

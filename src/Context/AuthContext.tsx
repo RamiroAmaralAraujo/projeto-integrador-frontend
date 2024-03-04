@@ -54,7 +54,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [empresaSelecionada, setEmpresaSelecionada] = useState<EmpresasData>()
   const [user, setUser] = useState<User>()
   const [isAuthenticating, setAuthenticating] = useState(false)
-  console.log({ user })
 
 
   const isAuthenticated = !!user

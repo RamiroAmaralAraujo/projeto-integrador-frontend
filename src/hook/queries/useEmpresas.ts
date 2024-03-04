@@ -27,6 +27,7 @@ async function read(usuarioID: string) {
   const response = await api.get('empresas',{params: {usuarioID}})
   
   return response.data
+
 }
 
 async function remove(id: string) {
