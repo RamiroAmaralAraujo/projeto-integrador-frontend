@@ -18,9 +18,10 @@ import { useDuplicatasStore } from '@/store/Duplicatas/Index'
 
 
 
+
 const CreateDuplicatasSchema = z.object({
   id: z.string().optional(),
-  tipoPag: z.boolean(),
+  tipoPag: z.string(),
   pessoaRef: z.string().nonempty('Não é possivel cria uma duplicata sem informar a pessoa referente.'),
   vencimento: z.string(),
   data_Pag_Receb: z.string(),
@@ -32,7 +33,7 @@ const CreateDuplicatasSchema = z.object({
   responsavel: z.string(),
   comp_url: z.string(),
   ass_url: z.string(),
-  empresaId: z.string(),
+  empresaId: z.string().optional(),
 })
 
 export type CreateDuplicatasData = z.infer<typeof CreateDuplicatasSchema>
@@ -75,7 +76,7 @@ export function FormDuplicatas() {
     }
 
 
-    await createDuplicatas({ id: empresaId, ...newDuplicatas })
+    await createDuplicatas({ empresaId: empresaId, ...newDuplicatas })
     handleCloseDialog()
   }
 
@@ -94,50 +95,48 @@ export function FormDuplicatas() {
         <FormRoot onSubmit={handleSubmit(submitDuplicatas)}>
 
           <Input
-
             icon={<ListChecksIcon size={20} />}
             label='Pessoa*'
             {...register('pessoaRef')}
             error={errors.pessoaRef}
           />
-
           <Input
-            type='number'
             accept='number'
             icon={<ListChecksIcon size={20} />}
             label='Valor Liquido*'
-            {...register('valorLiq')}
+            {...register("valorLiq", {
+              valueAsNumber: true,
+            })}
             error={errors.valorLiq}
           />
-
-
           <Input
-
+            accept='number'
             icon={<ListChecksIcon size={20} />}
-            type='number'
             label='Desconto*'
-            {...register('desconto')}
+            {...register("desconto", {
+              valueAsNumber: true,
+            })}
             error={errors.desconto}
           />
           <Input
-
+            accept='number'
             icon={<ListChecksIcon size={20} />}
-            type='number'
             label='Ascrescimo*'
-            {...register('acresc')}
+            {...register("acresc", {
+              valueAsNumber: true,
+            })}
             error={errors.acresc}
           />
           <Input
-
+            accept='number'
             icon={<ListChecksIcon size={20} />}
-            type='number'
             label='Valor Final*'
-            {...register('valorFinal')}
+            {...register("valorFinal", {
+              valueAsNumber: true,
+            })}
             error={errors.valorFinal}
           />
-
           <Input
-
             icon={<ListChecksIcon size={20} />}
             type='text'
             label='Descrição*'
@@ -145,37 +144,32 @@ export function FormDuplicatas() {
             error={errors.descricao}
           />
           <Input
-
             icon={<ListChecksIcon size={20} />}
-            type='datetime-local'
+            type='date'
             label='Vencimento*'
             {...register('vencimento')}
             error={errors.vencimento}
           />
           <Input
-
+            icon={<ListChecksIcon size={20} />}
+            type='date'
+            label='Data Pagamento/Recebimento'
+            {...register('data_Pag_Receb')}
+            error={errors.data_Pag_Receb}
+          />
+          <Input
             icon={<ListChecksIcon size={20} />}
             label='Foto Comprovante*'
             {...register('comp_url')}
             error={errors.comp_url}
           />
           <Input
-
             icon={<ListChecksIcon size={20} />}
             label='Assinatura*'
             {...register('ass_url')}
             error={errors.ass_url}
           />
           <Input
-
-            icon={<ListChecksIcon size={20} />}
-            type='datetime-local'
-            label='Data Pagamento/Recebimento'
-            {...register('data_Pag_Receb')}
-            error={errors.data_Pag_Receb}
-          />
-          <Input
-
             icon={<ListChecksIcon size={20} />}
             label='Nome do Responsável'
             {...register('responsavel')}
@@ -185,12 +179,9 @@ export function FormDuplicatas() {
             type='boolean'
             icon={<ListChecksIcon size={20} />}
             label='Checkbox Pagamento'
-            {...register('tipoPag')}
+            {...register('tipoPag', { setValueAs: value => value === 'true' })}
             error={errors.tipoPag}
           />
-
-
-
 
           <Dialog.Actions isLoading={isLoadingCreateOrUpdateDuplicatas} />
         </FormRoot>
