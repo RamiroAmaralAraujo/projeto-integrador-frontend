@@ -115,6 +115,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   function signOut() {
     localStorage.removeItem('token')
+    localStorage.removeItem('EmpresaStorage')
     setEmpresaSelecionada(undefined)
     setUser(undefined)
     api.defaults.headers.common.Authorization = undefined

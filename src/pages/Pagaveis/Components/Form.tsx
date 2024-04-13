@@ -11,11 +11,12 @@ import { Input } from '@/components/ui/input'
 
 
 import { z } from 'zod'
-import { useContext, useEffect } from 'react'
+import { SetStateAction, useContext, useEffect, useState } from 'react'
 import { AuthContext } from '@/Context/AuthContext'
 import { useDuplicatas } from '@/hook/queries/useDuplicatas'
 import { useDuplicatasStore } from '@/store/Duplicatas/Index'
 import { ToggleTipoDuplicata } from '@/components/ToggleTipoPagamento/ToggleTipoPagamento'
+import { UploadImage } from '@/components/UploadImage/UploadImage'
 
 
 
@@ -45,16 +46,19 @@ export type UpdateDuplicatasData = CreateDuplicatasData
 
 export function FormDuplicatas() {
 
+  const [valorLiquido, setValorLiquido] = useState('');
+  const [desconto, setDesconto] = useState('');
+  const [acrescimo, setAcrescimo] = useState('');
+  const [valorFinalAuto, setValorFinalAuto] = useState('');
 
   const { empresaSelecionada } = useContext(AuthContext)
-
   const {
     handleSubmit,
     register,
     reset,
     formState: { errors },
   } = useForm<CreateDuplicatasData>({
-    resolver: zodResolver(CreateDuplicatasSchema),
+    // resolver: zodResolver(CreateDuplicatasSchema),
   })
 
   const { data, handleCloseDialog, isOpen } = useDuplicatasStore((state) => {
@@ -67,6 +71,30 @@ export function FormDuplicatas() {
   const { useCreate, useUpdate } = useDuplicatas()
   const { mutateAsync: createDuplicatas, isLoading: isLoadingCreateDuplicatas } = useCreate()
   const { mutateAsync: updateDuplicatas, isLoading: isLoadingUpdateDuplicatas } = useUpdate()
+
+  const handleChangeValorLiquido = (e: { target: { value: SetStateAction<string> } }) => {
+    setValorLiquido(e.target.value);
+    calcularValorFinal();
+  };
+
+  const handleChangeDesconto = (e: { target: { value: SetStateAction<string> } }) => {
+    setDesconto(e.target.value);
+    calcularValorFinal();
+  };
+
+  const handleChangeAcrescimo = (e: { target: { value: SetStateAction<string> } }) => {
+    setAcrescimo(e.target.value);
+    calcularValorFinal();
+  };
+
+  const calcularValorFinal = () => {
+    const liquido = parseFloat(valorLiquido) || 0;
+    const desc = parseFloat(desconto) || 0;
+    const acre = parseFloat(acrescimo) || 0;
+    const valorFinal = (liquido - desc + acre);
+    setValorFinalAuto(valorFinal.toString());
+  };
+
 
 
 
@@ -102,9 +130,11 @@ export function FormDuplicatas() {
 
       await updateDuplicatas({ id: duplicatasId, ...newDuplicatas });
       handleCloseDialog();
+      setValorFinalAuto('')
     } else {
 
       await createDuplicatas({ empresaId: empresaId, ...newDuplicatas });
+      setValorFinalAuto('')
       handleCloseDialog();
     }
   }
@@ -118,6 +148,15 @@ export function FormDuplicatas() {
       reset();
     }
   }, [isOpen, reset]);
+
+  useEffect(() => {
+    console.log('Valor Liquido:', valorLiquido);
+    console.log('Desconto:', desconto);
+    console.log('Acrescimo:', acrescimo);
+    console.log('valorFinal:', valorFinalAuto)
+    calcularValorFinal();
+  }, [valorLiquido, desconto, acrescimo, valorFinalAuto]);
+
 
   return (
     <Dialog.Root open={isOpen} onOpenChange={handleCloseDialog}>
@@ -147,25 +186,29 @@ export function FormDuplicatas() {
           <div className='grid-cols-2 flex  gap-2'>
             <div className='w-full'>
               <Input
-                defaultValue={data ? data.valorLiq?.toString() ?? '' : ''}
+                type='number'
+                defaultValue={data ? data.valorLiq?.toString() ?? '' : 0}
                 accept='number'
                 icon={<ListChecksIcon size={20} />}
                 label='Valor Liquido*'
                 {...register("valorLiq", {
                   valueAsNumber: true,
                 })}
+                onChange={handleChangeValorLiquido}
                 error={errors.valorLiq}
               />
             </div>
             <div className='w-full'>
               <Input
+                type='number'
                 accept='number'
-                defaultValue={data ? data.desconto?.toString() ?? '' : ''}
+                defaultValue={data ? data.desconto?.toString() ?? '' : 0}
                 icon={<ListChecksIcon size={20} />}
                 label='Desconto*'
                 {...register("desconto", {
                   valueAsNumber: true,
                 })}
+                onChange={handleChangeDesconto}
                 error={errors.desconto}
               />
             </div>
@@ -174,20 +217,24 @@ export function FormDuplicatas() {
           <div className='grid-cols-2 flex  gap-2'>
             <div className='w-full'>
               <Input
+
+                type='number'
                 accept='number'
-                defaultValue={data ? data.acresc?.toString() ?? '' : ''}
+                defaultValue={data ? data.acresc?.toString() ?? '' : 0}
                 icon={<ListChecksIcon size={20} />}
-                label='Ascrescimo*'
+                label='Acrescimo*'
                 {...register("acresc", {
                   valueAsNumber: true,
                 })}
+                onChange={handleChangeAcrescimo}
                 error={errors.acresc}
               />
             </div>
             <div className='w-full'>
               <Input
+                readOnly={true}
                 accept='number'
-                defaultValue={data ? data.valorFinal?.toString() ?? '' : ''}
+                value={data ? data.valorFinal?.toString() : valorFinalAuto}
                 icon={<ListChecksIcon size={20} />}
                 label='Valor Final*'
                 {...register("valorFinal", {
@@ -233,6 +280,7 @@ export function FormDuplicatas() {
             {...register('comp_url')}
             error={errors.comp_url}
           />
+          <UploadImage />
           <Input
             icon={<ListChecksIcon size={20} />}
             defaultValue={data ? data.ass_url?.toString() ?? '' : ''}
