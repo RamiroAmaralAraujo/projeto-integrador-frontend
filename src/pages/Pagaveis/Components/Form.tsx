@@ -234,7 +234,7 @@ export function FormDuplicatas() {
               <Input
                 type='number'
                 accept='number'
-                defaultValue={data ? data.desconto?.toString() ?? '' : 0}
+                defaultValue={data ? data.descontoPorcento?.toString() ?? '' : 0}
                 icon={<ListChecksIcon size={20} />}
                 label='Desconto %*'
                 {...register("descontoPorcento", {
