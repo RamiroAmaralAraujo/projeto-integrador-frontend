@@ -1,6 +1,7 @@
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { ListChecksIcon, Store } from 'lucide-react'
+import { Store, Building, MapPinned, MapPin, Building2, Home, Flag} from 'lucide-react'
+import { TiBusinessCard } from "react-icons/ti";
 
 import { useEmpresasStore } from '@/store/Empresas/Index'
 
@@ -89,7 +90,7 @@ export function Form() {
 
           <Input
             defaultValue={data?.empresaNome}
-            icon={<ListChecksIcon size={20} />}
+            icon={<Building size={20} />}
             label='Empresa Nome*'
             {...register('empresaNome')}
             error={errors.empresaNome}
@@ -97,7 +98,7 @@ export function Form() {
 
           <Input
             defaultValue={data ? data.cnpj_cpf?.toString() ?? '' : ''}
-            icon={<ListChecksIcon size={20} />}
+            icon={<TiBusinessCard size={20} />}
             label='CNPJ/CPF*'
             maskType='cnpj'
             {...register('cnpj_cpf')}
@@ -108,7 +109,7 @@ export function Form() {
             <div className='w-full'>
               <Input
                 defaultValue={data ? data.endereco?.toString() ?? '' : ''}
-                icon={<ListChecksIcon size={20} />}
+                icon={<MapPinned size={20} />}
                 label='Endereço'
                 {...register('endereco')}
                 error={errors.endereco}
@@ -116,7 +117,7 @@ export function Form() {
             </div>
             <Input
               defaultValue={data ? data.bairro?.toString() ?? '' : ''}
-              icon={<ListChecksIcon size={20} />}
+              icon={<Home size={20} />}
               label='Bairro'
               {...register('bairro')}
               error={errors.bairro}
@@ -126,7 +127,7 @@ export function Form() {
             <div className='w-full'>
               <Input
                 defaultValue={data ? data.cidade?.toString() ?? '' : ''}
-                icon={<ListChecksIcon size={20} />}
+                icon={<Building2 size={20} />}
                 label='Cidade'
                 {...register('cidade')}
                 error={errors.cidade}
@@ -135,7 +136,7 @@ export function Form() {
 
             <Input
               defaultValue={data ? data.uf?.toString() ?? '' : ''}
-              icon={<ListChecksIcon size={20} />}
+              icon={<Flag size={20} />}
               label='UF'
               maxLength={2}
               {...register('uf')}
@@ -144,7 +145,7 @@ export function Form() {
 
             <Input
               defaultValue={data ? data.cep?.toString() ?? '' : ''}
-              icon={<ListChecksIcon size={20} />}
+              icon={<MapPin size={20} />}
               label='CEP'
               maskType='cep'
               {...register('cep')}
