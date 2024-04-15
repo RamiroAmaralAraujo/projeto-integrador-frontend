@@ -14,7 +14,9 @@ export interface DuplicatasData {
   descricao:       string
   valorLiq:        Number
   desconto:        Number
+  descontoPorcento:Number
   acresc:          Number
+  acrescPorcento:  Number
   valorFinal:      Number
   responsavel:     string
   comp_url:        string

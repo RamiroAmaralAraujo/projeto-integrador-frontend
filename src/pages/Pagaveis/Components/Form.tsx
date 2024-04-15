@@ -30,7 +30,9 @@ const CreateDuplicatasSchema = z.object({
   descricao: z.string(),
   valorLiq: z.number(),
   desconto: z.number(),
+  descontoPorcento: z.number(),
   acresc: z.number(),
+  acrescPorcento: z.number(),
   valorFinal: z.number(),
   responsavel: z.string(),
   comp_url: z.string(),
@@ -46,10 +48,12 @@ export type UpdateDuplicatasData = CreateDuplicatasData
 
 export function FormDuplicatas() {
 
-  const [valorLiquido, setValorLiquido] = useState('');
-  const [desconto, setDesconto] = useState('');
-  const [acrescimo, setAcrescimo] = useState('');
-  const [valorFinalAuto, setValorFinalAuto] = useState('');
+  const [valorLiquido, setValorLiquido] = useState('0');
+  const [desconto, setDesconto] = useState('0');
+  const [acrescimo, setAcrescimo] = useState('0');
+  const [valorFinalAuto, setValorFinalAuto] = useState('0');
+  const [descontoPorcento, setDescontoPorcento] = useState('0')
+  const [acrescimoPorcento, setAcrescimoPorcento] = useState('0')
 
   const { empresaSelecionada } = useContext(AuthContext)
   const {
@@ -82,8 +86,18 @@ export function FormDuplicatas() {
     calcularValorFinal();
   };
 
+  const handleChangeDescontoPorcento = (e: { target: { value: SetStateAction<string> } }) => {
+    setDescontoPorcento(e.target.value);
+    calcularValorFinal();
+  };
+
   const handleChangeAcrescimo = (e: { target: { value: SetStateAction<string> } }) => {
     setAcrescimo(e.target.value);
+    calcularValorFinal();
+  };
+
+  const handleChangeAcrescimoPorcento = (e: { target: { value: SetStateAction<string> } }) => {
+    setAcrescimoPorcento(e.target.value);
     calcularValorFinal();
   };
 
@@ -91,7 +105,9 @@ export function FormDuplicatas() {
     const liquido = parseFloat(valorLiquido) || 0;
     const desc = parseFloat(desconto) || 0;
     const acre = parseFloat(acrescimo) || 0;
-    const valorFinal = (liquido - desc + acre);
+    const descPorcento = parseFloat(descontoPorcento) || 0
+    const acrePorcento = parseFloat(acrescimoPorcento) || 0
+    const valorFinal = (liquido - desc + acre - ((descPorcento / 100) * liquido) + ((acrePorcento / 100) * liquido));
     setValorFinalAuto(valorFinal.toString());
   };
 
@@ -152,10 +168,12 @@ export function FormDuplicatas() {
   useEffect(() => {
     console.log('Valor Liquido:', valorLiquido);
     console.log('Desconto:', desconto);
+    console.log('Desconto Porcento:', descontoPorcento);
     console.log('Acrescimo:', acrescimo);
+    console.log('Acrescimo Porcento:', acrescimoPorcento);
     console.log('valorFinal:', valorFinalAuto)
     calcularValorFinal();
-  }, [valorLiquido, desconto, acrescimo, valorFinalAuto]);
+  }, [valorLiquido, desconto, acrescimo, valorFinalAuto, descontoPorcento, acrescimoPorcento]);
 
 
   return (
@@ -168,7 +186,7 @@ export function FormDuplicatas() {
               <Input
                 defaultValue={data ? data.pessoaRef?.toString() ?? '' : ''}
                 icon={<ListChecksIcon size={20} />}
-                label='Pessoa*'
+                label='Pessoa / Empresa*'
                 {...register('pessoaRef')}
                 error={errors.pessoaRef}
               />
@@ -204,7 +222,7 @@ export function FormDuplicatas() {
                 accept='number'
                 defaultValue={data ? data.desconto?.toString() ?? '' : 0}
                 icon={<ListChecksIcon size={20} />}
-                label='Desconto*'
+                label='Desconto R$*'
                 {...register("desconto", {
                   valueAsNumber: true,
                 })}
@@ -212,24 +230,23 @@ export function FormDuplicatas() {
                 error={errors.desconto}
               />
             </div>
+            <div className='w-full'>
+              <Input
+                type='number'
+                accept='number'
+                defaultValue={data ? data.desconto?.toString() ?? '' : 0}
+                icon={<ListChecksIcon size={20} />}
+                label='Desconto %*'
+                {...register("descontoPorcento", {
+                  valueAsNumber: true,
+                })}
+                onChange={handleChangeDescontoPorcento}
+                error={errors.descontoPorcento}
+              />
+            </div>
 
           </div>
           <div className='grid-cols-2 flex  gap-2'>
-            <div className='w-full'>
-              <Input
-
-                type='number'
-                accept='number'
-                defaultValue={data ? data.acresc?.toString() ?? '' : 0}
-                icon={<ListChecksIcon size={20} />}
-                label='Acrescimo*'
-                {...register("acresc", {
-                  valueAsNumber: true,
-                })}
-                onChange={handleChangeAcrescimo}
-                error={errors.acresc}
-              />
-            </div>
             <div className='w-full'>
               <Input
                 readOnly={true}
@@ -243,6 +260,38 @@ export function FormDuplicatas() {
                 error={errors.valorFinal}
               />
             </div>
+            <div className='w-full'>
+              <Input
+
+                type='number'
+                accept='number'
+                defaultValue={data ? data.acresc?.toString() ?? '' : 0}
+                icon={<ListChecksIcon size={20} />}
+                label='Acrescimo R$*'
+                {...register("acrescPorcento", {
+                  valueAsNumber: true,
+                })}
+                onChange={handleChangeAcrescimo}
+                error={errors.acresc}
+              />
+            </div>
+
+            <div className='w-full'>
+              <Input
+
+                type='number'
+                accept='number'
+                defaultValue={data ? data.acresc?.toString() ?? '' : 0}
+                icon={<ListChecksIcon size={20} />}
+                label='Acrescimo %*'
+                {...register("acresc", {
+                  valueAsNumber: true,
+                })}
+                onChange={handleChangeAcrescimoPorcento}
+                error={errors.acrescPorcento}
+              />
+            </div>
+
           </div>
           <Input
             icon={<ListChecksIcon size={20} />}

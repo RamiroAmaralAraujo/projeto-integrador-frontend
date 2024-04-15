@@ -4,6 +4,7 @@ import { Page } from '@/components/Page'
 import { FormDuplicatas } from "./Components/Form";
 import { TablePagaveis } from './Components/PagaveisColumn';
 import { useDuplicatasStore } from '@/store/Duplicatas/Index';
+import { SelectEmpresaButton } from '@/components/SelectEmpresaButton/SelectEmpresaButton';
 
 export function Finaceiro() {
 
@@ -13,7 +14,8 @@ export function Finaceiro() {
     <>
       <Page.Root>
         <Page.Header>
-          <Page.Title title="Financeiro - Pagaveis e Recebiveis" />
+          <Page.Title title="Financeiro" />
+          <SelectEmpresaButton />
         </Page.Header>
 
         <FormDuplicatas />

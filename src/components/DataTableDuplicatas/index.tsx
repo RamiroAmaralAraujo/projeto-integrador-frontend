@@ -61,7 +61,7 @@ export function DataTableDuplicatas<TData, TValue>({
     <div>
       <div className="flex items-center py-4 ">
         <Input
-          label='Filtro de Pessoas'
+          label='Filtro de Pessoas/Empresas'
           value={(table.getColumn("pessoaRef")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("pessoaRef")?.setFilterValue(event.target.value)

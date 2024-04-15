@@ -28,7 +28,7 @@ export function TablePagaveis() {
             className="flex p-2 justify-center items-center hover:bg-gray-400 rounded-xl w-full "
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
-            PESSOA
+            PESSOA/EMPRESA
             <ArrowUpDown className="ml-2 h-4 w-4  " />
           </button>
         )
@@ -43,14 +43,13 @@ export function TablePagaveis() {
       header: "Vencimento",
     },
     {
-      accessorKey: "valorFinal",
-      header: "Valor Total",
-    },
-    {
       accessorKey: "data_Pag_Receb",
       header: "Pagamento / Recebimento",
     },
-
+    {
+      accessorKey: "valorFinal",
+      header: "Valor Total",
+    },
     {
       header: 'Ações',
       accessorKey: 'id',
