@@ -7,6 +7,7 @@ import { useDeleteAlertDuplicatasStore } from "@/store/DeleteAlertDuplicatasStor
 import { useDuplicatasStore } from "@/store/Duplicatas/Index"
 import { ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown } from "lucide-react"
+import { HandCoins, Receipt } from 'lucide-react';
 
 
 export function TablePagaveis() {
@@ -36,19 +37,42 @@ export function TablePagaveis() {
     },
     {
       accessorKey: "tipoPag",
-      header: "Pagável",
+      header: "Tipo",
+      cell: ({ getValue }) => {
+        const isPagavel = getValue() as boolean;
+        return (
+          <>
+            {isPagavel ? <Receipt className="h-6 w-6 text-red-500" /> : <HandCoins className="h-6 w-6 text-green-500" />}
+          </>
+        );
+      },
     },
     {
       accessorKey: "vencimento",
       header: "Vencimento",
+      cell: ({ getValue }) => {
+        const dateValue = new Date(getValue() as string);
+        const formattedDate = dateValue.toLocaleDateString('pt-BR');
+        return <span>{formattedDate}</span>;
+      },
     },
     {
       accessorKey: "data_Pag_Receb",
       header: "Pagamento / Recebimento",
+      cell: ({ getValue }) => {
+        const dateValue = new Date(getValue() as string);
+        const formattedDate = dateValue.toLocaleDateString('pt-BR');
+        return <span>{formattedDate}</span>;
+      },
     },
     {
       accessorKey: "valorFinal",
       header: "Valor Total",
+      cell: ({ getValue }) => {
+        const valor = getValue() as number;
+        const formattedValor = `R$ ${valor.toFixed(2)}`;
+        return <span>{formattedValor}</span>;
+      },
     },
     {
       header: 'Ações',
@@ -63,6 +87,7 @@ export function TablePagaveis() {
           <ActionsTable.Root
             onEdit={() => handleChange(duplicata || null)}
             onDelete={() => openDeleteAlert(duplicata?.id)}
+            onPrint={() => openDeleteAlert(duplicata?.id)}
           />
         )
       },

@@ -1,24 +1,25 @@
 import { ReactNode } from 'react'
 import { ActionsTable } from '.'
-import { Pencil, Trash, CheckCircle } from 'lucide-react'
+import { Pencil, Trash, CheckCircle, Printer } from 'lucide-react'
 
 interface ActionsTableCellProps {
   defaultActions?: boolean
   onEdit?: () => void
   onDelete?: () => void
+  onPrint?: () => void
   onSelectEmpresa?: () => void
   children?: ReactNode
 }
 
 export function ActionsTableCell(props: ActionsTableCellProps) {
-  const { defaultActions = true, children, onEdit, onDelete, onSelectEmpresa } = props
+  const { defaultActions = true, children, onEdit, onDelete, onSelectEmpresa, onPrint } = props
 
   return (
     <div className="flex items-center justify-center gap-2">
       {defaultActions && (
         <>
           {onEdit && (
-            <div className='bg-gray-300 rounded-full hover:bg-gray-200 '>
+            <div className='bg-gray-300 rounded-full text-brand-blue-500 hover:bg-gray-200 '>
               <ActionsTable.Action icon={<Pencil size={20} />} onClick={onEdit} />
             </div>
           )}
@@ -28,6 +29,15 @@ export function ActionsTableCell(props: ActionsTableCellProps) {
               <ActionsTable.Action
                 onClick={onDelete}
                 icon={<Trash size={20} />}
+              />
+            </div>
+          )}
+
+          {onPrint && (
+            <div className='bg-gray-300 rounded-full text-brand-blue-300 hover:bg-gray-200'>
+              <ActionsTable.Action
+                onClick={onPrint}
+                icon={<Printer size={20} />}
               />
             </div>
           )}

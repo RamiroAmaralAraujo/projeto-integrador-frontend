@@ -1,14 +1,18 @@
-import { useState, Fragment, forwardRef } from 'react'
+import { Fragment, forwardRef } from 'react'
 import { Switch } from '@headlessui/react'
 import { Receipt, HandCoins } from 'lucide-react'
 
-const ToggleTipoDuplicata = forwardRef<HTMLButtonElement>(
+interface ToggleTipoDuplicataProps {
+  value: boolean;
+  onChange: (value: boolean) => void;
+}
 
-  ({ ...props }, ref) => {
-    const [enabled, setEnabled] = useState(false)
+const ToggleTipoDuplicata = forwardRef<HTMLButtonElement, ToggleTipoDuplicataProps>(
+
+  ({ value, onChange, ...props }, ref) => {
 
     return (
-      <Switch checked={enabled} onChange={setEnabled} as={Fragment}>
+      <Switch checked={value} onChange={onChange} as={Fragment}>
         {({ checked }) => (
 
           <div className='flex justify-center items-center gap-2 w-36'>

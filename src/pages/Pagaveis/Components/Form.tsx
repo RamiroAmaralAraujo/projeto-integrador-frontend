@@ -23,7 +23,7 @@ import { UploadImage } from '@/components/UploadImage/UploadImage'
 
 const CreateDuplicatasSchema = z.object({
   id: z.string().optional(),
-  tipoPag: z.string(),
+  tipoPag: z.boolean(),
   pessoaRef: z.string().nonempty('Não é possivel cria uma duplicata sem informar a pessoa referente.'),
   vencimento: z.string(),
   data_Pag_Receb: z.string(),
@@ -54,6 +54,8 @@ export function FormDuplicatas() {
   const [valorFinalAuto, setValorFinalAuto] = useState('0');
   const [descontoPorcento, setDescontoPorcento] = useState('0')
   const [acrescimoPorcento, setAcrescimoPorcento] = useState('0')
+
+  const [tipoPag, setTipoPag] = useState<boolean>(false);
 
   const { empresaSelecionada } = useContext(AuthContext)
   const {
@@ -139,6 +141,7 @@ export function FormDuplicatas() {
 
     }
 
+    newDuplicatas.tipoPag = tipoPag ? true : false
     const duplicatasId = data?.id;
     const empresaId = empresaSelecionada?.id;
 
@@ -317,7 +320,8 @@ export function FormDuplicatas() {
               error={errors.data_Pag_Receb}
             />
             <ToggleTipoDuplicata
-              {...register('tipoPag', { setValueAs: value => value === 'true' })}
+              value={data ? data.tipoPag : false}
+              onChange={(value) => setTipoPag(value)}
             />
 
 
