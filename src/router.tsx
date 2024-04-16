@@ -12,6 +12,7 @@ import { NotFound } from './pages/NotFound/NotFound'
 import { Empresas } from './pages/Empresas/Index'
 import { Configuracoes } from './pages/Configuracoes/Configuracoes'
 import { Finaceiro } from './pages/Pagaveis'
+import { LoadingFullscreen } from './components/LoadingFull/LoadingFullscreen'
 
 
 export const router = createBrowserRouter([
@@ -47,6 +48,10 @@ export const router = createBrowserRouter([
       {
         path: '/dashboard',
         element: <Dashboard />
+      },
+      {
+        path: '/loading',
+        element: <LoadingFullscreen />
       },
       {
         path: '/produtos',

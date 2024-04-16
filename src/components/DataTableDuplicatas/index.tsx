@@ -103,11 +103,11 @@ export function DataTableDuplicatas<TData, TValue>({
             {!isLoading && table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <tr
-                  className="bg-white border-b hover:brightness-90"
+                  className="bg-white border-b hover:brightness-90 text-center"
                   key={row.id}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <td key={cell.id} className="p-4 font-semibold">
+                    <td key={cell.id} className="p-4 text-center font-semibold items-center">
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </td>
                   ))}

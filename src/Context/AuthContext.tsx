@@ -95,20 +95,24 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const response = await api.post<Response>('auth/login', {
         email,
         password,
-      })
+      });
 
-      const token = response.data.accessToken
-      localStorage.setItem('token', token)
+      const token = response.data.accessToken;
+      localStorage.setItem('token', token);
       toast.success("Você será redirecionado a Pagina de usuário.");
 
-      getUserFromToken(token)
+      getUserFromToken(token);
 
-      navigate('/dashboard')
 
+      navigate('/loading');
+
+
+      setTimeout(() => {
+        navigate('/dashboard');
+      }, 5000);
     } catch (error: unknown) {
       if (axios.isAxiosError<Error>(error)) {
-        toast.error(error.response?.data.message)
-
+        toast.error(error.response?.data.message);
       }
     }
   }

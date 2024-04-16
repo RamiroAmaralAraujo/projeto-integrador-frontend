@@ -41,9 +41,9 @@ export function TablePagaveis() {
       cell: ({ getValue }) => {
         const isPagavel = getValue() as boolean;
         return (
-          <>
+          <div className="flex justify-center items-center">
             {isPagavel ? <Receipt className="h-6 w-6 text-red-500" /> : <HandCoins className="h-6 w-6 text-green-500" />}
-          </>
+          </div>
         );
       },
     },

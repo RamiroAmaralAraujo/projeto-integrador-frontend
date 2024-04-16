@@ -17,6 +17,7 @@ import { useDuplicatas } from '@/hook/queries/useDuplicatas'
 import { useDuplicatasStore } from '@/store/Duplicatas/Index'
 import { ToggleTipoDuplicata } from '@/components/ToggleTipoPagamento/ToggleTipoPagamento'
 import { UploadImage } from '@/components/UploadImage/UploadImage'
+import { AssinaturaPad } from '@/components/SignaturePad/SignaturePad'
 
 
 
@@ -333,7 +334,12 @@ export function FormDuplicatas() {
             {...register('comp_url')}
             error={errors.comp_url}
           />
-          <UploadImage />
+          <div className=' gap-4 flex w-full h-full'>
+            <UploadImage />
+            <div className='w-2/3'>
+              <AssinaturaPad />
+            </div>
+          </div>
           <Input
             icon={<ListChecksIcon size={20} />}
             defaultValue={data ? data.ass_url?.toString() ?? '' : ''}

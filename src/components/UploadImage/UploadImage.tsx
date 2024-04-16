@@ -89,7 +89,7 @@ export function UploadImage() {
 
   return (
     <div
-      className={`flex flex-col items-center justify-around p-5 rounded-xl border border-dashed border-base-hover border-brand-blue-500 ${isDraggingOver ? 'border-4 bg-gray-200 opacity-45' : ''
+      className={` flex flex-col items-center justify-around p-5 rounded-xl border border-dashed border-base-hover border-brand-blue-500 ${isDraggingOver ? 'border-4 bg-gray-200 opacity-45' : ''
         }`}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
@@ -106,13 +106,13 @@ export function UploadImage() {
       <div className='flex flex-col justify-center items-center'>
         <div className="w-[150px] flex justify-center mb-4  rounded-2xl">
           {previewUrl ? (
-            <img src={previewUrl} alt="Preview" className="max-w-full max-h-40" />
+            <img src={previewUrl} alt="Preview" className="w-16 h-16" />
           ) : (
             <img src={upload} alt="" />
           )}
         </div>
         {selectedFiles.length === 1 && (
-          <div className="mb-4  flex flex-col items-center justify-center">
+          <div className="mb-4 max-w-20 flex flex-col items-center justify-center text-center">
             {selectedFiles.map((file, index) => (
               <div className='' key={index}>
                 {file.name}
@@ -122,10 +122,9 @@ export function UploadImage() {
         )}
       </div>
 
-      <div className="flex gap-2">
+      <div className="flex">
         <Button
           type="button"
-          label="Inserir Imagem"
           icon={<ImageUp size={20} />}
           onClick={handleButtonClick}
         />
