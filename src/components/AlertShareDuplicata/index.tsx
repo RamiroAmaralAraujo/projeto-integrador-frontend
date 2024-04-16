@@ -22,6 +22,12 @@ export default function ShareAlertDuplicatass() {
   function printDuplicata() {
     const retornoDuplicata = duplicata
     console.log({ retornoDuplicata })
+
+    return (
+      <div>
+        <h1>{retornoDuplicata?.pessoaRef}</h1>
+      </div>
+    )
   }
 
   return (

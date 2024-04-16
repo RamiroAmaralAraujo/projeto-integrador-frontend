@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form'
 // import { zodResolver } from '@hookform/resolvers/zod'
-import { ListChecksIcon, ClipboardPlus } from 'lucide-react'
+import { ClipboardPlus, UsersRound, UserRound, Wallet, BadgePercent, DollarSign, AlignLeft, Camera, FilePen, BadgeDollarSign } from 'lucide-react';
 
 
 
@@ -189,7 +189,7 @@ export function FormDuplicatas() {
             <div className='w-full'>
               <Input
                 defaultValue={data ? data.pessoaRef?.toString() ?? '' : ''}
-                icon={<ListChecksIcon size={20} />}
+                icon={<UsersRound size={20} />}
                 label='Pessoa / Empresa*'
                 {...register('pessoaRef')}
                 error={errors.pessoaRef}
@@ -198,7 +198,7 @@ export function FormDuplicatas() {
             <div className='w-full'>
               <Input
                 defaultValue={data ? data.responsavel?.toString() ?? '' : ''}
-                icon={<ListChecksIcon size={20} />}
+                icon={<UserRound size={20} />}
                 label='Nome do Responsável'
                 {...register('responsavel')}
                 error={errors.responsavel}
@@ -211,7 +211,7 @@ export function FormDuplicatas() {
                 type='number'
                 defaultValue={data ? data.valorLiq?.toString() ?? '' : 0}
                 accept='number'
-                icon={<ListChecksIcon size={20} />}
+                icon={<Wallet size={20} />}
                 label='Valor Liquido*'
                 {...register("valorLiq", {
                   valueAsNumber: true,
@@ -225,7 +225,7 @@ export function FormDuplicatas() {
                 type='number'
                 accept='number'
                 defaultValue={data ? data.desconto?.toString() ?? '' : 0}
-                icon={<ListChecksIcon size={20} />}
+                icon={<BadgeDollarSign size={20} />}
                 label='Desconto R$*'
                 {...register("desconto", {
                   valueAsNumber: true,
@@ -239,7 +239,7 @@ export function FormDuplicatas() {
                 type='number'
                 accept='number'
                 defaultValue={data ? data.descontoPorcento?.toString() ?? '' : 0}
-                icon={<ListChecksIcon size={20} />}
+                icon={<BadgePercent size={20} />}
                 label='Desconto %*'
                 {...register("descontoPorcento", {
                   valueAsNumber: true,
@@ -256,7 +256,7 @@ export function FormDuplicatas() {
                 readOnly={true}
                 accept='number'
                 value={data ? data.valorFinal?.toString() : valorFinalAuto}
-                icon={<ListChecksIcon size={20} />}
+                icon={<DollarSign size={20} />}
                 label='Valor Final*'
                 {...register("valorFinal", {
                   valueAsNumber: true,
@@ -270,7 +270,7 @@ export function FormDuplicatas() {
                 type='number'
                 accept='number'
                 defaultValue={data ? data.acresc?.toString() ?? '' : 0}
-                icon={<ListChecksIcon size={20} />}
+                icon={<BadgeDollarSign size={20} />}
                 label='Acrescimo R$*'
                 {...register("acrescPorcento", {
                   valueAsNumber: true,
@@ -286,7 +286,7 @@ export function FormDuplicatas() {
                 type='number'
                 accept='number'
                 defaultValue={data ? data.acresc?.toString() ?? '' : 0}
-                icon={<ListChecksIcon size={20} />}
+                icon={<BadgePercent size={20} />}
                 label='Acrescimo %*'
                 {...register("acresc", {
                   valueAsNumber: true,
@@ -298,7 +298,7 @@ export function FormDuplicatas() {
 
           </div>
           <Input
-            icon={<ListChecksIcon size={20} />}
+            icon={<AlignLeft size={20} />}
             defaultValue={data ? data.descricao?.toString() ?? '' : ''}
             type='text'
             label='Descrição*'
@@ -328,7 +328,7 @@ export function FormDuplicatas() {
 
           </div>
           <Input
-            icon={<ListChecksIcon size={20} />}
+            icon={<Camera size={20} />}
             defaultValue={data ? data.comp_url?.toString() ?? '' : ''}
             label='Foto Comprovante*'
             {...register('comp_url')}
@@ -341,7 +341,7 @@ export function FormDuplicatas() {
             </div>
           </div>
           <Input
-            icon={<ListChecksIcon size={20} />}
+            icon={<FilePen size={20} />}
             defaultValue={data ? data.ass_url?.toString() ?? '' : ''}
             label='Assinatura*'
             {...register('ass_url')}
