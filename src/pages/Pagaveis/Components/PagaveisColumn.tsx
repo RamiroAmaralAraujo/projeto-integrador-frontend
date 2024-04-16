@@ -1,10 +1,12 @@
 import { ActionsTable } from "@/components/ActionsTableCell"
 import AlertDeleteDuplicata from "@/components/AlertDeleteDuplicata/index"
+import ShareAlertDuplicatass from "@/components/AlertShareDuplicata"
 import { DataTableDuplicatas } from "@/components/DataTableDuplicatas"
 import { DuplicatasData, useDuplicatas } from "@/hook/queries/useDuplicatas"
 import { useRemove } from "@/hook/queries/useDuplicatas"
 import { useDeleteAlertDuplicatasStore } from "@/store/DeleteAlertDuplicatasStore"
 import { useDuplicatasStore } from "@/store/Duplicatas/Index"
+import { useShareAlertDuplicatasStore } from "@/store/ShareAlertDuplicatasStore"
 import { ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown } from "lucide-react"
 import { HandCoins, Receipt } from 'lucide-react';
@@ -16,6 +18,8 @@ export function TablePagaveis() {
   const { data: duplicatas, isLoading, isFetching } = useRead()
   const handleChange = useDuplicatasStore((state) => state.actions.handleChange)
   const openDeleteAlert = useDeleteAlertDuplicatasStore((state) => state.actions.onOpenAlert,)
+  const openPrintAlert = useShareAlertDuplicatasStore((state) => state.actions.handleChangeSelectDuplicata,)
+
 
 
 
@@ -87,7 +91,7 @@ export function TablePagaveis() {
           <ActionsTable.Root
             onEdit={() => handleChange(duplicata || null)}
             onDelete={() => openDeleteAlert(duplicata?.id)}
-            onPrint={() => openDeleteAlert(duplicata?.id)}
+            onPrint={() => openPrintAlert(duplicata || null)}
           />
         )
       },
@@ -103,6 +107,7 @@ export function TablePagaveis() {
         isLoading={isLoading || isFetching}
       />
       <AlertDeleteDuplicata onDelete={removeDuplicatas} />
+      <ShareAlertDuplicatass />
     </>
   )
 }
