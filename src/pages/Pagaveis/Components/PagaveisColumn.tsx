@@ -9,7 +9,10 @@ import { useDuplicatasStore } from "@/store/Duplicatas/Index"
 import { useShareAlertDuplicatasStore } from "@/store/ShareAlertDuplicatasStore"
 import { ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown } from "lucide-react"
-import { HandCoins, Receipt } from 'lucide-react';
+import { HandCoins, Receipt, CircleDashed } from 'lucide-react';
+import { MdOutlineCheckCircle } from "react-icons/md";
+import { TbAlertCircle } from "react-icons/tb";
+
 
 
 export function TablePagaveis() {
@@ -64,9 +67,33 @@ export function TablePagaveis() {
       accessorKey: "data_Pag_Receb",
       header: "Pagamento / Recebimento",
       cell: ({ getValue }) => {
-        const dateValue = new Date(getValue() as string);
+        const rawValue = getValue();
+        if (rawValue === null) {
+          return
+        }
+        const dateValue = new Date(rawValue as string);
         const formattedDate = dateValue.toLocaleDateString('pt-BR');
         return <span>{formattedDate}</span>;
+      },
+    },
+    {
+      accessorKey: "data_Pag_Receb",
+      header: "Status",
+      cell: ({ row }) => {
+        const dataPagamento = row.original.data_Pag_Receb as Date | null;
+        const vencimentoString = row.original.vencimento as unknown as string;
+        const vencimento = new Date(vencimentoString);
+        const dataAtual = new Date();
+
+        if (dataPagamento === null) {
+          if (vencimento.getTime() > dataAtual.getTime()) {
+            return <div className="text-yellow-500 justify-center items-center flex"><CircleDashed size={25} /></div>;
+          } else {
+            return <div className="text-red-700 justify-center items-center flex "><TbAlertCircle size={28} /></div>;
+          }
+        } else {
+          return <div className="text-green-700 justify-center items-center flex"><MdOutlineCheckCircle size={28} /></div>;
+        }
       },
     },
     {

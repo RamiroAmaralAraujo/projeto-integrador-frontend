@@ -138,7 +138,7 @@ export function FormDuplicatas() {
       newDuplicatas.data_Pag_Receb = dataPagRecebDate.toISOString();
     } else {
 
-      console.error("Data de pagamento/recebimento inválida!");
+      newDuplicatas.data_Pag_Receb === null;
 
     }
 
@@ -321,7 +321,7 @@ export function FormDuplicatas() {
               error={errors.data_Pag_Receb}
             />
             <ToggleTipoDuplicata
-              value={data ? data.tipoPag : false}
+              value={data ? data.tipoPag : tipoPag}
               onChange={(value) => setTipoPag(value)}
             />
 
