@@ -111,7 +111,7 @@ export function FormDuplicatas() {
     const descPorcento = parseFloat(descontoPorcento) || 0
     const acrePorcento = parseFloat(acrescimoPorcento) || 0
     const valorFinal = (liquido - desc + acre - ((descPorcento / 100) * liquido) + ((acrePorcento / 100) * liquido));
-    setValorFinalAuto(valorFinal.toString());
+    setValorFinalAuto(valorFinal.toFixed(2).toString());
   };
 
 
@@ -124,40 +124,63 @@ export function FormDuplicatas() {
   }
 
   async function submitDuplicatas(newDuplicatas: CreateDuplicatasData) {
-
     const vencimentoDate = parseDate(newDuplicatas.vencimento);
     if (!vencimentoDate) {
       console.error("Data de vencimento inválida!");
       return;
     }
-    newDuplicatas.vencimento = vencimentoDate.toISOString();
 
+    // Define o fuso horário para 'America/Sao_Paulo'
+    vencimentoDate.setTime(vencimentoDate.getTime() + vencimentoDate.getTimezoneOffset() * 60 * 1000);
+    // Define a hora para 03:00:00
+    vencimentoDate.setHours(0, 0, 0, 0);
 
-    const dataPagRecebDate = parseDate(newDuplicatas.data_Pag_Receb);
-    if (dataPagRecebDate) {
-      newDuplicatas.data_Pag_Receb = dataPagRecebDate.toISOString();
-    } else {
-
-      newDuplicatas.data_Pag_Receb === null;
-
+    // Verifica se o dia foi definido corretamente
+    if (vencimentoDate.getDate() !== parseInt(newDuplicatas.vencimento.split('-')[2])) {
+      // Se não for o dia correto, ajusta para o dia correto
+      vencimentoDate.setDate(parseInt(newDuplicatas.vencimento.split('-')[2]));
     }
 
-    newDuplicatas.tipoPag = tipoPag ? true : false
+    newDuplicatas.vencimento = vencimentoDate.toISOString();
+
+    // O mesmo para a data de Pagamento/Recebimento
+    const dataPagRecebDate = parseDate(newDuplicatas.data_Pag_Receb);
+    if (dataPagRecebDate) {
+      dataPagRecebDate.setTime(dataPagRecebDate.getTime() + dataPagRecebDate.getTimezoneOffset() * 60 * 1000);
+      dataPagRecebDate.setHours(0, 0, 0, 0);
+
+      // Verifica e ajusta o dia, se necessário
+      if (dataPagRecebDate.getDate() !== parseInt(newDuplicatas.data_Pag_Receb.split('-')[2])) {
+        dataPagRecebDate.setDate(parseInt(newDuplicatas.data_Pag_Receb.split('-')[2]));
+      }
+
+      newDuplicatas.data_Pag_Receb = dataPagRecebDate.toISOString();
+    } else {
+      newDuplicatas.data_Pag_Receb = null;
+    }
+
+    newDuplicatas.tipoPag = tipoPag ? true : false;
+
     const duplicatasId = data?.id;
     const empresaId = empresaSelecionada?.id;
 
+    calcularValorFinal();
+
+    newDuplicatas.valorFinal = parseFloat(valorFinalAuto);
+    newDuplicatas.valorLiq = parseFloat(valorLiquido);
+    newDuplicatas.desconto = parseFloat(desconto);
+    newDuplicatas.descontoPorcento = parseFloat(descontoPorcento);
+    newDuplicatas.acresc = parseFloat(acrescimo);
+    newDuplicatas.acrescPorcento = parseFloat(acrescimoPorcento);
+
     if (duplicatasId) {
-
       await updateDuplicatas({ id: duplicatasId, ...newDuplicatas });
-      handleCloseDialog();
-      setValorFinalAuto('')
     } else {
-
       await createDuplicatas({ empresaId: empresaId, ...newDuplicatas });
-      setValorFinalAuto('')
-      handleCloseDialog();
     }
+    handleCloseDialog();
   }
+
 
 
   const isLoadingCreateOrUpdateDuplicatas =
@@ -166,6 +189,8 @@ export function FormDuplicatas() {
   useEffect(() => {
     if (!isOpen) {
       reset();
+    } else {
+      setValorFinalAuto('0');
     }
   }, [isOpen, reset]);
 
@@ -188,6 +213,7 @@ export function FormDuplicatas() {
           <div className='grid-cols-2 flex  gap-2'>
             <div className='w-full'>
               <Input
+
                 defaultValue={data ? data.pessoaRef?.toString() ?? '' : ''}
                 icon={<UsersRound size={20} />}
                 label='Pessoa / Empresa*'
@@ -197,6 +223,7 @@ export function FormDuplicatas() {
             </div>
             <div className='w-full'>
               <Input
+
                 defaultValue={data ? data.responsavel?.toString() ?? '' : ''}
                 icon={<UserRound size={20} />}
                 label='Nome do Responsável'
@@ -209,7 +236,8 @@ export function FormDuplicatas() {
             <div className='w-full'>
               <Input
                 type='number'
-                defaultValue={data ? data.valorLiq?.toString() ?? '' : 0}
+                defaultValue={data ? data.valorLiq?.toFixed(2) : ''}
+
                 accept='number'
                 icon={<Wallet size={20} />}
                 label='Valor Liquido*'
@@ -222,9 +250,10 @@ export function FormDuplicatas() {
             </div>
             <div className='w-full'>
               <Input
+
                 type='number'
                 accept='number'
-                defaultValue={data ? data.desconto?.toString() ?? '' : 0}
+                defaultValue={data ? data.desconto?.toFixed(2) : ''}
                 icon={<BadgeDollarSign size={20} />}
                 label='Desconto R$*'
                 {...register("desconto", {
@@ -236,9 +265,10 @@ export function FormDuplicatas() {
             </div>
             <div className='w-full'>
               <Input
+
                 type='number'
                 accept='number'
-                defaultValue={data ? data.descontoPorcento?.toString() ?? '' : 0}
+                defaultValue={data ? data.descontoPorcento?.toFixed(2) : ''}
                 icon={<BadgePercent size={20} />}
                 label='Desconto %*'
                 {...register("descontoPorcento", {
@@ -269,7 +299,7 @@ export function FormDuplicatas() {
 
                 type='number'
                 accept='number'
-                defaultValue={data ? data.acresc?.toString() ?? '' : 0}
+                defaultValue={data ? data.acresc?.toFixed(2) : ''}
                 icon={<BadgeDollarSign size={20} />}
                 label='Acrescimo R$*'
                 {...register("acrescPorcento", {
@@ -285,7 +315,7 @@ export function FormDuplicatas() {
 
                 type='number'
                 accept='number'
-                defaultValue={data ? data.acresc?.toString() ?? '' : 0}
+                defaultValue={data ? data.acresc?.toFixed(2) : ''}
                 icon={<BadgePercent size={20} />}
                 label='Acrescimo %*'
                 {...register("acresc", {
@@ -298,6 +328,7 @@ export function FormDuplicatas() {
 
           </div>
           <Input
+
             icon={<AlignLeft size={20} />}
             defaultValue={data ? data.descricao?.toString() ?? '' : ''}
             type='text'
@@ -307,6 +338,7 @@ export function FormDuplicatas() {
           />
           <div className='grid-cols-3 flex  gap-2'>
             <Input
+
               type='date'
               defaultValue={data ? data.vencimento?.toString() ?? '' : ''}
               label='Vencimento*'
@@ -314,6 +346,7 @@ export function FormDuplicatas() {
               error={errors.vencimento}
             />
             <Input
+
               defaultValue={data ? data.data_Pag_Receb?.toString() ?? '' : ''}
               type='date'
               label='Data Pagamento/Recebimento'
@@ -328,6 +361,7 @@ export function FormDuplicatas() {
 
           </div>
           <Input
+
             icon={<Camera size={20} />}
             defaultValue={data ? data.comp_url?.toString() ?? '' : ''}
             label='Foto Comprovante*'

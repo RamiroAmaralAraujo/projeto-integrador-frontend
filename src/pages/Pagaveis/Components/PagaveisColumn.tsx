@@ -65,6 +65,7 @@ export function TablePagaveis() {
     },
     {
       accessorKey: "data_Pag_Receb",
+      id: '1',
       header: "Pagamento / Recebimento",
       cell: ({ getValue }) => {
         const rawValue = getValue();
@@ -78,6 +79,7 @@ export function TablePagaveis() {
     },
     {
       accessorKey: "data_Pag_Receb",
+      id: '2',
       header: "Status",
       cell: ({ row }) => {
         const dataPagamento = row.original.data_Pag_Receb as Date | null;

@@ -33,6 +33,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         <div className="w-full flex justify-center items-center ">
           <div className="relative w-full min-w-[200px] h-10 flex justify-center items-center">
             <InputMask
+              placeholder=''
               maxLength={maxLength}
               type={type}
               mask={mask}
