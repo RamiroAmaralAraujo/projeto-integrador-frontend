@@ -13,9 +13,25 @@ import { Empresas } from './pages/Empresas/Index'
 import { Configuracoes } from './pages/Configuracoes/Configuracoes'
 import { Finaceiro } from './pages/Pagaveis'
 import { LoadingFullscreen } from './components/LoadingFull/LoadingFullscreen'
+import PrintDuplicatamodel from './pages/PrintDuplicataModel/PrintDuplicataModel'
+import { PrintDuplicataLayout } from './layout/PrintDuplicataLayout'
 
 
 export const router = createBrowserRouter([
+  {
+    element: (
+      <AuthProvider>
+        <PrintDuplicataLayout>
+        </PrintDuplicataLayout>
+      </AuthProvider>
+    ),
+    children: [
+      {
+        path: '/printduplicata',
+        element: <PrintDuplicatamodel />
+      },
+    ],
+  },
   {
     element: (
       <AuthProvider>
@@ -72,6 +88,10 @@ export const router = createBrowserRouter([
       {
         path: '/configuracoes',
         element: <Configuracoes />
+      },
+      {
+        path: '/printduplicata',
+        element: <PrintDuplicatamodel />
       },
     ],
   },

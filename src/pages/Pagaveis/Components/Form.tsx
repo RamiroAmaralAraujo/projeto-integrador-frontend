@@ -195,12 +195,6 @@ export function FormDuplicatas() {
   }, [isOpen, reset]);
 
   useEffect(() => {
-    console.log('Valor Liquido:', valorLiquido);
-    console.log('Desconto:', desconto);
-    console.log('Desconto Porcento:', descontoPorcento);
-    console.log('Acrescimo:', acrescimo);
-    console.log('Acrescimo Porcento:', acrescimoPorcento);
-    console.log('valorFinal:', valorFinalAuto)
     calcularValorFinal();
   }, [valorLiquido, desconto, acrescimo, valorFinalAuto, descontoPorcento, acrescimoPorcento]);
 
@@ -235,7 +229,6 @@ export function FormDuplicatas() {
           <div className='grid-cols-2 flex  gap-2'>
             <div className='w-full'>
               <Input
-                type='number'
                 defaultValue={data ? data.valorLiq?.toFixed(2) : ''}
 
                 accept='number'
@@ -250,8 +243,6 @@ export function FormDuplicatas() {
             </div>
             <div className='w-full'>
               <Input
-
-                type='number'
                 accept='number'
                 defaultValue={data ? data.desconto?.toFixed(2) : ''}
                 icon={<BadgeDollarSign size={20} />}
@@ -265,8 +256,6 @@ export function FormDuplicatas() {
             </div>
             <div className='w-full'>
               <Input
-
-                type='number'
                 accept='number'
                 defaultValue={data ? data.descontoPorcento?.toFixed(2) : ''}
                 icon={<BadgePercent size={20} />}
@@ -296,8 +285,6 @@ export function FormDuplicatas() {
             </div>
             <div className='w-full'>
               <Input
-
-                type='number'
                 accept='number'
                 defaultValue={data ? data.acresc?.toFixed(2) : ''}
                 icon={<BadgeDollarSign size={20} />}
@@ -312,8 +299,6 @@ export function FormDuplicatas() {
 
             <div className='w-full'>
               <Input
-
-                type='number'
                 accept='number'
                 defaultValue={data ? data.acresc?.toFixed(2) : ''}
                 icon={<BadgePercent size={20} />}

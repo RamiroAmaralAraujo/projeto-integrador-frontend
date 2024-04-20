@@ -12,6 +12,7 @@ import axios from 'axios'
 import { api } from '../service/api'
 import { useNavigate } from 'react-router-dom'
 import { EmpresasData } from '@/hook/queries/useEmpresas'
+import { DuplicatasData } from '@/hook/queries/useDuplicatas'
 
 type User = {
   sub: string
@@ -32,6 +33,8 @@ type AuthContextData = {
   isAuthenticated: boolean
   isAuthenticating: boolean
   empresaSelecionada?: EmpresasData
+  duplicataSelecionada?: DuplicatasData
+  setduplicataSelecionada?: (duplicata: DuplicatasData) => void
   setEmpresaSelecionada?: (empresa: EmpresasData) => void
 }
 
@@ -52,8 +55,11 @@ export const AuthContext = createContext({} as AuthContextData)
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [empresaSelecionada, setEmpresaSelecionada] = useState<EmpresasData>()
+  const [duplicataSelecionada, setduplicataSelecionada] = useState<DuplicatasData>()
   const [user, setUser] = useState<User>()
   const [isAuthenticating, setAuthenticating] = useState(false)
+
+  console.log({ duplicataSelecionada })
 
 
   const isAuthenticated = !!user
@@ -62,6 +68,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   useEffect(() => {
     const storedToken = localStorage.getItem('token')
     const storedEmpresa = localStorage.getItem('EmpresaStorage')
+    const storedDuplicata = localStorage.getItem('DuplicataStorage')
 
     if (storedToken) {
       getUserFromToken(storedToken)
@@ -69,6 +76,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     if (storedEmpresa) {
       getEmpresaFromStorage(storedEmpresa)
+    }
+
+    if (storedDuplicata) {
+      getDuplicataFromStorage(storedDuplicata)
     }
 
     setAuthenticating(true)
@@ -132,14 +143,20 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const response = await api.get(`empresas/${id}`)
     const empresaSelecionada = response.data
     setEmpresaSelecionada(empresaSelecionada)
-    console.log({ empresaSelecionada })
+  }
+
+  async function getDuplicataFromStorage(storedDuplicata: string) {
+    const id = storedDuplicata
+    const response = await api.get(`duplicatas/${id}`)
+    const duplicataSelecionada = response.data
+    setduplicataSelecionada(duplicataSelecionada)
   }
 
 
 
   return (
     <AuthContext.Provider
-      value={{ signIn, signOut, user, isAuthenticated, isAuthenticating, empresaSelecionada, setEmpresaSelecionada }}
+      value={{ signIn, signOut, user, isAuthenticated, isAuthenticating, empresaSelecionada, setEmpresaSelecionada, duplicataSelecionada, setduplicataSelecionada }}
     >
       {children}
     </AuthContext.Provider>

@@ -20,7 +20,7 @@ interface AlertSelectEmpresaDProps {
 export default function AlertSelectEmpresa(props: AlertSelectEmpresaDProps) {
   const { onSelectEmpresa } = props
 
-  const { setEmpresaSelecionada, empresaSelecionada } = useContext(AuthContext)
+  const { setEmpresaSelecionada } = useContext(AuthContext)
 
 
 
@@ -50,7 +50,6 @@ export default function AlertSelectEmpresa(props: AlertSelectEmpresaDProps) {
       }
     }
   }
-  console.log({ empresaSelecionada })
 
 
 

@@ -18,16 +18,21 @@ export default function ShareAlertDuplicatass() {
     actions: { handleCloseDialog },
   } = useShareAlertDuplicatasStore()
 
-
   function printDuplicata() {
-    const retornoDuplicata = duplicata
-    console.log({ retornoDuplicata })
+    if (duplicata) {
 
-    return (
-      <div>
-        <h1>{retornoDuplicata?.pessoaRef}</h1>
-      </div>
-    )
+      localStorage.setItem('DuplicataStorage', duplicata.id)
+      const retornoDuplicata = duplicata;
+      console.log({ retornoDuplicata });
+
+
+      const width = 793;
+      const height = 1122;
+      const left = window.screenX + (window.innerWidth - width) / 2;
+      const top = window.screenY + (window.innerHeight - height) / 2;
+
+      window.open('/printduplicata', '_blank', `width=${width}, height=${height}, left=${left}, top=${top}`);
+    }
   }
 
   return (
