@@ -4,6 +4,7 @@ import { AlertTriangle } from 'lucide-react'
 import { UseMutateAsyncFunction } from 'react-query'
 import { AxiosError } from 'axios'
 import { useDeleteAlertStore } from '@/store/DeleteAlertStore'
+import { queryClient } from '@/service/reactQuery'
 
 
 interface AlertDeleteDuplicatasProps {
@@ -32,6 +33,7 @@ export default function AlertDeleteDuplicata(props: AlertDeleteDuplicatasProps) 
   function handleSubmit() {
     setLoading(true)
     onDelete(id || '').finally(() => {
+      queryClient.invalidateQueries({ queryKey: ['EMPRESAS'] });
       setLoading(false)
       onCloseAlert()
     })
