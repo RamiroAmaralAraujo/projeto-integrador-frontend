@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form'
 // import { zodResolver } from '@hookform/resolvers/zod'
-import { ClipboardPlus, UsersRound, UserRound, Wallet, BadgePercent, DollarSign, AlignLeft, Camera, FilePen, BadgeDollarSign } from 'lucide-react';
+import { ClipboardPlus, UsersRound, UserRound, Wallet, BadgePercent, DollarSign, AlignLeft, FilePen, BadgeDollarSign } from 'lucide-react';
 
 
 
@@ -18,6 +18,7 @@ import { useDuplicatasStore } from '@/store/Duplicatas/Index'
 import { ToggleTipoDuplicata } from '@/components/ToggleTipoPagamento/ToggleTipoPagamento'
 import { UploadImage } from '@/components/UploadImage/UploadImage'
 import { AssinaturaPad } from '@/components/SignaturePad/SignaturePad'
+import { RegistroDuplicatas } from '@/components/RegistroDuplicatas/RegistroDuplicatas';
 
 
 
@@ -63,6 +64,7 @@ export function FormDuplicatas() {
     handleSubmit,
     register,
     reset,
+    setValue,
     formState: { errors },
   } = useForm<CreateDuplicatasData>({
     // resolver: zodResolver(CreateDuplicatasSchema),
@@ -197,6 +199,10 @@ export function FormDuplicatas() {
   useEffect(() => {
     calcularValorFinal();
   }, [valorLiquido, desconto, acrescimo, valorFinalAuto, descontoPorcento, acrescimoPorcento]);
+
+  const handleUploadSuccess = (fileName: string) => {
+    setValue('comp_url', fileName);
+  };
 
 
   return (
@@ -345,18 +351,13 @@ export function FormDuplicatas() {
 
 
           </div>
-          <Input
-
-            icon={<Camera size={20} />}
-            defaultValue={data ? data.comp_url?.toString() ?? '' : ''}
-            label='Foto Comprovante*'
-            {...register('comp_url')}
-            error={errors.comp_url}
-          />
-          <div className=' gap-4 flex w-full h-full'>
-            <UploadImage />
-            <div className='w-2/3'>
+          <div className=' gap-4 flex w-full'>
+            <UploadImage onUploadSuccess={handleUploadSuccess} />
+            <div className='w-full'>
               <AssinaturaPad />
+            </div>
+            <div className='w-full'>
+              <RegistroDuplicatas />
             </div>
           </div>
           <Input

@@ -80,7 +80,7 @@ export default function PrintDuplicatamodel() {
         valorAtual %= 10;
       }
 
-      if (valorAtual > 0) {
+      if (valorAtual >= 0) {
         valorPorExtenso.push(unidades[valorAtual] + ' CENTAVOS ');
       }
 
@@ -90,7 +90,7 @@ export default function PrintDuplicatamodel() {
 
 
     if (valorPorExtenso.length === 0) {
-      valorPorExtenso.push('ZERO');
+      valorPorExtenso.push('ZERO REAIS');
     }
 
     return valorPorExtenso.join(' E ');

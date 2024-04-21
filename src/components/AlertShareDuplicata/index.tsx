@@ -71,7 +71,7 @@ export default function ShareAlertDuplicatass() {
                     <Share2 className="h-6 w-6 text-brand-blue-500" aria-hidden="true" />
                   </div>
                   <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                    <h3 className="text-lg leading-6 font-medium text-gray-900">CANHOTO DIGITAL</h3>
+                    <h3 className="text-lg leading-6 font-medium text-gray-900">RECIBO DIGITAL</h3>
                     <div className="mt-2">
                       <p className="text-sm text-gray-500">
                         Você pode utilizar a central de compartilhamento de Canhotos Digitais, para imprimir ou realizar o download do arquivo necessario.

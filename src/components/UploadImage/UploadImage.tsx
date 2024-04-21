@@ -5,7 +5,12 @@ import React, { useRef, useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
-export function UploadImage() {
+interface UploadImageProps {
+  onUploadSuccess: (fileName: string) => void;
+}
+
+export function UploadImage({ onUploadSuccess }: UploadImageProps) {
+
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -69,14 +74,15 @@ export function UploadImage() {
         const formData = new FormData();
         formData.append('file', file);
 
-        const response = await axios.post('https://core-commerce-api.onrender.com/upload', formData, {
+        const response = await axios.post<{ fileName: string }>('http://localhost:3000/upload', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
         });
 
+        const uploadedFileName = response.data.fileName;
+        onUploadSuccess(uploadedFileName);
         toast.success(`Arquivo "${file.name}" enviado com sucesso!`);
-        console.log('Resposta do servidor:', response.data);
       }
 
       setSelectedFiles([]);
