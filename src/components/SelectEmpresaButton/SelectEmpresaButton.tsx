@@ -21,7 +21,7 @@ export function SelectEmpresaButton() {
               </div>
               <div className={` rounded-xl p-2 ${empresaSelecionada ? "bg-white" : "bg-gray-200"}`}>
                 <span className='text-brand-blue-500 font-semibold  whitespace-nowrap  ' >
-                  {empresaSelecionada ? empresaSelecionada.empresaNome.substring(0, 10) + '...' : <FaRegQuestionCircle className="text-brand-blue-500" size={25} />}
+                  {empresaSelecionada ? empresaSelecionada.empresaNome.substring(0, 10) + '...' : <FaRegQuestionCircle className="text-brand-blue-500 animate-pulse" size={25} />}
                 </span>
               </div>
 

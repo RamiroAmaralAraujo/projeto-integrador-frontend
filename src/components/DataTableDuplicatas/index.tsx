@@ -16,6 +16,7 @@ import {
 } from '@tanstack/react-table'
 import { Button } from '../ui/button';
 import * as React from 'react';
+import { Skeleton } from '../ui/skeleton';
 
 
 interface TableProps<TData, TValue> {
@@ -132,7 +133,7 @@ export function DataTableDuplicatas<TData, TValue>({
                       (_, index) => index,
                     ).map((elm) => (
                       <td className="p-4" key={elm}>
-                        carregando
+                        <Skeleton className="h-4 w-full rounded-xl bg-gray-300" />
                       </td>
                     ))}
                   </tr>
