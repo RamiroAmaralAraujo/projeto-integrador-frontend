@@ -10,6 +10,7 @@ export default function PrintDuplicatamodel() {
 
   const { empresaSelecionada, duplicataSelecionada } = useContext(AuthContext)
 
+
   const tipoPag = duplicataSelecionada?.tipoPag || ''
   const desconto = duplicataSelecionada?.desconto || ''
   const descontoPorcento = duplicataSelecionada?.descontoPorcento || ''
@@ -210,30 +211,30 @@ export default function PrintDuplicatamodel() {
         </div>
       </div>
 
-
       {pagamento_recebimento && tipoPag && (
         <div className="flex justify-center items-center full mt-10">
-          <h1 className="font-bold text-base text-brand-blue-500 ">Eu {duplicataSelecionada?.responsavel} declaro o recebimento  da quantia de {valorFinalPorExtenso} no dia {duplicataSelecionada ? format(new Date(duplicataSelecionada.data_Pag_Receb), 'dd/MM/yyyy') : 'Data não disponível'}, referete a competencia de {duplicataSelecionada?.descricao.toString()} pela empresa {empresaSelecionada?.empresaNome} portadora do CNPJ/CPF {empresaSelecionada?.cnpj_cpf}</h1>
+          <h1 className="font-bold text-base text-brand-blue-500 ">Eu {duplicataSelecionada?.responsavel} declaro o recebimento da quantia de {valorFinalPorExtenso} no dia {duplicataSelecionada ? format(new Date(duplicataSelecionada.data_Pag_Receb), 'dd/MM/yyyy') : 'Data não disponível'}, referente à competência de {duplicataSelecionada?.descricao.toString()} pela empresa {empresaSelecionada?.empresaNome} portadora do CNPJ/CPF {empresaSelecionada?.cnpj_cpf}</h1>
         </div>
       )}
 
       {pagamento_recebimento && !tipoPag && (
         <div className="flex justify-center items-center full mt-10">
-          <h1 className="font-bold text-base text-brand-blue-500 ">Nos da empresa {empresaSelecionada?.empresaNome}  portadora do CNPJ/CPF  {empresaSelecionada?.cnpj_cpf} declaramos o recebimento da quantia de {valorFinalPorExtenso} na data do dia {duplicataSelecionada ? format(new Date(duplicataSelecionada.data_Pag_Receb), 'dd/MM/yyyy') : 'Data não disponível'}, referente a competencia de {duplicataSelecionada?.descricao.toString()}</h1>
+          <h1 className="font-bold text-base text-brand-blue-500 ">Nós da empresa {empresaSelecionada?.empresaNome} portadora do CNPJ/CPF {empresaSelecionada?.cnpj_cpf} declaramos o recebimento da quantia de {valorFinalPorExtenso} na data do dia {duplicataSelecionada ? format(new Date(duplicataSelecionada.data_Pag_Receb), 'dd/MM/yyyy') : 'Data não disponível'}, referente à competência de {duplicataSelecionada?.descricao.toString()}</h1>
         </div>
       )}
 
       {!pagamento_recebimento && tipoPag && (
         <div className="flex justify-center items-center full mt-10">
-          <h1 className="font-bold text-base text-brand-blue-500 ">Nos da empresa {empresaSelecionada?.empresaNome}  portadora do CNPJ/CPF  {empresaSelecionada?.cnpj_cpf} declaramos ter ciência da responsabilidade de arcar com o pagamento da quantia de {valorFinalPorExtenso} até a data do dia {duplicataSelecionada ? format(new Date(duplicataSelecionada.vencimento), 'dd/MM/yyyy') : 'Data não disponível'}, referente a competencia de {duplicataSelecionada?.descricao.toString()}. Reiteramos ter ciência de possiveis sanções, multas e juros que podem ser aplicadas sobre a empresa.</h1>
+          <h1 className="font-bold text-base text-brand-blue-500 ">Nós da empresa {empresaSelecionada?.empresaNome} portadora do CNPJ/CPF {empresaSelecionada?.cnpj_cpf} declaramos ter ciência da responsabilidade de arcar com o pagamento da quantia de {valorFinalPorExtenso} até a data do dia {duplicataSelecionada ? format(new Date(duplicataSelecionada.vencimento), 'dd/MM/yyyy') : 'Data não disponível'}, referente à competência de {duplicataSelecionada?.descricao.toString()}. Reiteramos ter ciência de possíveis sanções, multas e juros que podem ser aplicados sobre a empresa.</h1>
         </div>
       )}
 
       {!pagamento_recebimento && !tipoPag && (
         <div className="flex justify-center items-center full mt-10">
-          <h1 className="font-bold text-base text-brand-blue-500 ">Eu {duplicataSelecionada?.responsavel}  responsável por pela duplicata atribuida à  {duplicataSelecionada?.pessoaRef} declaro ter ciência da responsabilidade de arcar com o pagamento da quantia de {valorFinalPorExtenso} até a data do dia {duplicataSelecionada ? format(new Date(duplicataSelecionada.vencimento), 'dd/MM/yyyy') : 'Data não disponível'}, referente a competencia de {duplicataSelecionada?.descricao.toString()}. Reitero ter ciencenica de possiveis sanções, multas e juros que podem ser aplicadas sobre minha pessoa.</h1>
+          <h1 className="font-bold text-base text-brand-blue-500 ">Eu {duplicataSelecionada?.responsavel} responsável pela duplicata atribuída à {duplicataSelecionada?.pessoaRef} declaro ter ciência da responsabilidade de arcar com o pagamento da quantia de {valorFinalPorExtenso} até a data do dia {duplicataSelecionada ? format(new Date(duplicataSelecionada.vencimento), 'dd/MM/yyyy') : 'Data não disponível'}, referente à competência de {duplicataSelecionada?.descricao.toString()}. Reitero ter ciência de possíveis sanções, multas e juros que podem ser aplicados sobre minha pessoa.</h1>
         </div>
       )}
+
     </div>
   )
 }

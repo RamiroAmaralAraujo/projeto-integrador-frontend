@@ -19,6 +19,7 @@ import { ToggleTipoDuplicata } from '@/components/ToggleTipoPagamento/ToggleTipo
 import { UploadImage } from '@/components/UploadImage/UploadImage'
 import { AssinaturaPad } from '@/components/SignaturePad/SignaturePad'
 import { RegistroDuplicatas } from '@/components/RegistroDuplicatas/RegistroDuplicatas';
+import { queryClient } from '@/service/reactQuery';
 
 
 
@@ -28,7 +29,7 @@ const CreateDuplicatasSchema = z.object({
   tipoPag: z.boolean(),
   pessoaRef: z.string().nonempty('Não é possivel cria uma duplicata sem informar a pessoa referente.'),
   vencimento: z.string(),
-  data_Pag_Receb: z.string(),
+  data_Pag_Receb: z.string().nullable(),
   descricao: z.string(),
   valorLiq: z.number(),
   desconto: z.number(),
@@ -146,19 +147,21 @@ export function FormDuplicatas() {
     newDuplicatas.vencimento = vencimentoDate.toISOString();
 
     // O mesmo para a data de Pagamento/Recebimento
-    const dataPagRecebDate = parseDate(newDuplicatas.data_Pag_Receb);
-    if (dataPagRecebDate) {
-      dataPagRecebDate.setTime(dataPagRecebDate.getTime() + dataPagRecebDate.getTimezoneOffset() * 60 * 1000);
-      dataPagRecebDate.setHours(0, 0, 0, 0);
+    if (newDuplicatas.data_Pag_Receb !== null) {
+      const dataPagRecebDate = parseDate(newDuplicatas.data_Pag_Receb)
+      if (dataPagRecebDate) {
+        dataPagRecebDate.setTime(dataPagRecebDate.getTime() + dataPagRecebDate.getTimezoneOffset() * 60 * 1000);
+        dataPagRecebDate.setHours(0, 0, 0, 0);
 
-      // Verifica e ajusta o dia, se necessário
-      if (dataPagRecebDate.getDate() !== parseInt(newDuplicatas.data_Pag_Receb.split('-')[2])) {
-        dataPagRecebDate.setDate(parseInt(newDuplicatas.data_Pag_Receb.split('-')[2]));
+        // Verifica e ajusta o dia, se necessário
+        if (dataPagRecebDate.getDate() !== parseInt(newDuplicatas.data_Pag_Receb.split('-')[2])) {
+          dataPagRecebDate.setDate(parseInt(newDuplicatas.data_Pag_Receb.split('-')[2]));
+        }
+
+        newDuplicatas.data_Pag_Receb = dataPagRecebDate.toISOString();
+      } else {
+        newDuplicatas.data_Pag_Receb = null;
       }
-
-      newDuplicatas.data_Pag_Receb = dataPagRecebDate.toISOString();
-    } else {
-      newDuplicatas.data_Pag_Receb = null;
     }
 
     newDuplicatas.tipoPag = tipoPag ? true : false;
@@ -177,6 +180,7 @@ export function FormDuplicatas() {
 
     if (duplicatasId) {
       await updateDuplicatas({ id: duplicatasId, ...newDuplicatas });
+      queryClient.invalidateQueries({ queryKey: ['DUPLICATAS'] })
     } else {
       await createDuplicatas({ empresaId: empresaId, ...newDuplicatas });
     }
@@ -203,6 +207,10 @@ export function FormDuplicatas() {
   const handleUploadSuccess = (fileName: string) => {
     setValue('comp_url', fileName);
   };
+
+  const defaultVencimento = data && data.vencimento ? new Date(data.vencimento).toISOString().split('T')[0] : '';
+  const defaultPagamento = data && data.data_Pag_Receb ? new Date(data.data_Pag_Receb).toISOString().split('T')[0] : '';
+
 
 
   return (
@@ -331,14 +339,14 @@ export function FormDuplicatas() {
             <Input
 
               type='date'
-              defaultValue={data ? data.vencimento?.toString() ?? '' : ''}
+              defaultValue={defaultVencimento}
               label='Vencimento*'
               {...register('vencimento')}
               error={errors.vencimento}
             />
             <Input
 
-              defaultValue={data ? data.data_Pag_Receb?.toString() ?? '' : ''}
+              defaultValue={defaultPagamento}
               type='date'
               label='Data Pagamento/Recebimento'
               {...register('data_Pag_Receb')}
@@ -356,7 +364,7 @@ export function FormDuplicatas() {
             <div className='w-full'>
               <AssinaturaPad />
             </div>
-            <div className='w-full'>
+            <div className='w-full h-full'>
               <RegistroDuplicatas />
             </div>
           </div>

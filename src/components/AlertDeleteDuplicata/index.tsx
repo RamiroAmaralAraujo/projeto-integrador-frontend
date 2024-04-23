@@ -78,9 +78,9 @@ export default function AlertDeleteDuplicata(props: AlertDeleteDuplicataProps) {
                     <h3 className="text-lg leading-6 font-medium text-gray-900">EXCLUIR DUPLICATA</h3>
                     <div className="mt-2">
                       <p className="text-sm text-gray-500">
-                        A exlcusão apaga todos os registros da empresa no Banco de Dados, assim todas as informações referentes a essa empresa serão deletadas.
+                        A exlcusão apaga todos os registros da duplicata no Banco de Dados, assim todas as informações referentes a essa duplicata serão deletadas.
                       </p>
-                      <span className="text-sm text-gray-500 font-medium">Você tem certeza que deseja realizar a exclusão do cadastro dessa empresa?</span>
+                      <span className="text-sm text-gray-500 font-medium">Você tem certeza que deseja realizar a exclusão dessa duplicata?</span>
                     </div>
                   </div>
                 </div>

@@ -15,6 +15,7 @@ import { z } from 'zod'
 import { useEmpresas } from '@/hook/queries/useEmpresas'
 import { useContext, useEffect } from 'react'
 import { AuthContext } from '@/Context/AuthContext'
+import { queryClient } from '@/service/reactQuery';
 
 
 
@@ -65,6 +66,7 @@ export function Form() {
 
     if (empresasId) {
       await updateEmpresas({ id: empresasId, ...newEmpresas })
+      queryClient.invalidateQueries({ queryKey: ['EMPRESAS'] })
       handleCloseDialog()
       return
     }
