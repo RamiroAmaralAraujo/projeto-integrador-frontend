@@ -1,6 +1,6 @@
 import { AuthContext } from "@/Context/AuthContext"
 import { useContext } from "react"
-import LogoSemFundoAzul from '../../assets/LogoSemFundoAzul.svg'
+import LogoSemFundoBranco from '../../assets/LogoSemFundoBranco.svg'
 import { format } from 'date-fns';
 
 
@@ -112,7 +112,7 @@ export default function PrintDuplicatamodel() {
         <div className="bg-brand-blue-500 w-full h-12"></div>
         <h1 className="font-bold text-4xl text-brand-blue-500 mb-7 mt-4">RECIBO DIGITAL</h1>
         <div className="w-full flex justify-end -mt-16 ">
-          <img src={LogoSemFundoAzul} alt="" width={100} />
+          <img src={`https://core-commerce.s3.sa-east-1.amazonaws.com/${empresaSelecionada?.logo_url}`} alt="" width={100} />
         </div>
       </div>
 
@@ -156,7 +156,7 @@ export default function PrintDuplicatamodel() {
 
         {/* Dados do Cliente */}
         <div className="flex flex-col items-start justify-start">
-          <h1 className="font-bold text-xl text-brand-blue-500 mb-3 ">DOCUMENTO</h1>
+          <h1 className="font-bold text-xl text-brand-blue-500 mb-3 ">{`DOCUMENTO #`}</h1>
           <div className="flex flex-col justify-start items-start">
             <div className="flex gap-2 justify-center items-center">
               <h1 className="font-bold text-base">PESSOA:</h1>
@@ -234,6 +234,22 @@ export default function PrintDuplicatamodel() {
           <h1 className="font-bold text-base text-brand-blue-500 ">Eu {duplicataSelecionada?.responsavel} responsável pela duplicata atribuída à {duplicataSelecionada?.pessoaRef} declaro ter ciência da responsabilidade de arcar com o pagamento da quantia de {valorFinalPorExtenso} até a data do dia {duplicataSelecionada ? format(new Date(duplicataSelecionada.vencimento), 'dd/MM/yyyy') : 'Data não disponível'}, referente à competência de {duplicataSelecionada?.descricao.toString()}. Reitero ter ciência de possíveis sanções, multas e juros que podem ser aplicados sobre minha pessoa.</h1>
         </div>
       )}
+
+      <div className="mt-28 flex gap-10 justify-center">
+        <h1 className="border-t-2 border-brand-blue-500 w-72 text-brand-blue-500 font-semibold text-center">{empresaSelecionada?.empresaNome}</h1>
+        <h1 className="border-t-2 border-brand-blue-500 w-72 text-brand-blue-500 font-semibold text-center">{duplicataSelecionada?.responsavel}</h1>
+
+      </div>
+
+      <footer>
+        <div className="w-full p-2 mt-16 bg-brand-blue-500 flex justify-center items-center">
+          <div>
+            <img src={LogoSemFundoBranco} alt="" width={40} />
+          </div>
+          <div>
+          </div>
+        </div>
+      </footer>
 
     </div>
   )

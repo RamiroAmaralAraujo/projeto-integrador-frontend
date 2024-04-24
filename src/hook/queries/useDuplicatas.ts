@@ -22,6 +22,7 @@ export interface DuplicatasData {
   comp_url:        string
   ass_url:         string
   empresaId:       string
+  documento:       Number
   createdAt:       Date
   updatedAt:       Date
 

@@ -16,6 +16,8 @@ import { useEmpresas } from '@/hook/queries/useEmpresas'
 import { useContext, useEffect } from 'react'
 import { AuthContext } from '@/Context/AuthContext'
 import { queryClient } from '@/service/reactQuery';
+import { UploadImage } from '@/components/UploadImage/UploadImage';
+import { RegistroEmpresas } from '@/components/RegistroEmpresas/RegistroEmpresas';
 
 
 
@@ -27,6 +29,7 @@ const CreateEmpresasSchema = z.object({
   bairro: z.string().optional(),
   cidade: z.string().optional(),
   uf: z.string().optional(),
+  logo_url: z.string().optional(),
   cep: z.string().optional(),
   usuarioID: z.string().optional(),
 
@@ -43,6 +46,7 @@ export function Form() {
     handleSubmit,
     register,
     reset,
+    setValue,
     formState: { errors },
   } = useForm<CreateEmpresasData>({
     resolver: zodResolver(CreateEmpresasSchema),
@@ -84,6 +88,10 @@ export function Form() {
       reset();
     }
   }, [isOpen, reset]);
+
+  const handleUploadLogoSuccess = (fileName: string) => {
+    setValue('logo_url', fileName);
+  };
 
   return (
     <Dialog.Root open={isOpen} onOpenChange={handleCloseDialog}>
@@ -153,8 +161,16 @@ export function Form() {
               {...register('cep')}
               error={errors.cep}
             />
-          </div>
 
+          </div>
+          <div className='flex w-full gap-4'>
+            <div className='w-full'>
+              <UploadImage onUploadSuccess={handleUploadLogoSuccess} />
+            </div>
+            <div className='w-full'>
+              <RegistroEmpresas />
+            </div>
+          </div>
 
 
 

@@ -40,6 +40,7 @@ const CreateDuplicatasSchema = z.object({
   responsavel: z.string(),
   comp_url: z.string(),
   ass_url: z.string(),
+  documento: z.number(),
   empresaId: z.string().optional(),
 })
 

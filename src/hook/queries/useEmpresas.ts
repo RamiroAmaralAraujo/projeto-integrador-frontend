@@ -16,6 +16,7 @@ export interface EmpresasData {
   uf: String
   cep: String
   usuarioID: String
+  logo_url: String
 }
 
 async function create(data: CreateEmpresasData) {

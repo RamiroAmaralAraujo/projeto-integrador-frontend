@@ -29,6 +29,10 @@ export function TablePagaveis() {
 
   const columns: ColumnDef<DuplicatasData>[] = [
     {
+      accessorKey: "documento",
+      header: "documento",
+    },
+    {
       accessorKey: "pessoaRef",
       header: ({ column }) => {
         return (
