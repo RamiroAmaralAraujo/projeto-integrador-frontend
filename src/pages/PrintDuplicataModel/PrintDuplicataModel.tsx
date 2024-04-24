@@ -11,6 +11,7 @@ export default function PrintDuplicatamodel() {
   const { empresaSelecionada, duplicataSelecionada } = useContext(AuthContext)
 
 
+
   const tipoPag = duplicataSelecionada?.tipoPag || ''
   const desconto = duplicataSelecionada?.desconto || ''
   const descontoPorcento = duplicataSelecionada?.descontoPorcento || ''
