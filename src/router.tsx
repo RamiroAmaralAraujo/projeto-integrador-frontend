@@ -6,6 +6,8 @@ import { AuthenticatedLayout } from './layout/AuthenticatedLayout'
 import { Dashboard } from './pages/Dashboard/dashboard'
 import { Login } from './pages/login/login'
 import { CadastroUsuario } from './pages/cadastroUsuario/cadastroUsuario'
+import TermosDeUso from './pages/termosDeUso/termosDeUso'
+import PoliticaDePrivacidade from './pages/politicaDePrivacidade/politicaDePrivacidade'
 import { Produtos } from './pages/Produtos/Produtos'
 import { Pedidos } from './pages/Pedidos/pedidos'
 import { NotFound } from './pages/NotFound/NotFound'
@@ -29,6 +31,14 @@ export const router = createBrowserRouter([
       {
         path: '/printduplicata',
         element: <PrintDuplicatamodel />
+      },
+      {
+        path: '/termos-de-uso',
+        element: <TermosDeUso />
+      },
+      {
+        path: '/politica-de-privacidade',
+        element: <PoliticaDePrivacidade />
       },
     ],
   },

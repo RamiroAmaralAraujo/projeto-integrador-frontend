@@ -17,6 +17,8 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { useState } from "react";
 
+import { Link } from 'react-router-dom';
+
 
 const CadastroSchema = z
   .object({
@@ -162,7 +164,7 @@ export function CadastroUsuario() {
 
                 className="accent-brand-blue-500 h-4 w-4 mt-1 hover:accent-brand-blue-300 border-gray-300 rounded" />
               <label className="font-medium text-brand-blue-200">
-                Concordo com os <span className=" text-brand-blue-300 hover:text-brand-blue-500 cursor-pointer hover:underline ease-in">Termos de Uso</span>  e com a <span className=" text-brand-blue-300 hover:text-brand-blue-500 cursor-pointer hover:underline ease-in">Politica de privacidade da empresa</span>.
+                Concordo com os <Link to="/termos-de-uso" target="_blank"><span className=" text-brand-blue-300 hover:text-brand-blue-500 cursor-pointer hover:underline ease-in">Termos de Uso</span></Link>  e com a <Link to="/politica-de-privacidade" target="_blank"><span className=" text-brand-blue-300 hover:text-brand-blue-500 cursor-pointer hover:underline ease-in">Politica de privacidade da empresa</span></Link>.
               </label>
             </div>
 
