@@ -87,7 +87,9 @@ export function useRemove() {
       queryCliente.invalidateQueries({ queryKey: ['EMPRESA'] })
       toast.success('Empresa Excluida com sucesso!')
     },
-    onError() {},
+    onError() {
+      toast.error('Não é possível deletar Empresas com duplicatas registradas em sistema.')
+    },
   })
 }
 

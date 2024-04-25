@@ -19,9 +19,9 @@ export function SelectEmpresaButton() {
               <div className="w-full">
                 <h1 className="font-bold text-lg  text-white whitespace-nowrap ">Empresa Selecionada:</h1>
               </div>
-              <div className={` rounded-xl p-2 ${empresaSelecionada ? "bg-white" : "bg-gray-200"}`}>
+              <div className={` rounded-xl p-2 ${empresaSelecionada ? "bg-white" : "bg-red-700 animate-pulse border-2 border-white"}`}>
                 <span className='text-brand-blue-500 font-semibold  whitespace-nowrap  ' >
-                  {empresaSelecionada ? empresaSelecionada.empresaNome.substring(0, 10) + '...' : <FaRegQuestionCircle className="text-brand-blue-500 animate-pulse" size={25} />}
+                  {empresaSelecionada ? empresaSelecionada.empresaNome.substring(0, 10) + '...' : <FaRegQuestionCircle className="text-white " size={25} />}
                 </span>
               </div>
 

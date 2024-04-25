@@ -105,7 +105,7 @@ export default function PrintDuplicatamodel() {
 
 
 
-
+  window.print()
 
   return (
     <div className="flex justify-center p-6 flex-col">
@@ -145,7 +145,7 @@ export default function PrintDuplicatamodel() {
             </div>
             <div className="flex gap-2 justify-center items-center">
               <h1 className="font-bold text-base">UF:</h1>
-              <p className="font-semibold text-gray-500 text-sm">{empresaSelecionada?.uf}</p>
+              <p className="font-semibold text-gray-500 text-sm">{empresaSelecionada?.uf.toUpperCase()}</p>
             </div>
             <div className="flex gap-2 justify-center items-center">
               <h1 className="font-bold text-base">CEP:</h1>
@@ -214,31 +214,31 @@ export default function PrintDuplicatamodel() {
 
       {pagamento_recebimento && tipoPag && (
         <div className="flex justify-center items-center full mt-10">
-          <h1 className="font-bold text-base text-brand-blue-500 ">Eu {duplicataSelecionada?.responsavel} declaro o recebimento da quantia de {valorFinalPorExtenso} no dia {duplicataSelecionada ? format(new Date(duplicataSelecionada.data_Pag_Receb), 'dd/MM/yyyy') : 'Data não disponível'}, referente à competência de {duplicataSelecionada?.descricao.toString()} pela empresa {empresaSelecionada?.empresaNome} portadora do CNPJ/CPF {empresaSelecionada?.cnpj_cpf}</h1>
+          <h1 className="font-bold text-base text-brand-blue-500 text-justify">Eu {duplicataSelecionada?.responsavel.toUpperCase()} declaro o recebimento da quantia de {valorFinalPorExtenso} no dia {duplicataSelecionada ? format(new Date(duplicataSelecionada.data_Pag_Receb), 'dd/MM/yyyy') : 'Data não disponível'}, referente à competência de {duplicataSelecionada?.descricao.toString().toUpperCase()} pela empresa {empresaSelecionada?.empresaNome.toUpperCase()} portadora do CNPJ/CPF {empresaSelecionada?.cnpj_cpf}</h1>
         </div>
       )}
 
       {pagamento_recebimento && !tipoPag && (
         <div className="flex justify-center items-center full mt-10">
-          <h1 className="font-bold text-base text-brand-blue-500 ">Nós da empresa {empresaSelecionada?.empresaNome} portadora do CNPJ/CPF {empresaSelecionada?.cnpj_cpf} declaramos o recebimento da quantia de {valorFinalPorExtenso} na data do dia {duplicataSelecionada ? format(new Date(duplicataSelecionada.data_Pag_Receb), 'dd/MM/yyyy') : 'Data não disponível'}, referente à competência de {duplicataSelecionada?.descricao.toString()}</h1>
+          <h1 className="font-bold text-base text-brand-blue-500 text-justify ">Nós da empresa {empresaSelecionada?.empresaNome.toUpperCase()} portadora do CNPJ/CPF {empresaSelecionada?.cnpj_cpf} declaramos o recebimento da quantia de {valorFinalPorExtenso} na data do dia {duplicataSelecionada ? format(new Date(duplicataSelecionada.data_Pag_Receb), 'dd/MM/yyyy') : 'Data não disponível'}, referente à competência de {duplicataSelecionada?.descricao.toString().toUpperCase()}</h1>
         </div>
       )}
 
       {!pagamento_recebimento && tipoPag && (
         <div className="flex justify-center items-center full mt-10">
-          <h1 className="font-bold text-base text-brand-blue-500 ">Nós da empresa {empresaSelecionada?.empresaNome} portadora do CNPJ/CPF {empresaSelecionada?.cnpj_cpf} declaramos ter ciência da responsabilidade de arcar com o pagamento da quantia de {valorFinalPorExtenso} até a data do dia {duplicataSelecionada ? format(new Date(duplicataSelecionada.vencimento), 'dd/MM/yyyy') : 'Data não disponível'}, referente à competência de {duplicataSelecionada?.descricao.toString()}. Reiteramos ter ciência de possíveis sanções, multas e juros que podem ser aplicados sobre a empresa.</h1>
+          <h1 className="font-bold text-base text-brand-blue-500 text-justify ">Nós da empresa {empresaSelecionada?.empresaNome.toUpperCase()} portadora do CNPJ/CPF {empresaSelecionada?.cnpj_cpf} declaramos ter ciência da responsabilidade de arcar com o pagamento da quantia de {valorFinalPorExtenso} até a data do dia {duplicataSelecionada ? format(new Date(duplicataSelecionada.vencimento), 'dd/MM/yyyy') : 'Data não disponível'}, referente à competência de {duplicataSelecionada?.descricao.toString().toUpperCase()}. Reiteramos ter ciência de possíveis sanções, multas e juros que podem ser aplicados sobre a empresa.</h1>
         </div>
       )}
 
       {!pagamento_recebimento && !tipoPag && (
         <div className="flex justify-center items-center full mt-10">
-          <h1 className="font-bold text-base text-brand-blue-500 ">Eu {duplicataSelecionada?.responsavel} responsável pela duplicata atribuída à {duplicataSelecionada?.pessoaRef} declaro ter ciência da responsabilidade de arcar com o pagamento da quantia de {valorFinalPorExtenso} até a data do dia {duplicataSelecionada ? format(new Date(duplicataSelecionada.vencimento), 'dd/MM/yyyy') : 'Data não disponível'}, referente à competência de {duplicataSelecionada?.descricao.toString()}. Reitero ter ciência de possíveis sanções, multas e juros que podem ser aplicados sobre minha pessoa.</h1>
+          <h1 className="font-bold text-base text-brand-blue-500 text-justify ">Eu {duplicataSelecionada?.responsavel.toUpperCase()} responsável pela duplicata atribuída à {duplicataSelecionada?.pessoaRef.toUpperCase()} declaro ter ciência da responsabilidade de arcar com o pagamento da quantia de {valorFinalPorExtenso} até a data do dia {duplicataSelecionada ? format(new Date(duplicataSelecionada.vencimento), 'dd/MM/yyyy') : 'Data não disponível'}, referente à competência de {duplicataSelecionada?.descricao.toString().toUpperCase()}. Reitero ter ciência de possíveis sanções, multas e juros que podem ser aplicados sobre minha pessoa.</h1>
         </div>
       )}
 
       <div className="mt-28 flex gap-10 justify-center">
-        <h1 className="border-t-2 border-brand-blue-500 w-72 text-brand-blue-500 font-semibold text-center">{empresaSelecionada?.empresaNome}</h1>
-        <h1 className="border-t-2 border-brand-blue-500 w-72 text-brand-blue-500 font-semibold text-center">{duplicataSelecionada?.responsavel}</h1>
+        <h1 className="border-t-2 border-brand-blue-500 w-72 text-brand-blue-500 font-semibold text-center">{empresaSelecionada?.empresaNome.toUpperCase()}</h1>
+        <h1 className="border-t-2 border-brand-blue-500 w-72 text-brand-blue-500 font-semibold text-center">{duplicataSelecionada?.responsavel.toUpperCase()}</h1>
 
       </div>
 

@@ -92,7 +92,7 @@ export default function AlertSelectEmpresa(props: AlertSelectEmpresaDProps) {
                   <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
                     <h3 className="text-lg leading-6 font-medium text-gray-900">Seleção de Empresas</h3>
                     <div className="mt-2 flex gap-2">
-                      <p className="text-sm text-gray-500">Você está selecionando a empresa</p><span className='text-sm text-brand-blue-400 font-bold'>{empresas?.empresaNome}.</span>
+                      <p className="text-sm text-gray-500 whitespace-nowrap ">Você está selecionando a empresa</p><span className='text-sm text-brand-blue-400 font-bold'>{empresas?.empresaNome}.</span>
                     </div>
 
                     <span className="text-sm text-gray-500">Após a seleção, as ações realizadas em sistema serão vinculadas exclusivamentes a mesma.</span>
