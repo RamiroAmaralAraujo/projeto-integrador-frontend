@@ -59,7 +59,7 @@ export function FormDuplicatas() {
   const [descontoPorcento, setDescontoPorcento] = useState('0')
   const [acrescimoPorcento, setAcrescimoPorcento] = useState('0')
 
-  const [tipoPag, setTipoPag] = useState<boolean>(false);
+  const [tipoPag, setTipoPag] = useState<boolean>(false)
 
   const { empresaSelecionada } = useContext(AuthContext)
   const {
@@ -196,14 +196,25 @@ export function FormDuplicatas() {
   useEffect(() => {
     if (!isOpen) {
       reset();
-    } else {
-      setValorFinalAuto('0');
+      setValorFinalAuto('');
     }
   }, [isOpen, reset]);
 
   useEffect(() => {
     calcularValorFinal();
   }, [valorLiquido, desconto, acrescimo, valorFinalAuto, descontoPorcento, acrescimoPorcento]);
+
+
+  useEffect(() => {
+    if (data) {
+      setTipoPag(data.tipoPag);
+    } else {
+      setTipoPag(false);
+    }
+  }, [data]);
+
+
+
 
   const handleUploadSuccess = (fileName: string) => {
     setValue('comp_url', fileName);
@@ -289,7 +300,7 @@ export function FormDuplicatas() {
               <Input
                 readOnly={true}
                 accept='number'
-                value={data ? data.valorFinal?.toString() : valorFinalAuto}
+                value={data ? data.valorFinal?.toString() : (valorFinalAuto !== '0' ? valorFinalAuto : '')}
                 icon={<DollarSign size={20} />}
                 label='Valor Final*'
                 {...register("valorFinal", {
@@ -354,7 +365,7 @@ export function FormDuplicatas() {
               error={errors.data_Pag_Receb}
             />
             <ToggleTipoDuplicata
-              value={data ? data.tipoPag : tipoPag}
+              value={tipoPag}
               onChange={(value) => setTipoPag(value)}
             />
 

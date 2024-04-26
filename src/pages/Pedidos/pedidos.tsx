@@ -1,11 +1,13 @@
 import { Page } from '@/components/Page'
 import constructionAnimate from '../../assets/constructionAnimate.svg'
+import { SelectEmpresaButton } from '@/components/SelectEmpresaButton/SelectEmpresaButton';
 
 export function Pedidos() {
   return (
     <Page.Root>
       <Page.Header>
         <Page.Title title="Pedidos" />
+        <SelectEmpresaButton />
       </Page.Header>
       <div className='flex flex-col w-full justify-center items-center'>
         <div className=' '>

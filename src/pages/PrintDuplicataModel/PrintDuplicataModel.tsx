@@ -111,14 +111,14 @@ export default function PrintDuplicatamodel() {
     <div className="flex justify-center p-6 flex-col">
       <div className="flex flex-col items-center">
         <div className="bg-brand-blue-500 w-full h-12"></div>
-        <h1 className="font-bold text-4xl text-brand-blue-500 mb-7 mt-4">RECIBO DIGITAL</h1>
+        <h1 className="font-bold text-4xl text-brand-blue-500 mb-14 mt-4">RECIBO DIGITAL</h1>
         <div className="w-full flex justify-end -mt-16 ">
           <img src={`https://core-commerce.s3.sa-east-1.amazonaws.com/${empresaSelecionada?.logo_url}`} alt="" width={100} />
         </div>
       </div>
 
 
-      <div className="flex justify-center gap-10">
+      <div className="flex justify-center gap-10 mt-16">
         {/* Dados da empresa */}
         <div className="flex flex-col items-start justify-start">
           <h1 className="font-bold text-xl text-brand-blue-500 mb-3 ">{tipoPag ? "PAGADOR" : "RECEBEDOR"}</h1>
