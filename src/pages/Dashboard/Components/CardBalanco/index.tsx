@@ -20,7 +20,7 @@ export function CardBalanco() {
       <h1 className="font-bold text-brand-blue-500 text-2xl">Balanço do Caixa</h1>
       <div className="flex items-center justify-between gap-5 mt-5">
         <span className="text-2xl font-semibold">R$ {saldo.toFixed(2)}</span>
-        <div className={`w-14 h-14 rounded-full flex justify-center items-center ${saldo < 0 ? 'bg-red-300 text-red-700' : 'bg-green-300 text-green-700'}`}> <CandlestickChart size={30} /> </div>
+        <div className={`w-14 h-14 rounded-full flex justify-center items-center ${saldo < 0 ? 'bg-red-300 text-red-700' : saldo > 0 ? 'bg-green-300 text-green-700' : 'bg-gray-300 text-gray-700'}`}> <CandlestickChart size={30} /> </div>
       </div>
     </div>
   );

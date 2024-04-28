@@ -19,11 +19,11 @@ export function GraficoPizza() {
 
   const sales = [
     {
-      name: 'Pagáveis',
+      name: 'Recebíveis',
       value: saldoPagaveis
     },
     {
-      name: 'Recebíveis',
+      name: 'Pagáveis',
       value: saldoRecebiveis
     }
   ];

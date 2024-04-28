@@ -18,6 +18,7 @@ export default function PrintDuplicatamodel() {
   const acresc = duplicataSelecionada?.acresc || ''
   const acrescPorcento = duplicataSelecionada?.acrescPorcento || ''
   const pagamento_recebimento = duplicataSelecionada?.data_Pag_Receb || ''
+  const assinatura = duplicataSelecionada?.ass_url
 
 
   const formatarValorFinalPorExtenso = (valor: number) => {
@@ -236,10 +237,24 @@ export default function PrintDuplicatamodel() {
         </div>
       )}
 
-      <div className="mt-28 flex gap-10 justify-center">
-        <h1 className="border-t-2 border-brand-blue-500 w-72 text-brand-blue-500 font-semibold text-center">{empresaSelecionada?.empresaNome.toUpperCase()}</h1>
-        <h1 className="border-t-2 border-brand-blue-500 w-72 text-brand-blue-500 font-semibold text-center">{duplicataSelecionada?.responsavel.toUpperCase()}</h1>
+      <div className="mt-28 flex gap-10 justify-center items-center">
+        {!assinatura && (
+          <div className="flex justify-end items-end gap-10">
+            <h1 className="border-t-2 border-brand-blue-500 w-72 text-brand-blue-500 font-semibold text-center">{empresaSelecionada?.empresaNome.toUpperCase()}</h1>
+            <h1 className="border-t-2 border-brand-blue-500 w-72 text-brand-blue-500 font-semibold text-center">{duplicataSelecionada?.responsavel.toUpperCase()}</h1>
 
+          </div>
+        )}
+        {assinatura && (
+
+          <div className="flex gap-10 items-end">
+            <h1 className="border-t-2 border-brand-blue-500 w-72 text-brand-blue-500 font-semibold text-center">{empresaSelecionada?.empresaNome.toUpperCase()}</h1>
+            <div className=" flex flex-col justify-center items-center">
+              <img src={`https://core-commerce.s3.sa-east-1.amazonaws.com/${duplicataSelecionada.ass_url}`} alt="" width={170} className="mb-2" />
+              <h1 className="border-t-2 border-brand-blue-500 w-72 text-brand-blue-500 font-semibold text-center">{duplicataSelecionada?.responsavel.toUpperCase()}</h1>
+            </div>
+          </div>
+        )}
       </div>
 
       <footer>

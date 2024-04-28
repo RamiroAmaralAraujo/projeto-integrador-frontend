@@ -44,7 +44,17 @@ export function TablePagaveis() {
     },
     {
       accessorKey: "tipoPag",
-      header: "Tipo",
+      header: ({ column }) => {
+        return (
+          <button
+            className="flex p-2 justify-center items-center hover:bg-gray-400 rounded-xl w-full "
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            TIPO
+            <ArrowUpDown className="ml-2 h-4 w-4  " />
+          </button>
+        )
+      },
       cell: ({ getValue }) => {
         const isPagavel = getValue() as boolean;
         return (
@@ -56,7 +66,17 @@ export function TablePagaveis() {
     },
     {
       accessorKey: "vencimento",
-      header: "Vencimento",
+      header: ({ column }) => {
+        return (
+          <button
+            className="flex p-2 justify-center items-center hover:bg-gray-400 rounded-xl w-full "
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            VENCIMENTO
+            <ArrowUpDown className="ml-2 h-4 w-4  " />
+          </button>
+        )
+      },
       cell: ({ getValue }) => {
         const dateValue = new Date(getValue() as string);
         const formattedDate = dateValue.toLocaleDateString('pt-BR');

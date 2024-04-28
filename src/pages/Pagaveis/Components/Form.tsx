@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form'
 // import { zodResolver } from '@hookform/resolvers/zod'
-import { ClipboardPlus, UsersRound, UserRound, Wallet, BadgePercent, DollarSign, AlignLeft, FilePen, BadgeDollarSign } from 'lucide-react';
+import { ClipboardPlus, UsersRound, UserRound, Wallet, BadgePercent, DollarSign, AlignLeft, BadgeDollarSign } from 'lucide-react';
 
 
 
@@ -17,9 +17,9 @@ import { useDuplicatas } from '@/hook/queries/useDuplicatas'
 import { useDuplicatasStore } from '@/store/Duplicatas/Index'
 import { ToggleTipoDuplicata } from '@/components/ToggleTipoPagamento/ToggleTipoPagamento'
 import { UploadImage } from '@/components/UploadImage/UploadImage'
-import { AssinaturaPad } from '@/components/SignaturePad/SignaturePad'
 import { RegistroDuplicatas } from '@/components/RegistroDuplicatas/RegistroDuplicatas';
 import { queryClient } from '@/service/reactQuery';
+import SignaturePad from '@/components/SignaturePad/SignaturePad';
 
 
 
@@ -121,6 +121,7 @@ export function FormDuplicatas() {
 
 
 
+
   function parseDate(dateString: string): Date | null {
     const date = new Date(dateString);
     // Verifica se a data é válida
@@ -201,6 +202,24 @@ export function FormDuplicatas() {
   }, [isOpen, reset]);
 
   useEffect(() => {
+    if (data) {
+      setValorLiquido(data.valorLiq.toString());
+      setDesconto(data.desconto.toString());
+      setAcrescimo(data.acresc.toString());
+      setDescontoPorcento(data.descontoPorcento.toString());
+      setAcrescimoPorcento(data.acrescPorcento.toString());
+      calcularValorFinal();
+    } else {
+      setValorLiquido('0');
+      setDesconto('0');
+      setAcrescimo('0');
+      setDescontoPorcento('0');
+      setAcrescimoPorcento('0');
+      setValorFinalAuto('0');
+    }
+  }, [data]);
+
+  useEffect(() => {
     calcularValorFinal();
   }, [valorLiquido, desconto, acrescimo, valorFinalAuto, descontoPorcento, acrescimoPorcento]);
 
@@ -218,6 +237,10 @@ export function FormDuplicatas() {
 
   const handleUploadSuccess = (fileName: string) => {
     setValue('comp_url', fileName);
+  };
+
+  const handleUploadAssinaturaSuccess = (fileName: string) => {
+    setValue('ass_url', fileName);
   };
 
   const defaultVencimento = data && data.vencimento ? new Date(data.vencimento).toISOString().split('T')[0] : '';
@@ -364,29 +387,27 @@ export function FormDuplicatas() {
               {...register('data_Pag_Receb')}
               error={errors.data_Pag_Receb}
             />
-            <ToggleTipoDuplicata
-              value={tipoPag}
-              onChange={(value) => setTipoPag(value)}
-            />
+            <div className='w-full justify-center flex'>
+              <ToggleTipoDuplicata
+                value={tipoPag}
+                onChange={(value) => setTipoPag(value)}
+              />
+            </div>
 
 
           </div>
-          <div className=' gap-4 flex w-full'>
-            <UploadImage onUploadSuccess={handleUploadSuccess} />
-            <div className='w-full'>
-              <AssinaturaPad />
-            </div>
-            <div className='w-full h-full'>
-              <RegistroDuplicatas />
+
+
+
+          <div className='flex gap-2'>
+            <div className='w-full h-full flex gap-2'>
+              <UploadImage onUploadSuccess={handleUploadSuccess} />
+              <SignaturePad onUploadSuccess={handleUploadAssinaturaSuccess} />
+              <div className='h-76'>
+                <RegistroDuplicatas />
+              </div>
             </div>
           </div>
-          <Input
-            icon={<FilePen size={20} />}
-            defaultValue={data ? data.ass_url?.toString() ?? '' : ''}
-            label='Assinatura*'
-            {...register('ass_url')}
-            error={errors.ass_url}
-          />
           <Dialog.Actions isLoading={isLoadingCreateOrUpdateDuplicatas} />
         </FormRoot>
       </Dialog.Content>

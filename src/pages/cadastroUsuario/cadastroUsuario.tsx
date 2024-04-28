@@ -1,8 +1,7 @@
 import { Input } from "../../components/ui/input";
 import { IoMdArrowBack } from "react-icons/io";
 import { FiMail } from "react-icons/fi";
-import { FiLock } from "react-icons/fi";
-import { FiUnlock } from "react-icons/fi";
+import { FiEye } from "react-icons/fi";
 import { FiUser } from "react-icons/fi";
 import { TiBusinessCard } from "react-icons/ti";
 
@@ -133,17 +132,17 @@ export function CadastroUsuario() {
             <Input
               type="password"
               label="Senha*"
-              icon={<FiLock size={20} />}
+              icon={<FiEye size={20} />}
               error={errors?.password}
-              iconError={<FiUnlock size={20} />}
+              iconError={<FiEye size={20} />}
               {...register('password')}
             />
 
             <Input
               type="password"
               label="Confirme a Senha*"
-              icon={<FiLock size={20} />}
-              iconError={<FiUnlock size={20} />}
+              icon={<FiEye size={20} />}
+              iconError={<FiEye size={20} />}
               error={errors?.passwordConfirm}
               {...register('passwordConfirm')}
             />
