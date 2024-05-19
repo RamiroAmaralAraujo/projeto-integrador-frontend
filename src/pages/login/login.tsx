@@ -9,6 +9,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from "../../components/ui/button";
 import { useNavigate } from "react-router-dom";
 
+import LogoSemFundoBranco from "../../assets/LogoSemFundoBranco.svg"
+
 
 const LogInSchema = z.object({
     email: z
@@ -41,10 +43,19 @@ export function Login() {
         await signIn(data)
     }
 
+    function retornarPaginaInicial() {
+        navigate('/');
+    }
 
 
     return (
         <>
+        <div>
+            <div onClick={retornarPaginaInicial} className="flex items-center gap-2 w-1/5 justify-center z-10 absolute mt-12 cursor-pointer">
+                <img src={LogoSemFundoBranco} alt="Logo" width={30} />
+                <p className="font-semibold text-white text-2xl">Core<span className="font-normal">Commerce</span></p>
+            </div>
+
             <div className="relative min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8bg-no-repeat bg-cover ">
                 <div className="absolute bg-base-background opacity-
                 0 inset-0 z-0"></div>
@@ -109,6 +120,7 @@ export function Login() {
                     </form>
                 </div>
             </div>
+        </div>
 
         </>
     )

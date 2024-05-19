@@ -134,7 +134,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     setEmpresaSelecionada(undefined)
     setUser(undefined)
     api.defaults.headers.common.Authorization = undefined
-    navigate('/')
+    navigate('/login')
   }
 
 

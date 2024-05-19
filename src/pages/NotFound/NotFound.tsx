@@ -16,7 +16,7 @@ export function NotFound() {
       <span className=' w-screen absolute mt-20 font-semibold text-brand-blue-400 text-center'>Sem problemas, clique no botão abaixo, para retornar a pagina inicial.</span>
 
       <div className='absolute flex justify-center w-full mt-32  '>
-        <Button label='Retornar a Tela inicial' onClick={() => navigate('/')}></Button>
+        <Button label='Retornar a Tela inicial' onClick={() => navigate('/login')}></Button>
       </div>
       <div className='h-full w-full justify-center flex items-center '>
 
