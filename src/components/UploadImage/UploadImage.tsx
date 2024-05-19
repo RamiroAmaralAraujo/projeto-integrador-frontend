@@ -137,7 +137,7 @@ export function UploadImage({ onUploadSuccess }: UploadImageProps) {
       </div>
 
       {selectedFiles.length === 1 && (
-        <Button type="button" label="Enviar Arquivos" onClick={uploadFiles} />
+        <Button type="button" label="Enviar Arquivo" onClick={uploadFiles} />
       )}
     </div>
   );

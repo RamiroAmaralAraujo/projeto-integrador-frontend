@@ -15,6 +15,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, icon, iconError, error, label, maskType, maxLength, ...props }, ref) => {
 
     const [mask, setMask] = useState<string>('')
+    const [showPassword, setShowPassword] = useState<boolean>(false)
 
     useEffect(() => {
       if (maskType === 'cpf') {
@@ -26,6 +27,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       }
     }, [maskType]);
 
+    const handleShowPassword = () => {
+      setShowPassword(!showPassword);
+    }
 
     return (
       <div>
@@ -35,18 +39,23 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             <InputMask
               placeholder=''
               maxLength={maxLength}
-              type={type}
+              type={type === 'password' ? (showPassword ? 'text' : 'password') : type}
               mask={mask}
               className={`peer w-full h-full bg-transparent text-brand-blue-500 outline-none focus:outline-none disabled:bg-brand-blue-500 disabled:border-0 transition-all placeholder-shown:border placeholder-shown:border-brand-blue-500 placeholder-shown:border-t-brand-blue-500 border focus:border-2 border-t-transparent focus:border-t-transparent text-sm px-3 py-2.5 rounded-[7px] border-brand-blue-500 focus:border-brand-blue-500 `}
               inputRef={ref}
               {...props}
             />
 
-            <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+            <div className="absolute inset-y-0 right-0 flex items-center pr-3">
+
               {error && iconError ? (
                 <div className="text-red-700">{iconError}</div>
               ) : (
-                icon && <div className="text-brand-blue-400">{icon}</div>
+                icon && (
+                  <div onClick={handleShowPassword} className="text-brand-blue-400 cursor-pointer">
+                    {icon}
+                  </div>
+                )
               )}
             </div>
 
@@ -65,6 +74,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             <span className='text-xs '>{error.message}</span>
           )}
         </div>
+
 
 
 

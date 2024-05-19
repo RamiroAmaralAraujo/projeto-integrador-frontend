@@ -1,5 +1,6 @@
 import { Page } from '@/components/Page'
 import constructionAnimate from '../../assets/constructionAnimate.svg'
+import { SelectEmpresaButton } from '@/components/SelectEmpresaButton/SelectEmpresaButton';
 
 
 export function Produtos() {
@@ -7,6 +8,7 @@ export function Produtos() {
     <Page.Root>
       <Page.Header>
         <Page.Title title="Produtos" />
+        <SelectEmpresaButton />
       </Page.Header>
 
 

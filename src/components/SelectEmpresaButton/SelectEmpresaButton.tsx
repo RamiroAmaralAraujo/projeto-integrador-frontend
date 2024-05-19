@@ -12,9 +12,9 @@ export function SelectEmpresaButton() {
 
   return (
     <>
-      <div onClick={(() => navigate('/empresas'))} className="w-full flex justify-end relative cursor-pointer">
+      <div className="w-full flex justify-end relative ">
         <div className=" max-w-[500px]">
-          <div className=" bg-brand-blue-400 rounded-xl justify-between mr-14 shadow-lg">
+          <div onClick={(() => navigate('/empresas'))} className=" bg-brand-blue-400 cursor-pointer rounded-xl justify-between mr-14 shadow-lg">
             <div className={`flex justify-around items-center p-3 gap-3 `}>
               <div className="w-full">
                 <h1 className="font-bold text-lg  text-white whitespace-nowrap ">Empresa Selecionada:</h1>

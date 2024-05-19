@@ -1,6 +1,5 @@
 import { Input } from "../../components/ui/input";
-import { FiMail, FiUnlock } from "react-icons/fi";
-import { FiLock } from "react-icons/fi";
+import { FiMail, FiEye } from "react-icons/fi";
 
 import * as z from 'zod'
 import { useAuth } from "../../Context/AuthContext";
@@ -86,8 +85,8 @@ export function Login() {
                         <Input
                             type="password"
                             label="Senha"
-                            icon={<FiLock size={20} />}
-                            iconError={<FiUnlock size={20} />}
+                            icon={<FiEye size={20} />}
+                            iconError={<FiEye size={20} />}
                             error={errors?.password}
                             {...register('password')}
                         />
