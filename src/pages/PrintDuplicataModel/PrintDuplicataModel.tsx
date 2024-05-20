@@ -1,5 +1,5 @@
 import { AuthContext } from "@/Context/AuthContext"
-import { useContext } from "react"
+import { useContext, useEffect } from "react"
 import LogoSemFundoBranco from '../../assets/LogoSemFundoBranco.svg'
 import { format } from 'date-fns';
 
@@ -106,10 +106,21 @@ export default function PrintDuplicatamodel() {
 
 
 
-  window.print()
+
+  const empresaReady = empresaSelecionada
+  const duplicataReady = duplicataSelecionada
+
+
+
+  useEffect(() => {
+    if (empresaReady && duplicataReady) {
+      window.print()
+    }
+  }, [duplicataReady, empresaReady]
+  )
 
   return (
-    <div className="flex justify-center p-6 flex-col">
+    <div className="flex justify-center p-6 flex-col print:absolute">
       <div className="flex flex-col items-center">
         <div className="bg-brand-blue-500 w-full h-12"></div>
         <h1 className="font-bold text-4xl text-brand-blue-500 mb-14 mt-4">RECIBO DIGITAL</h1>
