@@ -1,60 +1,63 @@
+import estoque from "./assets/estoque.png";
+import financeiro from "./assets/financeiro.png";
+import gestaodevendas from "./assets/gestaodevendas.png";
+
 export function Section3() {
-  return(
-    <div className="p-12 bg-white flex justify-center items-center flex-col">
-      <div className="flex flex-col justify-center items-center mb-20 gap-2">
-        <h1 className="font-semibold text-4xl">As melhores soluções em um só lugar</h1>
-        <p>Você contrata somente as soluções que o seu negócio precisa</p>
+  return (
+    <div className="p-6 md:p-12 bg-white flex justify-center items-center flex-col">
+      <div className="flex flex-col justify-center items-center mb-10 md:mb-20 gap-2">
+        <h1 className="font-semibold text-2xl md:text-4xl text-center">As melhores soluções em um só lugar</h1>
+        <p className="text-center">Você contrata soluções que o seu negócio precisa</p>
       </div>
 
-      <div className="flex justify-center items-start w-full">
+      <div className="flex flex-col md:flex-row justify-center items-start w-full gap-6 md:gap-0">
 
-        <div className="flex flex-col justify-center items-end w-1/3">
-          <div className="flex flex-col justify-center items-center w-4/6">
-            <img src="https://via.placeholder.com/150" alt="Imagem1" className="mb-10" />
+        <div className="flex flex-col justify-center items-center md:items-end w-full md:w-1/3">
+          <div className="flex flex-col justify-center items-center w-4/5 md:w-4/6">
+            <img src={gestaodevendas} alt="Imagem1" width={200} className="mb-6 md:mb-10" />
             <div className="flex flex-col justify-center items-center gap-2">
-              <h1 className="font-semibold text-xl">Aplicativo para vendas</h1>
-              <div className="h-36">
-                <p className="text-center">Emita seus pedidos em qualquer lugar, sem internet, com um aplicativo rápido que não trava na frente do cliente</p>
+              <h1 className="font-semibold text-lg md:text-xl text-center">Gestão de vendas</h1>
+              <div className="md:h-36 md:mb-0 mb-2">
+                <p className="text-center">É essencial para impulsionar o sucesso comercial, oferecendo insights em tempo real e automação de processos</p>
               </div>
             </div>
-            <div className="bg-base-background text-white rounded-xl h-10 flex items-center justify-center p-5">
-              <p>Conheça o aplicativo para vendas</p>
+            <div className="bg-base-background text-white rounded-xl h-10 flex items-center justify-center md:p-5 p-3 font-semibold md:mb-0 mb-10">
+              <p className="text-center">Conheça a Gestão de vendas</p>
             </div>
           </div>
         </div>
 
-        <div className="flex flex-col justify-center items-center w-1/3">
-          <div className="flex flex-col justify-center items-center w-4/6">
-            <img src="https://via.placeholder.com/150" alt="Imagem2" className="mb-10" />
+        <div className="flex flex-col justify-center items-center w-full md:w-1/3">
+          <div className="flex flex-col justify-center items-center w-4/5 md:w-4/6">
+            <img src={financeiro} alt="Imagem2" width={200} className="mb-6 md:mb-10" />
             <div className="flex flex-col justify-center items-center gap-2">
-              <h1 className="font-semibold text-xl">ERP</h1>
-              <div className="h-36">
-                <p className="text-center">Emissão de Notas Fiscais com cálculo automático dos impostos, boletos registrados no seu banco, PDV, integração com marketplaces e intermediadores de pagamento. Gerencie todo seu negócio em uma única plataforma</p>
+              <h1 className="font-semibold text-lg md:text-xl text-center">Financeiro</h1>
+              <div className="md:h-36 md:mb-0 mb-2">
+                <p className="text-center">Desempenha um papel fundamental na gestão e na análise dos aspectos monetários do negócio</p>
               </div>
             </div>
-            <div className="bg-base-background text-white rounded-xl h-10 flex items-center justify-center p-5">
-              <p className="text-center">Conheça o ERP</p>
+            <div className="bg-base-background text-white rounded-xl h-10 flex items-center justify-center md:p-5 p-3 font-semibold md:mb-0 mb-10">
+              <p className="text-center">Conheça o Financeiro</p>
             </div>
           </div>
         </div>
 
-        <div className="flex flex-col justify-center items-start w-1/3">
-          <div className="flex flex-col justify-center items-center w-4/6">
-            <img src="https://via.placeholder.com/150" alt="Imagem3" className="mb-10" />
+        <div className="flex flex-col justify-center items-center md:items-start w-full md:w-1/3">
+          <div className="flex flex-col justify-center items-center w-4/5 md:w-4/6">
+            <img src={estoque} alt="Imagem3" width={200} className="mb-6 md:mb-10" />
             <div className="flex flex-col justify-center items-center gap-2">
-              <h1 className="font-semibold text-xl">E-commerce</h1>
-              <div className="h-36">
-                <p className="text-center">Crie sua própria loja virtual ou catálogo online em poucos cliques e venda sem pagar comissões</p>
+              <h1 className="font-semibold text-lg md:text-xl text-center">Estoque</h1>
+              <div className="md:h-36 md:mb-0 mb-2">
+                <p className="text-center">É essencial para o controle eficiente de inventário e gestão de mercadorias</p>
               </div>
             </div>
-            <div className="bg-base-background text-white rounded-xl h-10 flex items-center justify-center p-5">
-              <p className="text-center">Conheça o E-commerce</p>
+            <div className="bg-base-background text-white rounded-xl h-10 flex items-center justify-center md:p-5 p-3 font-semibold md:mb-0 mb-10">
+              <p className="text-center">Conheça o Estoque</p>
             </div>
           </div>
         </div>
 
       </div>
-        
     </div>
-  )
+  );
 }

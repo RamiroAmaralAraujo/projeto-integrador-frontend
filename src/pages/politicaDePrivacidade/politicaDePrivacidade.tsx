@@ -1,13 +1,13 @@
 export default function PoliticaDePrivacidade() {
   return(
 
-    <div className="relative min-h-screen h-screen  flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8bg-no-repeat bg-cover ">
+    <div className="relative min-h-screen h-screen  flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 bg-no-repeat bg-cover ">
       <div className="absolute bg-base-background opacity-
             0 inset-0 z-0"></div>
-      <div className="max-w-4xl w-full p-10 bg-white rounded-xl z-10 h-full">
+      <div className="max-w-4xl w-full md:p-10 bg-white rounded-xl z-10 h-full">
           <div className="max-w-4xl w-full space-y-10 p-10 bg-white rounded-xl z-10 h-full overflow-hidden overflow-y-scroll">
             <div className="space-y-5">
-              <h1 className="font-bold text-3xl text-brand-blue-500">Política de Privacidade</h1>
+              <h1 className="font-bold text-2xl md:text-3xl text-brand-blue-500">Política de Privacidade</h1>
               <p className="text-justify italic text-gray-500">A Core Commerce está comprometida em proteger a privacidade e os dados pessoais dos usuários de nossos produtos e serviços. Esta Política de Privacidade descreve como coletamos, usamos, compartilhamos e protegemos suas informações pessoais de acordo com as disposições da Lei Geral de Proteção de Dados (LGPD).</p>
             </div>
             
@@ -62,7 +62,7 @@ export default function PoliticaDePrivacidade() {
               <p className="text-justify text-gray-500">Se você tiver alguma dúvida ou preocupação sobre esta Política de Privacidade ou sobre nossas práticas de privacidade, entre em contato conosco através dos seguintes meios de contato:</p>
               <div>
                 <p className="text-gray-500">Telefone: (32)99195-2561 | (32)99838-9080</p>
-                <p className="text-gray-500">Email: suporte@corecommerce.com.br</p>
+                <p className="text-gray-500">Email: suporte@corecommerce.online</p>
               </div>
             </div>
         
