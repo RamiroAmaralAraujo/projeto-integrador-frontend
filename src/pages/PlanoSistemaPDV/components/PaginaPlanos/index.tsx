@@ -384,8 +384,8 @@ const PaginaPlanos: React.FC = () => {
   };
 
   return (
-    <div className="w-full flex flex-col items-center">
-      <div className="flex space-x-4 mb-8">
+    <div className="w-full flex flex-col items-center md:p-4">
+      <div className="flex flex-wrap justify-center space-x-1 md:space-x-4 md:space-y-0 mb-8">
         {['Mensal', 'Trimestral', 'Semestral', 'Anual'].map((planType) => (
           <button
             key={planType}
@@ -397,7 +397,7 @@ const PaginaPlanos: React.FC = () => {
         ))}
       </div>
 
-      <div className="w-full flex flex-col md:flex-row md:space-x-10 space-y-4 md:space-y-0 justify-center mb-20">
+      <div className="w-full flex flex-col md:flex-row md:flex-wrap md:space-x-10 space-y-4 md:space-y-0 justify-center mb-20">
         {plans[selectedPlan as keyof typeof plans].map((plan, index) => (
           <BlocoPlanos
             key={index}

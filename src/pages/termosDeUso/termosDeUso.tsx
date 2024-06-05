@@ -5,9 +5,9 @@ export default function TermosDeUso() {
       <div className="absolute bg-base-background opacity-
             0 inset-0 z-0"></div>
       <div className="max-w-4xl w-full p-10 bg-white rounded-xl z-10 h-full">
-          <div className="max-w-4xl w-full space-y-10 p-10 bg-white rounded-xl z-10 h-full overflow-hidden overflow-y-scroll">
+          <div className="max-w-4xl w-full space-y-10 md:p-10 bg-white rounded-xl z-10 h-full overflow-hidden overflow-y-scroll">
             <div className="space-y-5">
-              <h1 className="font-bold text-3xl text-brand-blue-500">Termos de Uso</h1>
+              <h1 className="font-bold text-2xl md:text-3xl text-brand-blue-500">Termos de Uso</h1>
               <p className="text-justify italic text-gray-500">Estes Termos de Uso regem o uso dos produtos e serviços oferecidos pela Core Commerce. Ao acessar ou usar nossos produtos e serviços, você concorda em ficar vinculado a estes Termos.</p>
             </div>
             
@@ -41,7 +41,7 @@ export default function TermosDeUso() {
               <p className="text-justify text-gray-500">Se você tiver alguma dúvida ou preocupação sobre estes Termos, entre em contato conosco através dos seguintes meios de contato:</p>
               <div>
               <p className="text-gray-500">Telefone: (32)99195-2561 | (32)99838-9080</p>
-                <p className="text-gray-500">Email: suporte@corecommerce.com.br</p>
+                <p className="text-gray-500">Email: suporte@corecommerce.online</p>
               </div>
             </div>
         

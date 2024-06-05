@@ -1,19 +1,25 @@
+import image from "./assets/section1site.png";
+
 export function Section1() {
   return (
-    <div className="p-28 bg-brand-blue-200 flex items-center">
-      <div className="flex justify-end font-semibold">
-        <div className="font-semibold text-4xl w-3/4">
-          <h1>Aplicativo para vendas</h1>
-          <h1>ERP</h1>
-          <h1>E-commerce</h1>
-          <p className="font-normal text-base">Na CoreCommerce você emite NF-e, NFC-e e boletos, faz a gestão das vendas, financeiro e estoque e ainda conta com o PDV, aplicativo Android para vendas, catálogo online e E-commerce, além de integração com principais marketplaces, bancos e intermediadores de pagamentos.</p>
+    <div className="p-6 lg:p-28 pt-20 bg-brand-blue-200 flex md:flex-row flex-col items-center">
+      <div className="flex md:justify-end font-semibold justify-center w-full text-center md:text-left">
+        <div className="text-2xl md:text-3xl lg:text-4xl w-full lg:w-3/4">
+          <h1>Sistema PDV</h1>
+          <p className="font-normal text-sm md:text-base mt-4">
+          Com o Sistema PDV da CoreCommerce, você tem a solução completa para a gestão eficiente das vendas, do financeiro e do estoque. Nosso PDV oferece funcionalidades robustas que facilitam o controle de vendas, o acompanhamento financeiro e a organização do estoque, tudo em um único lugar. Além disso, você pode contar com integrações que otimizam o processo, garantindo uma experiência ainda mais fluida para o seu negócio.
+          </p>
         </div>
       </div>
       <div className="w-full">
-        <div className="flex justify-start items-center ml-32">
-          <img src="https://via.placeholder.com/150" alt="Imagem" width={400} />
+        <div className="flex md:justify-start justify-center md:w-auto w-full items-center md:ml-32 mt-8 md:mt-0">
+          <img
+            src={image}
+            alt="Imagem"
+            width={500}
+          />
         </div>
       </div>
     </div>
-  )
+  );
 }

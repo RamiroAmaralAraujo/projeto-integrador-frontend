@@ -25,7 +25,7 @@ const Popover: React.FC<PopoverProps> = ({ menuItems, children }) => {
     <div className="relative inline-block" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       <div>{children}</div>
       {isOpen && (
-        <div className="absolute z-10 w-64 bg-white border border-gray-200 rounded-xl shadow-lg">
+        <div className="absolute z-10 w-64 bg-white border border-gray-200 rounded-xl shadow-lg text-black">
           {menuItems.map((item, index) => (
             <div
               key={index}
