@@ -1,8 +1,22 @@
+import { useNavigate } from "react-router-dom";
 import estoque from "./assets/estoque.png";
 import financeiro from "./assets/financeiro.png";
 import gestaodevendas from "./assets/gestaodevendas.png";
 
+
+
+
+
+
 export function Section3() {
+  const navigate = useNavigate()
+
+  function paginaSolucoes() {
+
+    navigate('solucoes/sistema-pdv')
+
+  }
+
   return (
     <div className="p-6 md:p-12 bg-white flex justify-center items-center flex-col">
       <div className="flex flex-col justify-center items-center mb-10 md:mb-20 gap-2">
@@ -21,7 +35,7 @@ export function Section3() {
                 <p className="text-center">É essencial para impulsionar o sucesso comercial, oferecendo insights em tempo real e automação de processos</p>
               </div>
             </div>
-            <div className="bg-base-background text-white rounded-xl h-10 flex items-center justify-center md:p-5 p-3 font-semibold md:mb-0 mb-10">
+            <div onClick={paginaSolucoes} className="bg-base-background text-white rounded-xl h-10 flex items-center justify-center md:p-5 p-3 font-semibold md:mb-0 mb-10 cursor-pointer">
               <p className="text-center">Conheça a Gestão de vendas</p>
             </div>
           </div>
@@ -36,7 +50,7 @@ export function Section3() {
                 <p className="text-center">Desempenha um papel fundamental na gestão e na análise dos aspectos monetários do negócio</p>
               </div>
             </div>
-            <div className="bg-base-background text-white rounded-xl h-10 flex items-center justify-center md:p-5 p-3 font-semibold md:mb-0 mb-10">
+            <div onClick={paginaSolucoes} className="bg-base-background text-white rounded-xl h-10 flex items-center justify-center md:p-5 p-3 font-semibold md:mb-0 mb-10 cursor-pointer">
               <p className="text-center">Conheça o Financeiro</p>
             </div>
           </div>
@@ -51,7 +65,7 @@ export function Section3() {
                 <p className="text-center">É essencial para o controle eficiente de inventário e gestão de mercadorias</p>
               </div>
             </div>
-            <div className="bg-base-background text-white rounded-xl h-10 flex items-center justify-center md:p-5 p-3 font-semibold md:mb-0 mb-10">
+            <div onClick={paginaSolucoes} className="bg-base-background text-white rounded-xl h-10 flex items-center justify-center md:p-5 p-3 font-semibold md:mb-0 mb-10 cursor-pointer">
               <p className="text-center">Conheça o Estoque</p>
             </div>
           </div>

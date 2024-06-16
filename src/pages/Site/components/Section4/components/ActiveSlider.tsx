@@ -44,22 +44,24 @@ const ActiveSlider = () => {
       >
         {ServiceData.map((item) => (
           <SwiperSlide key={item.title} className="flex justify-center">
-            <div className="flex flex-col gap-6 mb-20 group relative shadow-xl text-white rounded-xl px-6 py-8 h-[400px] md:w-[350px] overflow-hidden cursor-pointer">
-              <div
-                className="absolute inset-0 bg-cover bg-center"
-                style={{ backgroundImage: `url(${item.backgroundImage})` }}
-              />
-              <div className="absolute inset-0 bg-brand-blue-500 opacity-70 group-hover:opacity-90" />
-              <div className="relative flex flex-col items-center gap-4 lg:gap-20">
-                {/* <item.icon className="text-blue-600 group-hover:text-blue-400 w-[32px] h-[32px]" /> */}
-                <img src={item.logo} alt="LogoEmpresa" width={100} className="rounded-full" />
-                <div className="text-center">
-                  <h1 className="text-xl lg:text-2xl mb-2">{item.title} </h1>
-                  <p className="lg:text-[18px]">{item.content} </p>
+            <a href={item.link} target="_blank">
+              <div className="flex flex-col gap-6 mb-20 group relative shadow-xl text-white rounded-xl px-6 py-8 h-[400px] md:w-[350px] overflow-hidden cursor-pointer">
+                <div
+                  className="absolute inset-0 bg-cover bg-center"
+                  style={{ backgroundImage: `url(${item.backgroundImage})` }}
+                />
+                <div className="absolute inset-0 bg-brand-blue-500 opacity-70 group-hover:opacity-90" />
+                <div className="relative flex flex-col items-center gap-4 lg:gap-20">
+                  {/* <item.icon className="text-blue-600 group-hover:text-blue-400 w-[32px] h-[32px]" /> */}
+                  <img src={item.logo} alt="LogoEmpresa" width={100} className="rounded-full" />
+                  <div className="text-center">
+                    <h1 className="text-xl lg:text-2xl mb-2">{item.title} </h1>
+                    <p className="lg:text-[18px]">{item.content} </p>
+                  </div>
                 </div>
+                {/* <RxArrowTopRight className="absolute bottom-5 left-5 w-[35px] h-[35px] text-white group-hover:text-blue-500 group-hover:rotate-45 duration-100" /> */}
               </div>
-              {/* <RxArrowTopRight className="absolute bottom-5 left-5 w-[35px] h-[35px] text-white group-hover:text-blue-500 group-hover:rotate-45 duration-100" /> */}
-            </div>
+            </a>
           </SwiperSlide>
         ))}
       </Swiper>

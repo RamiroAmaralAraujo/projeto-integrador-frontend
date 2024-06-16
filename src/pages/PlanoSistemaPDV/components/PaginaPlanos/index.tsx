@@ -7,46 +7,18 @@ const PaginaPlanos: React.FC = () => {
   const plans = {
     Mensal: [
       {
-        titulo: 'Free',
-        desconto: '0',
-        preco: '0',
-        tempo: 'mês',
-        equivalente: '55',
-        recursosInclusos: [
-          'Integrações com +250 e-commerces, marketplaces e operadores logísticos',
-          'Sincronização de estoque',
-          'Atualização automática de pedidos de venda',
-          'Emissão de notas fiscais (NF-e, NFC-e e NFS-e)'
-        ],
-        recursosNaoInclusos: [
-          'Impressão de etiqueta',
-          'Campos customizáveis de produto',
-          'Frente de Caixa (PDV)',
-          'Ordens de serviço',
-          'Área Meu Contador',
-          'Logística reversa',
-        ],
-        especificacoes: [
-          '5 usuários',
-          '60 MB de dados',
-          '1,5 GB de arquivos',
-          '200 importações de pedidos em marketplaces por mês'
-        ],
-        suporte: 'Suporte ilimitado e gratuito via telefone, e-mail, chat e ticket'
-      },
-      {
         titulo: 'Básico',
         desconto: '0',
         preco: '150',
         tempo: 'mês',
         equivalente: '55',
         recursosInclusos: [
-          'Integrações com +250 e-commerces, marketplaces e operadores logísticos',
-          'Sincronização de estoque',
+          'Controle Financeiro',
           'Atualização automática de pedidos de venda',
-          'Emissão de notas fiscais (NF-e, NFC-e e NFS-e)'
         ],
         recursosNaoInclusos: [
+          'Integrações com +250 e-commerces, marketplaces e operadores logísticos',
+          'Emissão de notas fiscais (NF-e, NFC-e e NFS-e)',
           'Impressão de etiqueta',
           'Campos customizáveis de produto',
           'Frente de Caixa (PDV)',
@@ -70,7 +42,7 @@ const PaginaPlanos: React.FC = () => {
         equivalente: '55',
         recursosInclusos: [
           'Integrações com +250 e-commerces, marketplaces e operadores logísticos',
-          'Sincronização de estoque',
+          'Controle Financeiro',
           'Atualização automática de pedidos de venda',
           'Emissão de notas fiscais (NF-e, NFC-e e NFS-e)'
         ],
@@ -98,17 +70,18 @@ const PaginaPlanos: React.FC = () => {
         equivalente: '55',
         recursosInclusos: [
           'Integrações com +250 e-commerces, marketplaces e operadores logísticos',
-          'Sincronização de estoque',
+          'Controle Financeiro',
           'Atualização automática de pedidos de venda',
-          'Emissão de notas fiscais (NF-e, NFC-e e NFS-e)'
-        ],
-        recursosNaoInclusos: [
+          'Emissão de notas fiscais (NF-e, NFC-e e NFS-e)',
           'Impressão de etiqueta',
           'Campos customizáveis de produto',
           'Frente de Caixa (PDV)',
           'Ordens de serviço',
           'Área Meu Contador',
           'Logística reversa',
+        ],
+        recursosNaoInclusos: [
+
         ],
         especificacoes: [
           '50 usuários',
@@ -128,7 +101,7 @@ const PaginaPlanos: React.FC = () => {
         equivalente: '55',
         recursosInclusos: [
           'Integrações com +250 e-commerces, marketplaces e operadores logísticos',
-          'Sincronização de estoque',
+          'Controle Financeiro',
           'Atualização automática de pedidos de venda',
           'Emissão de notas fiscais (NF-e, NFC-e e NFS-e)'
         ],
@@ -156,7 +129,7 @@ const PaginaPlanos: React.FC = () => {
         equivalente: '55',
         recursosInclusos: [
           'Integrações com +250 e-commerces, marketplaces e operadores logísticos',
-          'Sincronização de estoque',
+          'Controle Financeiro',
           'Atualização automática de pedidos de venda',
           'Emissão de notas fiscais (NF-e, NFC-e e NFS-e)'
         ],
@@ -184,7 +157,7 @@ const PaginaPlanos: React.FC = () => {
         equivalente: '55',
         recursosInclusos: [
           'Integrações com +250 e-commerces, marketplaces e operadores logísticos',
-          'Sincronização de estoque',
+          'Controle Financeiro',
           'Atualização automática de pedidos de venda',
           'Emissão de notas fiscais (NF-e, NFC-e e NFS-e)'
         ],
@@ -214,7 +187,7 @@ const PaginaPlanos: React.FC = () => {
         equivalente: '55',
         recursosInclusos: [
           'Integrações com +250 e-commerces, marketplaces e operadores logísticos',
-          'Sincronização de estoque',
+          'Controle Financeiro',
           'Atualização automática de pedidos de venda',
           'Emissão de notas fiscais (NF-e, NFC-e e NFS-e)'
         ],
@@ -242,7 +215,7 @@ const PaginaPlanos: React.FC = () => {
         equivalente: '55',
         recursosInclusos: [
           'Integrações com +250 e-commerces, marketplaces e operadores logísticos',
-          'Sincronização de estoque',
+          'Controle Financeiro',
           'Atualização automática de pedidos de venda',
           'Emissão de notas fiscais (NF-e, NFC-e e NFS-e)'
         ],
@@ -270,7 +243,7 @@ const PaginaPlanos: React.FC = () => {
         equivalente: '55',
         recursosInclusos: [
           'Integrações com +250 e-commerces, marketplaces e operadores logísticos',
-          'Sincronização de estoque',
+          'Controle Financeiro',
           'Atualização automática de pedidos de venda',
           'Emissão de notas fiscais (NF-e, NFC-e e NFS-e)'
         ],
@@ -300,7 +273,7 @@ const PaginaPlanos: React.FC = () => {
         equivalente: '55',
         recursosInclusos: [
           'Integrações com +250 e-commerces, marketplaces e operadores logísticos',
-          'Sincronização de estoque',
+          'Controle Financeiro',
           'Atualização automática de pedidos de venda',
           'Emissão de notas fiscais (NF-e, NFC-e e NFS-e)'
         ],
@@ -328,7 +301,7 @@ const PaginaPlanos: React.FC = () => {
         equivalente: '55',
         recursosInclusos: [
           'Integrações com +250 e-commerces, marketplaces e operadores logísticos',
-          'Sincronização de estoque',
+          'Controle Financeiro',
           'Atualização automática de pedidos de venda',
           'Emissão de notas fiscais (NF-e, NFC-e e NFS-e)'
         ],
@@ -356,7 +329,7 @@ const PaginaPlanos: React.FC = () => {
         equivalente: '55',
         recursosInclusos: [
           'Integrações com +250 e-commerces, marketplaces e operadores logísticos',
-          'Sincronização de estoque',
+          'Controle Financeiro',
           'Atualização automática de pedidos de venda',
           'Emissão de notas fiscais (NF-e, NFC-e e NFS-e)'
         ],
