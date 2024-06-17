@@ -1,6 +1,6 @@
 import { Input } from "../../components/ui/input";
 import { IoMdArrowBack } from "react-icons/io";
-import { FiMail, FiEye, FiUser } from "react-icons/fi";
+import { FiMail, FiEye, FiEyeOff, FiUser } from "react-icons/fi";
 import { TiBusinessCard } from "react-icons/ti";
 import LogoSemFundoBranco from "../../assets/LogoSemFundoBranco.svg";
 
@@ -42,6 +42,8 @@ type CadastroData = z.infer<typeof CadastroSchema>;
 export function CadastroUsuario() {
   const { mutateAsync: signUp, isLoading: isSignUp } = useSignUp();
   const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
 
   const {
     handleSubmit,
@@ -123,18 +125,42 @@ export function CadastroUsuario() {
               {...register("email")}
             />
             <Input
-              type="password"
+              type={isPasswordVisible ? "text" : "password"}
               label="Senha*"
-              icon={<FiEye size={20} />}
+              icon={
+                isPasswordVisible ? (
+                  <FiEyeOff size={20} onClick={() => setIsPasswordVisible(false)} />
+                ) : (
+                  <FiEye size={20} onClick={() => setIsPasswordVisible(true)} />
+                )
+              }
+              iconError={
+                isPasswordVisible ? (
+                  <FiEyeOff size={20} onClick={() => setIsPasswordVisible(false)} />
+                ) : (
+                  <FiEye size={20} onClick={() => setIsPasswordVisible(true)} />
+                )
+              }
               error={errors?.password}
-              iconError={<FiEye size={20} />}
               {...register("password")}
             />
             <Input
-              type="password"
+              type={isConfirmPasswordVisible ? "text" : "password"}
               label="Confirme a Senha*"
-              icon={<FiEye size={20} />}
-              iconError={<FiEye size={20} />}
+              icon={
+                isConfirmPasswordVisible ? (
+                  <FiEyeOff size={20} onClick={() => setIsConfirmPasswordVisible(false)} />
+                ) : (
+                  <FiEye size={20} onClick={() => setIsConfirmPasswordVisible(true)} />
+                )
+              }
+              iconError={
+                isConfirmPasswordVisible ? (
+                  <FiEyeOff size={20} onClick={() => setIsConfirmPasswordVisible(false)} />
+                ) : (
+                  <FiEye size={20} onClick={() => setIsConfirmPasswordVisible(true)} />
+                )
+              }
               error={errors?.passwordConfirm}
               {...register("passwordConfirm")}
             />

@@ -1,5 +1,5 @@
 import { Input } from "../../components/ui/input";
-import { FiMail, FiEye } from "react-icons/fi";
+import { FiMail, FiEye, FiEyeOff } from "react-icons/fi";
 import * as z from 'zod';
 import { useAuth } from "../../Context/AuthContext";
 import { useForm } from 'react-hook-form';
@@ -7,6 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from "../../components/ui/button";
 import { useNavigate } from "react-router-dom";
 import LogoSemFundoBranco from "../../assets/LogoSemFundoBranco.svg";
+import { useState } from "react";
 
 const LogInSchema = z.object({
     email: z
@@ -22,6 +23,7 @@ type LogInData = z.infer<typeof LogInSchema>;
 export function Login() {
     const { signIn } = useAuth();
     const navigate = useNavigate();
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
     const {
         handleSubmit,
@@ -67,10 +69,22 @@ export function Login() {
                         {...register('email')}
                     />
                     <Input
-                        type="password"
+                        type={isPasswordVisible ? "text" : "password"}
                         label="Senha"
-                        icon={<FiEye size={20} />}
-                        iconError={<FiEye size={20} />}
+                        icon={
+                            isPasswordVisible ? (
+                                <FiEyeOff size={20} onClick={() => setIsPasswordVisible(false)} />
+                            ) : (
+                                <FiEye size={20} onClick={() => setIsPasswordVisible(true)} />
+                            )
+                        }
+                        iconError={
+                            isPasswordVisible ? (
+                                <FiEyeOff size={20} onClick={() => setIsPasswordVisible(false)} />
+                            ) : (
+                                <FiEye size={20} onClick={() => setIsPasswordVisible(true)} />
+                            )
+                        }
                         error={errors?.password}
                         {...register('password')}
                     />
