@@ -1,78 +1,102 @@
-import { ReactNode, useContext } from "react";
+import { ReactNode, useContext, useState, useEffect } from "react";
 import { SidebarContext } from "./SidebarForm";
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom';
 import { AuthContext } from "@/Context/AuthContext";
-
-
+import { ChevronDown, ChevronUp } from 'lucide-react';
 
 interface SidebarItemProps {
-  icon: ReactNode
+  icon: ReactNode;
   text: string;
-  url: string;
+  url?: string;
   alert?: boolean;
+  subItems?: { text: string; url: string }[];
 }
 
-
-export function SidebarItem({ icon, text, alert, url }: SidebarItemProps) {
+export function SidebarItem({ icon, text, alert, url, subItems }: SidebarItemProps) {
   const { expanded } = useContext(SidebarContext);
+  const { empresaSelecionada } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  const { empresaSelecionada } = useContext(AuthContext)
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
+  const activeLink = location.pathname === url;
+  
+  const isAnySubItemActive = subItems?.some(subItem => location.pathname === subItem.url);
 
-  const navigate = useNavigate()
-  const location = useLocation()
+  const empresaSelected = empresaSelecionada?.id;
 
-  const activeLink = location.pathname === url
-
-  const empresaSelected = empresaSelecionada?.id
+  useEffect(() => {
+    if (subItems && isAnySubItemActive) {
+      setIsPopoverOpen(true);
+    }
+  }, [location.pathname, subItems, isAnySubItemActive]);
 
   function handleNavigateTo() {
-    navigate(url)
+    if (url) {
+      navigate(url);
+    }
+    if (subItems) {
+      setIsPopoverOpen(!isPopoverOpen);
+    }
   }
 
   return (
     <>
       {empresaSelected && (
-
         <li
           className={`
-         mb-2 relative flex items-center py-2 px-3 my-1 font-medium rounded-xl cursor-pointer transition-colors group justify-center hover:bg-brand-blue-300 shadow-md
-        ${activeLink ? "bg-brand-blue-400 text-brand-blue-200 " : " bg-brand-blue-200 text-brand-blue-400"} 
-      `}
+            mb-2 relative flex flex-col items-center py-2 px-3 my-1 font-medium rounded-xl cursor-pointer transition-colors group justify-center hover:bg-brand-blue-300 shadow-md
+            ${(activeLink || isAnySubItemActive) ? "bg-brand-blue-400 text-brand-blue-200 " : " bg-brand-blue-200 text-brand-blue-400"} 
+          `}
           onClick={handleNavigateTo}
         >
-          {icon}
-          <span className={`overflow-hidden transition-all flex justify-between ${expanded ? "w-60 ml-3 " : "w-0"}`}>{text}</span>
-          {alert && (
-            <div className={` ${activeLink ? "absolute right-2 w-2 h-2 rounded-full bg-brand-blue-200" : ""} ${expanded ? "" : "top-2"}`} />
-          )}
-          {!expanded && (
-            <div className={`absolute left-full rounded-xl px-2 py-1 ml-6 bg-brand-blue-500 text-brand-blue-100 text-sm invisible opacity-20 -translate-x-3 transition-all group-hover:visible group-hover:opacity-100 group-hover:translate-x-0`}>
+          <div className="flex items-center w-full">
+            {icon}
+            <span className={`overflow-hidden transition-all flex justify-between ${expanded ? "w-60 ml-3 " : "w-0"}`}>
               {text}
-            </div>
+            </span>
+            {subItems && (
+              isPopoverOpen ? <ChevronUp className="ml-auto" /> : <ChevronDown className="ml-auto" />
+            )}
+            {alert && (activeLink) && (
+              <div className="absolute right-4 w-2 h-2 rounded-full bg-brand-blue-200" />
+            )}
+          </div>
+
+          {isPopoverOpen && subItems && (
+            <ul className={`w-full mt-2 pl-4 transition-all ${expanded ? "block" : "hidden"}`}>
+              {subItems.map((subItem, index) => {
+                const isSubItemActive = location.pathname === subItem.url;
+                return (
+                  <li
+                    key={index}
+                    className={`py-1 cursor-pointer flex items-center transition-colors ${
+                      isAnySubItemActive ? "text-brand-blue-200" : "text-brand-blue-400 hover:text-brand-blue-200"
+                    }`}
+                    onClick={() => navigate(subItem.url)}
+                  >
+                    {subItem.text}
+                    {isSubItemActive && (
+                      <div className="absolute right-4 w-2 h-2 rounded-full bg-brand-blue-200" />
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
           )}
         </li>
-
       )}
 
       {!empresaSelected && (
         <li
           className={`
-       mb-2 relative flex items-center py-2 px-3 my-1 font-medium rounded-xl cursor-not-allowed transition-colors group justify-center  shadow-md opacity-45
-      ${activeLink ? "bg-gray-400 text-gray-600 " : " bg-gray-200 text-brand-blue-"} 
-    `}
-
+            mb-2 relative flex items-center py-2 px-3 my-1 font-medium rounded-xl cursor-not-allowed transition-colors group justify-center shadow-md opacity-45
+            ${activeLink ? "bg-gray-400 text-gray-600 " : " bg-gray-200 text-brand-blue-400"} 
+          `}
         >
           {icon}
           <span className={`overflow-hidden transition-all flex justify-between ${expanded ? "w-60 ml-3 " : "w-0"}`}>{text}</span>
-          {alert && (
-            <div className={` ${activeLink ? "absolute right-2 w-2 h-2 rounded-full bg-gray-600" : ""} ${expanded ? "" : "top-2"}`} />
-          )}
-          {!expanded && (
-            <div className={`absolute left-full rounded-xl px-2 py-1 ml-6 bg-brand-blue-500 text-brand-blue-100 text-sm invisible opacity-20 -translate-x-3 transition-all group-hover:visible group-hover:opacity-100 group-hover:translate-x-0`}>
-              {text}
-            </div>
-          )}
         </li>
       )}
     </>

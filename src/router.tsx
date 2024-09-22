@@ -10,7 +10,8 @@ import TermosDeUso from './pages/termosDeUso/termosDeUso'
 import { Site } from './pages/Site/site'
 import { PlanoSistemaPDV } from './pages/PlanoSistemaPDV/planoSistemaPDV'
 import PoliticaDePrivacidade from './pages/politicaDePrivacidade/politicaDePrivacidade'
-import { Produtos } from './pages/Produtos/Produtos'
+import { Produtos } from './pages/Produtos/Index'
+import { Categorias } from './pages/Categorias/Index'
 import { Pedidos } from './pages/Pedidos/pedidos'
 import { NotFound } from './pages/NotFound/NotFound'
 import { Empresas } from './pages/Empresas/Index'
@@ -97,6 +98,10 @@ export const router = createBrowserRouter([
       {
         path: '/produtos',
         element: <Produtos />
+      },
+      {
+        path: '/categorias',
+        element: <Categorias />
       },
       {
         path: '/pedidos',
