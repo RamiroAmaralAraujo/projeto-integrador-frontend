@@ -13,6 +13,7 @@ import { api } from '../service/api'
 import { useNavigate } from 'react-router-dom'
 import { EmpresasData } from '@/hook/queries/useEmpresas'
 import { DuplicatasData } from '@/hook/queries/useDuplicatas'
+import { CategoriasData } from '@/hook/queries/useCategorias'
 
 type User = {
   sub: string
@@ -36,6 +37,8 @@ type AuthContextData = {
   duplicataSelecionada?: DuplicatasData
   setduplicataSelecionada?: (duplicata: DuplicatasData) => void
   setEmpresaSelecionada?: (empresa: EmpresasData) => void
+  categoriaSelecionada?: CategoriasData
+  setcategoriaSelecionada?: (categoria: CategoriasData) => void
 }
 
 type Response = {
@@ -56,10 +59,12 @@ export const AuthContext = createContext({} as AuthContextData)
 export function AuthProvider({ children }: AuthProviderProps) {
   const [empresaSelecionada, setEmpresaSelecionada] = useState<EmpresasData>()
   const [duplicataSelecionada, setduplicataSelecionada] = useState<DuplicatasData>()
+  const [categoriaSelecionada, setcategoriaSelecionada] = useState<CategoriasData>()
   const [user, setUser] = useState<User>()
   const [isAuthenticating, setAuthenticating] = useState(false)
 
   console.log({ duplicataSelecionada })
+  console.log({ categoriaSelecionada })
 
 
   const isAuthenticated = !!user
@@ -69,6 +74,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const storedToken = localStorage.getItem('token')
     const storedEmpresa = localStorage.getItem('EmpresaStorage')
     const storedDuplicata = localStorage.getItem('DuplicataStorage')
+    const storedCategoria = localStorage.getItem('CategoriaStorage')
 
     if (storedToken) {
       getUserFromToken(storedToken)
@@ -80,6 +86,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     if (storedDuplicata) {
       getDuplicataFromStorage(storedDuplicata)
+    }
+
+    if (storedCategoria) {
+      getCategoriaFromStorage(storedCategoria)
     }
 
     setAuthenticating(true)
@@ -152,11 +162,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
     setduplicataSelecionada(duplicataSelecionada)
   }
 
+  async function getCategoriaFromStorage(storedCategoria: string) {
+    const id = storedCategoria
+    const response = await api.get(`categorias/${id}`)
+    const categoriaSelecionada = response.data
+    setcategoriaSelecionada(categoriaSelecionada)
+  }
+
 
 
   return (
     <AuthContext.Provider
-      value={{ signIn, signOut, user, isAuthenticated, isAuthenticating, empresaSelecionada, setEmpresaSelecionada, duplicataSelecionada, setduplicataSelecionada }}
+      value={{ signIn, signOut, user, isAuthenticated, isAuthenticating, empresaSelecionada, setEmpresaSelecionada, duplicataSelecionada, setduplicataSelecionada, categoriaSelecionada, setcategoriaSelecionada }}
     >
       {children}
     </AuthContext.Provider>
