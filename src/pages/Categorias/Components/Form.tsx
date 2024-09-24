@@ -2,7 +2,7 @@
 
 import { useForm } from "react-hook-form";
 // import { zodResolver } from '@hookform/resolvers/zod'
-import { ClipboardPlus, UsersRound, AlignLeft } from "lucide-react";
+import { ClipboardPlus, AlignLeft, FolderPen } from "lucide-react";
 
 import { Dialog } from "@/components/Dialog";
 import { FormRoot } from "@/components/FormRoot"; // Verifique o caminho correto
@@ -117,7 +117,7 @@ export function FormCategorias() {
             <div className="w-full">
               <Input
                 defaultValue={currentCategory ? currentCategory.nome : ""}
-                icon={<UsersRound size={20} />}
+                icon={<FolderPen size={20} />}
                 label="Nome da Categoria*"
                 {...register("nome")}
                 error={errors.nome}
@@ -135,13 +135,8 @@ export function FormCategorias() {
           />
 
           <div className="w-full">
-            <label
-              htmlFor="parentId"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Categoria Pai
-            </label>
             <Select
+              label="Categoria Pai"
               id="parentId"
               {...register("parentId")}
               className={`mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 

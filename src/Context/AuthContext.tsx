@@ -14,6 +14,7 @@ import { useNavigate } from 'react-router-dom'
 import { EmpresasData } from '@/hook/queries/useEmpresas'
 import { DuplicatasData } from '@/hook/queries/useDuplicatas'
 import { CategoriasData } from '@/hook/queries/useCategorias'
+import { ProdutosData } from '@/hook/queries/useProdutos'
 
 type User = {
   sub: string
@@ -39,6 +40,8 @@ type AuthContextData = {
   setEmpresaSelecionada?: (empresa: EmpresasData) => void
   categoriaSelecionada?: CategoriasData
   setcategoriaSelecionada?: (categoria: CategoriasData) => void
+  produtoSelecionada?: ProdutosData
+  setprodutoSelecionada?: (produto: ProdutosData) => void
 }
 
 type Response = {
@@ -60,11 +63,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [empresaSelecionada, setEmpresaSelecionada] = useState<EmpresasData>()
   const [duplicataSelecionada, setduplicataSelecionada] = useState<DuplicatasData>()
   const [categoriaSelecionada, setcategoriaSelecionada] = useState<CategoriasData>()
+  const [produtoSelecionada, setprodutoSelecionada] = useState<ProdutosData>()
   const [user, setUser] = useState<User>()
   const [isAuthenticating, setAuthenticating] = useState(false)
 
   console.log({ duplicataSelecionada })
   console.log({ categoriaSelecionada })
+  console.log({ produtoSelecionada })
 
 
   const isAuthenticated = !!user
@@ -75,6 +80,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const storedEmpresa = localStorage.getItem('EmpresaStorage')
     const storedDuplicata = localStorage.getItem('DuplicataStorage')
     const storedCategoria = localStorage.getItem('CategoriaStorage')
+    const storedProduto = localStorage.getItem('ProdutoStorage')
 
     if (storedToken) {
       getUserFromToken(storedToken)
@@ -90,6 +96,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     if (storedCategoria) {
       getCategoriaFromStorage(storedCategoria)
+    }
+
+    if (storedProduto) {
+      getProdutoFromStorage(storedProduto)
     }
 
     setAuthenticating(true)
@@ -169,11 +179,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
     setcategoriaSelecionada(categoriaSelecionada)
   }
 
+  async function getProdutoFromStorage(storedProduto: string) {
+    const id = storedProduto
+    const response = await api.get(`produtos/${id}`)
+    const produtoSelecionada = response.data
+    setprodutoSelecionada(produtoSelecionada)
+  }
+
 
 
   return (
     <AuthContext.Provider
-      value={{ signIn, signOut, user, isAuthenticated, isAuthenticating, empresaSelecionada, setEmpresaSelecionada, duplicataSelecionada, setduplicataSelecionada, categoriaSelecionada, setcategoriaSelecionada }}
+      value={{ signIn, signOut, user, isAuthenticated, isAuthenticating, empresaSelecionada, setEmpresaSelecionada, duplicataSelecionada, setduplicataSelecionada, categoriaSelecionada, setcategoriaSelecionada, produtoSelecionada, setprodutoSelecionada }}
     >
       {children}
     </AuthContext.Provider>

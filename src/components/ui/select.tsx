@@ -54,7 +54,7 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
 
             {label && (
               <label
-                className="flex w-full h-full select-none pointer-events-none absolute left-0 font-normal overflow-visible truncate peer-placeholder-shown:text-brand-blue-500 leading-tight peer-focus:leading-tight transition-all -top-1.5 text-[11px] peer-placeholder-shown:text-sm peer-focus:text-[11px] text-brand-blue-500"
+                className="absolute left-3 -top-1.5 bg-white px-1 text-[11px] text-brand-blue-500 pointer-events-none peer-placeholder-shown:text-sm peer-placeholder-shown:top-2.5 peer-focus:text-[11px] transition-all"
                 htmlFor={props.id}
               >
                 {label}
