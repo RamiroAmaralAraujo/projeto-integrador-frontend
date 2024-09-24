@@ -1,13 +1,14 @@
-import { TableEmpresas } from "./Components/EmpresasColumn"
+
 import { PlusCircle } from 'lucide-react';
-import { useEmpresasStore } from "@/store/Empresas/Index";
 import { Page } from '@/components/Page'
-import { Form } from "./Components/Form";
-import { SelectEmpresaButton } from "@/components/SelectEmpresaButton/SelectEmpresaButton";
+import { FormProdutos } from "./Components/Form";
+import { TablePagaveis } from './Components/ProdutosColumn';
+import { useProdutosStore } from '@/store/Produtos/Index';
+import { SelectEmpresaButton } from '@/components/SelectEmpresaButton/SelectEmpresaButton';
 
 export function Produtos() {
 
-  const handleOpenDialog = useEmpresasStore((state) => state.actions.handleOpenDialog)
+  const handleOpenDialog = useProdutosStore((state) => state.actions.handleOpenDialog)
 
   return (
     <>
@@ -17,12 +18,12 @@ export function Produtos() {
           <SelectEmpresaButton />
         </Page.Header>
 
-        <Form />
-        <TableEmpresas />
+        <FormProdutos />
+        <TablePagaveis />
         <Page.Actions>
           <div className="flex justify-center items-center -mt-16">
             <Page.Action
-              label="Adicionar Empresa"
+              label="Adicionar Produto"
               icon={<PlusCircle size={30} />}
               onClick={handleOpenDialog}
             />

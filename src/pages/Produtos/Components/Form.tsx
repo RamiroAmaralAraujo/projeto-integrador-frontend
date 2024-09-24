@@ -1,182 +1,236 @@
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Store, Building, MapPinned, MapPin, Building2, Home, Flag } from 'lucide-react'
-import { TiBusinessCard } from "react-icons/ti";
+import React, { useState, useContext, useEffect } from "react";
+import { useForm, Controller } from "react-hook-form";
+import { ClipboardPlus, AlignLeft, ScanBarcode, CircleDollarSign, PackageOpen } from "lucide-react";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-import { useEmpresasStore } from '@/store/Empresas/Index'
+import { Dialog } from "@/components/Dialog";
+import { FormRoot } from "../../../components/FormRoot";
+import { Input } from "@/components/ui/input";
+import { Select } from "@/components/ui/select";
+import { UploadImage } from "@/components/UploadImage/UploadImage";
+import { RegistroProdutos } from "@/components/RegistroProdutos/RegistroProdutos";
+import { AuthContext } from "@/Context/AuthContext";
+import { useProdutos } from "@/hook/queries/useProdutos";
+import { useCategorias } from "@/hook/queries/useCategorias";
+import { useProdutosStore } from "@/store/Produtos/Index";
+import { queryClient } from "@/service/reactQuery";
 
-
-import { Dialog } from '@/components/Dialog'
-import { FormRoot } from '../../../components/FormRoot'
-import { Input } from '@/components/ui/input'
-
-
-import { z } from 'zod'
-import { useEmpresas } from '@/hook/queries/useEmpresas'
-import { useContext, useEffect } from 'react'
-import { AuthContext } from '@/Context/AuthContext'
-import { queryClient } from '@/service/reactQuery';
-import { UploadImage } from '@/components/UploadImage/UploadImage';
-import { RegistroEmpresas } from '@/components/RegistroEmpresas/RegistroEmpresas';
-
-
-
-const CreateEmpresasSchema = z.object({
+// Schema de validação com Zod
+const CreateProdutosSchema = z.object({
   id: z.string().optional(),
-  empresaNome: z.string().nonempty({ message: 'Nome da Empresa é obrigatório' }),
-  cnpj_cpf: z.string().nonempty({ message: 'CNPJ ou CPF é obrigatório' }),
-  endereco: z.string().optional(),
-  bairro: z.string().optional(),
-  cidade: z.string().optional(),
-  uf: z.string().optional(),
-  logo_url: z.string().optional(),
-  cep: z.string().optional(),
-  usuarioID: z.string().optional(),
+  nome: z.string().nonempty("Nome do Produto é obrigatório."),
+  descricao: z.string().optional(),
+  preco: z.number().optional(),
+  quantidade: z.number().optional(),
+  sku: z.string().optional(),
+  prod_url: z.string().optional(),
+  categoriaId: z.string().optional(),
+  empresaId: z.string().optional(),
+});
 
-})
+// Tipos derivados do schema
+export type CreateProdutosData = z.infer<typeof CreateProdutosSchema>;
+export type UpdateProdutosData = CreateProdutosData & { id: string };
 
-export type CreateEmpresasData = z.infer<typeof CreateEmpresasSchema>
-export type UpdateEmpresasData = CreateEmpresasData
+export function FormProdutos() {
+  const [preco, setPreco] = useState("0");
 
-export function Form() {
+  // Contexto de autenticação para obter a empresa selecionada
+  const { empresaSelecionada } = useContext(AuthContext);
 
-  const { user } = useContext(AuthContext)
-
+  // React Hook Form com validação Zod
   const {
     handleSubmit,
+    control, // Usaremos Controller para componentes personalizados
     register,
     reset,
     setValue,
     formState: { errors },
-  } = useForm<CreateEmpresasData>({
-    resolver: zodResolver(CreateEmpresasSchema),
-  })
+  } = useForm<CreateProdutosData>({
+    resolver: zodResolver(CreateProdutosSchema),
+  });
 
-  const { data, handleCloseDialog, isOpen } = useEmpresasStore((state) => {
-    return {
-      data: state.empresas,
-      handleCloseDialog: state.actions.handleCloseDialog,
-      isOpen: state.isOpen,
+  // Gerenciador de estado para produtos
+  const {
+    data: produtoData,
+    handleCloseDialog,
+    isOpen,
+  } = useProdutosStore((state) => ({
+    data: state.produtos,
+    handleCloseDialog: state.actions.handleCloseDialog,
+    isOpen: state.isOpen,
+  }));
+
+  // Hooks para criar e atualizar produtos
+  const { useCreate, useUpdate } = useProdutos();
+  const { mutateAsync: createProdutos, isLoading: isLoadingCreateProdutos } =
+    useCreate();
+  const { mutateAsync: updateProdutos, isLoading: isLoadingUpdateProdutos } =
+    useUpdate();
+
+  // Hook para ler categorias
+  const { useRead } = useCategorias();
+  const {
+    data: categorias,
+    error: errorCategorias,
+  } = useRead();
+
+  // Manipulador de mudança no campo de preço
+  const handleChangePreco = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPreco(e.target.value);
+  };
+
+  // Função de submissão do formulário
+  async function submitProdutos(newProdutos: CreateProdutosData) {
+    const produtosId = produtoData?.id;
+    const empresaId = empresaSelecionada?.id;
+
+    // Atualiza o preço com o valor numérico
+    newProdutos.preco = parseFloat(preco);
+
+    try {
+      if (produtosId) {
+        // Atualiza um produto existente
+        await updateProdutos({ id: produtosId, ...newProdutos });
+        queryClient.invalidateQueries({ queryKey: ["PRODUTOS"] });
+      } else {
+        // Cria um novo produto
+        await createProdutos({ empresaId: empresaId!, ...newProdutos });
+        queryClient.invalidateQueries({ queryKey: ["PRODUTOS"] });
+      }
+      
+      // Fechar o diálogo após a criação ou edição
+      handleCloseDialog();
+
+    } catch (error) {
+      console.error("Erro ao criar ou atualizar o produto", error);
     }
-  })
-  const { useCreate, useUpdate } = useEmpresas()
-  const { mutateAsync: createEmpresas, isLoading: isLoadingCreateEmpresas } = useCreate()
-  const { mutateAsync: updateEmpresas, isLoading: isLoadingUpdateCategory } = useUpdate()
-
-
-  async function submitEmpresas(newEmpresas: CreateEmpresasData) {
-    const empresasId = data?.id
-    const usuarioID = user?.sub
-
-    if (empresasId) {
-      await updateEmpresas({ id: empresasId, ...newEmpresas })
-      queryClient.invalidateQueries({ queryKey: ['EMPRESAS'] })
-      handleCloseDialog()
-      return
-    }
-
-
-    await createEmpresas({ usuarioID: usuarioID, ...newEmpresas })
-    handleCloseDialog()
   }
 
-  const isLoadingCreateOrUpdateEmpresas =
-    isLoadingCreateEmpresas || isLoadingUpdateCategory
+  const isLoadingCreateOrUpdateProdutos =
+    isLoadingCreateProdutos || isLoadingUpdateProdutos;
 
+  // Resetar o formulário quando o diálogo for fechado
   useEffect(() => {
     if (!isOpen) {
       reset();
+      setPreco("0");
     }
   }, [isOpen, reset]);
 
-  const handleUploadLogoSuccess = (fileName: string) => {
-    setValue('logo_url', fileName);
+  // Preencher o preço ao editar um produto
+  useEffect(() => {
+    if (produtoData) {
+      setPreco(produtoData.preco.toString());
+    } else {
+      setPreco("0");
+    }
+  }, [produtoData]);
+
+  // Manipulador para sucesso no upload da imagem
+  const handleUploadSuccess = (fileName: string) => {
+    setValue("prod_url", fileName);
   };
+
+  // Preparar opções para o Select
+  const selectOptions =
+    categorias?.map((categoria) => ({
+      value: categoria.id,
+      label: categoria.nome,
+    })) || [];
 
   return (
     <Dialog.Root open={isOpen} onOpenChange={handleCloseDialog}>
-      <Dialog.Content title='Cadastro Empresa' icon={<Store />}>
-        <FormRoot onSubmit={handleSubmit(submitEmpresas)}>
-
-          <Input
-            defaultValue={data?.empresaNome}
-            icon={<Building size={20} />}
-            label='Empresa Nome*'
-            {...register('empresaNome')}
-            error={errors.empresaNome}
-          />
-
-          <Input
-            defaultValue={data ? data.cnpj_cpf?.toString() ?? '' : ''}
-            icon={<TiBusinessCard size={20} />}
-            label='CNPJ/CPF*'
-            maskType='cnpj'
-            {...register('cnpj_cpf')}
-            error={errors.cnpj_cpf}
-          />
-
-          <div className='grid-cols-2 flex gap-2'>
-            <div className='w-full'>
+      <Dialog.Content title="Cadastro de Produtos" icon={<ClipboardPlus />}>
+        <FormRoot onSubmit={handleSubmit(submitProdutos)}>
+          {/* Nome e Preço do Produto */}
+          <div className="grid-cols-2 flex gap-2">
+            <div className="w-full">
               <Input
-                defaultValue={data ? data.endereco?.toString() ?? '' : ''}
-                icon={<MapPinned size={20} />}
-                label='Endereço'
-                {...register('endereco')}
-                error={errors.endereco}
+                defaultValue={produtoData ? produtoData.nome : ""}
+                icon={<PackageOpen size={20} />}
+                label="Nome do Produto*"
+                {...register("nome")}
+                error={errors.nome}
               />
             </div>
-            <Input
-              defaultValue={data ? data.bairro?.toString() ?? '' : ''}
-              icon={<Home size={20} />}
-              label='Bairro'
-              {...register('bairro')}
-              error={errors.bairro}
-            />
-          </div>
-          <div className='grid-cols-2 flex gap-2'>
-            <div className='w-full'>
+            <div className="w-full">
               <Input
-                defaultValue={data ? data.cidade?.toString() ?? '' : ''}
-                icon={<Building2 size={20} />}
-                label='Cidade'
-                {...register('cidade')}
-                error={errors.cidade}
+                defaultValue={produtoData ? produtoData.preco.toFixed(2) : ""}
+                type="number"
+                step="0.01"
+                icon={<CircleDollarSign size={20} />}
+                label="Preço*"
+                {...register("preco", {
+                  valueAsNumber: true,
+                })}
+                onChange={handleChangePreco}
+                error={errors.preco}
               />
             </div>
-
-            <Input
-              defaultValue={data ? data.uf?.toString() ?? '' : ''}
-              icon={<Flag size={20} />}
-              label='UF'
-              maxLength={2}
-              {...register('uf')}
-              error={errors.uf}
-            />
-
-            <Input
-              defaultValue={data ? data.cep?.toString() ?? '' : ''}
-              icon={<MapPin size={20} />}
-              label='CEP'
-              maskType='cep'
-              {...register('cep')}
-              error={errors.cep}
-            />
-
-          </div>
-          <div className='flex w-full gap-4'>
-            <div className='w-full'>
-              <UploadImage onUploadSuccess={handleUploadLogoSuccess} />
-            </div>
-            <div className='w-full'>
-              <RegistroEmpresas />
-            </div>
           </div>
 
+          {/* Descrição do Produto */}
+          <div className="w-full mt-4">
+            <Input
+              icon={<AlignLeft size={20} />}
+              defaultValue={produtoData ? produtoData.descricao : ""}
+              type="text"
+              label="Descrição*"
+              {...register("descricao")}
+              error={errors.descricao}
+            />
+          </div>
 
+          {/* Categoria e SKU */}
+          <div className="grid-cols-2 flex gap-2 mt-4">
+            <div className="w-full">
+              <Controller
+                control={control}
+                name="categoriaId"
+                defaultValue={produtoData ? produtoData.categoriaId : ""}
+                render={({ field }) => (
+                  <Select
+                    label="Categoria*"
+                    options={selectOptions}
+                    error={errors.categoriaId}
+                    {...field}
+                  />
+                )}
+              />
+              {errorCategorias && (
+                <span className="text-red-500 text-xs">
+                  Erro ao carregar categorias
+                </span>
+              )}
+            </div>
 
-          <Dialog.Actions isLoading={isLoadingCreateOrUpdateEmpresas} />
+            <div className="w-full">
+              <Input
+                defaultValue={produtoData ? produtoData.sku : ""}
+                icon={<ScanBarcode size={20} />}
+                label="SKU*"
+                {...register("sku")}
+                error={errors.sku}
+              />
+            </div>
+          </div>
+
+          {/* Upload de Imagem e Registro de Produtos */}
+          <div className="grid-cols-2 flex gap-2 mt-4">
+            <div className="w-full">
+              <UploadImage onUploadSuccess={handleUploadSuccess} />
+            </div>
+            <div className="w-full">
+              <RegistroProdutos />
+            </div>
+          </div>
+
+          {/* Ações do Diálogo */}
+          <Dialog.Actions isLoading={isLoadingCreateOrUpdateProdutos} />
         </FormRoot>
       </Dialog.Content>
-    </Dialog.Root >
-  )
+    </Dialog.Root>
+  );
 }
