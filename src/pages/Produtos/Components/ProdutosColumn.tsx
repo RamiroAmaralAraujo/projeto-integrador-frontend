@@ -9,7 +9,7 @@ import { useCategorias } from "@/hook/queries/useCategorias";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 
-export function TablePagaveis() {
+export function TableProdutos() {
   const { useRead: useReadProdutos } = useProdutos();
   const { useRead: useReadCategorias } = useCategorias(); // Lendo as categorias
   const { mutateAsync: removeProdutos } = useRemove();
@@ -45,6 +45,11 @@ export function TablePagaveis() {
     {
       accessorKey: "preco",
       header: "PREÇO",
+      cell: ({ getValue }) => {
+        const valor = getValue() as number;
+        const formattedValor = `R$ ${valor.toFixed(2)}`;
+        return <span>{formattedValor}</span>;
+      },
     },
     {
       accessorKey: "categoriaId",

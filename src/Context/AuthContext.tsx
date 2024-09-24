@@ -15,6 +15,7 @@ import { EmpresasData } from '@/hook/queries/useEmpresas'
 import { DuplicatasData } from '@/hook/queries/useDuplicatas'
 import { CategoriasData } from '@/hook/queries/useCategorias'
 import { ProdutosData } from '@/hook/queries/useProdutos'
+import { PedidosData } from '@/hook/queries/usePedidos'
 
 type User = {
   sub: string
@@ -42,6 +43,8 @@ type AuthContextData = {
   setcategoriaSelecionada?: (categoria: CategoriasData) => void
   produtoSelecionada?: ProdutosData
   setprodutoSelecionada?: (produto: ProdutosData) => void
+  pedidoSelecionada?: PedidosData
+  setpedidoSelecionada?: (pedido: PedidosData) => void
 }
 
 type Response = {
@@ -64,12 +67,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [duplicataSelecionada, setduplicataSelecionada] = useState<DuplicatasData>()
   const [categoriaSelecionada, setcategoriaSelecionada] = useState<CategoriasData>()
   const [produtoSelecionada, setprodutoSelecionada] = useState<ProdutosData>()
+  const [pedidoSelecionada, setpedidoSelecionada] = useState<PedidosData>()
   const [user, setUser] = useState<User>()
   const [isAuthenticating, setAuthenticating] = useState(false)
 
   console.log({ duplicataSelecionada })
   console.log({ categoriaSelecionada })
   console.log({ produtoSelecionada })
+  console.log({ pedidoSelecionada })
 
 
   const isAuthenticated = !!user
@@ -81,6 +86,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const storedDuplicata = localStorage.getItem('DuplicataStorage')
     const storedCategoria = localStorage.getItem('CategoriaStorage')
     const storedProduto = localStorage.getItem('ProdutoStorage')
+    const storedPedido = localStorage.getItem('PedidoStorage')
 
     if (storedToken) {
       getUserFromToken(storedToken)
@@ -100,6 +106,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     if (storedProduto) {
       getProdutoFromStorage(storedProduto)
+    }
+
+    if (storedPedido) {
+      getPedidoFromStorage(storedPedido)
     }
 
     setAuthenticating(true)
@@ -186,11 +196,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
     setprodutoSelecionada(produtoSelecionada)
   }
 
+  async function getPedidoFromStorage(storedPedido: string) {
+    const id = storedPedido
+    const response = await api.get(`pedidos/${id}`)
+    const pedidoSelecionada = response.data
+    setpedidoSelecionada(pedidoSelecionada)
+  }
+
 
 
   return (
     <AuthContext.Provider
-      value={{ signIn, signOut, user, isAuthenticated, isAuthenticating, empresaSelecionada, setEmpresaSelecionada, duplicataSelecionada, setduplicataSelecionada, categoriaSelecionada, setcategoriaSelecionada, produtoSelecionada, setprodutoSelecionada }}
+      value={{ signIn, signOut, user, isAuthenticated, isAuthenticating, empresaSelecionada, setEmpresaSelecionada, duplicataSelecionada, setduplicataSelecionada, categoriaSelecionada, setcategoriaSelecionada, produtoSelecionada, setprodutoSelecionada, pedidoSelecionada, setpedidoSelecionada }}
     >
       {children}
     </AuthContext.Provider>
