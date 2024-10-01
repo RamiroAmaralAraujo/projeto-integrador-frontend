@@ -1,45 +1,63 @@
-import { useMutation, useQuery, useQueryClient } from 'react-query'
-import { AxiosError } from 'axios'
-import { api } from '../../service/api'
-import { toast } from 'react-toastify'
-import { CreatePedidosData, UpdatePedidosData } from '@/pages/Pedidos/Components/Form'
-import { TipoMovimentacao } from '@/enums/TipoMovimentacao'; // Importe o Enum aqui
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { AxiosError } from 'axios';
+import { api } from '../../service/api';
+import { toast } from 'react-toastify';
+import { CreatePedidosData, UpdatePedidosData } from '@/pages/Pedidos/Components/Form';
+import { TipoMovimentacao } from '@/enums/TipoMovimentacao'; // Enum para TipoMovimentacao
 
-export interface PedidosData {
-  id:              string 
-  tipo:            TipoMovimentacao  // Alterado de boolean para TipoMovimentacao
-  quantidade:      number
-  produtoId:       string
-  empresaId:       string
-  descricao:       string
-  ped_url:         string
-  data:            Date
-  createdAt:       Date
-  updatedAt:       Date
+// Interface para os dados de um Produto dentro de um Pedido
+export interface PedidoProdutosData {
+  produtoId: string;
+  quantidade: number;  // A quantidade deve ser um número
 }
+
+// Interface para os dados de Pedidos
+export interface PedidosData {
+  id: string;
+  tipo: TipoMovimentacao;
+  empresaId: string;
+  descricao: string;
+  data: Date;
+  createdAt: Date;
+  updatedAt: Date;
+  produtos: PedidoProdutosData[];  // Produtos associados ao pedido
+}
+
+// Tipo para representar cada produto dentro de um pedido
+export type PedidoProdutosInput = CreatePedidosData['produtos'][number];
 
 // Função de criação de pedidos
 async function create(data: CreatePedidosData) {
+  // O payload agora segue o formato correto
   const payload = {
-    ...data,
     tipo: data.tipo === 'ENTRADA' ? TipoMovimentacao.ENTRADA : TipoMovimentacao.SAIDA,
+    descricao: data.descricao,
+    empresaId: data.empresaId,
+    data: data.data,
+    produtos: data.produtos.map((produto) => ({
+      produtoId: produto.produtoId,
+      quantidade: Number(produto.quantidade),  // Certifique-se de que a quantidade é um número
+    })),
   };
 
   const response = await api.post('pedidos', payload);
   return response.data;
 }
 
-// Função de leitura de pedidos, convertendo boolean para enum
+// Função de leitura de pedidos
 async function read(empresaId: string): Promise<PedidosData[]> {
   const response = await api.get('pedidos', { params: { empresaId } });
 
-  // Mapeia os pedidos e usa diretamente o valor do tipo, assumindo que ele já está no formato correto do enum
+  // Mapeia os pedidos e os produtos associados
   return response.data.map((pedido: any) => ({
     ...pedido,
     tipo: pedido.tipo === 'ENTRADA' ? TipoMovimentacao.ENTRADA : TipoMovimentacao.SAIDA,
+    produtos: pedido.pedidoProdutos.map((pp: any) => ({
+      produtoId: pp.produtoId,
+      quantidade: pp.quantidade,
+    })),
   }));
 }
-
 
 // Função de remoção de pedidos
 async function remove(id: string) {
@@ -51,8 +69,14 @@ async function remove(id: string) {
 async function update(data: UpdatePedidosData) {
   const id = data.id;
   const payload = {
-    ...data,
     tipo: data.tipo === 'ENTRADA' ? TipoMovimentacao.ENTRADA : TipoMovimentacao.SAIDA,
+    descricao: data.descricao,
+    empresaId: data.empresaId,
+    data: data.data,
+    produtos: data.produtos.map((produto) => ({
+      produtoId: produto.produtoId,
+      quantidade: Number(produto.quantidade),  // Certifique-se de que a quantidade é um número
+    })),
   };
 
   const response = await api.patch(`pedidos/${id}`, payload);
@@ -73,37 +97,43 @@ export function useRead() {
 
 // Hook de criação de pedidos
 export function useCreate() {
-  const queryCliente = useQueryClient();
+  const queryClient = useQueryClient();
   return useMutation<any, AxiosError, CreatePedidosData>(create, {
     onSuccess(_: CreatePedidosData) {
-      queryCliente.invalidateQueries({ queryKey: ['PEDIDOS'] });
+      queryClient.invalidateQueries({ queryKey: ['PEDIDOS'] });
       toast.success('Pedido cadastrado com sucesso!');
     },
-    onError() {},
+    onError() {
+      toast.error('Erro ao cadastrar pedido.');
+    },
   });
 }
 
 // Hook de remoção de pedidos
 export function useRemove() {
-  const queryCliente = useQueryClient();
+  const queryClient = useQueryClient();
   return useMutation<any, AxiosError, string>(remove, {
-    onSuccess(_: CreatePedidosData) {
-      queryCliente.invalidateQueries({ queryKey: ['PEDIDO'] });
+    onSuccess() {
+      queryClient.invalidateQueries({ queryKey: ['PEDIDOS'] });
       toast.success('Pedido excluído com sucesso!');
     },
-    onError() {},
+    onError() {
+      toast.error('Erro ao excluir pedido.');
+    },
   });
 }
 
 // Hook de atualização de pedidos
 export function useUpdate() {
-  const queryCliente = useQueryClient();
+  const queryClient = useQueryClient();
   return useMutation<any, AxiosError, UpdatePedidosData>(update, {
     onSuccess(_: UpdatePedidosData) {
-      queryCliente.invalidateQueries({ queryKey: ['PEDIDO'] });
+      queryClient.invalidateQueries({ queryKey: ['PEDIDOS'] });
       toast.success('Pedido atualizado com sucesso!');
     },
-    onError() { console.log("erro"); },
+    onError() {
+      toast.error('Erro ao atualizar pedido.');
+    },
   });
 }
 
@@ -113,5 +143,6 @@ export function usePedidos() {
     useRead,
     useCreate,
     useUpdate,
+    useRemove,
   };
 }
