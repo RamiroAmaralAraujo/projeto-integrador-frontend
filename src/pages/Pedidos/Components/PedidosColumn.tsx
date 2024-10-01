@@ -8,16 +8,16 @@ import { usePedidosStore } from "@/store/Pedidos/Index";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { PackagePlus, PackageMinus } from "lucide-react";
-import { TipoMovimentacao } from '@/enums/TipoMovimentacao'; // Importe o enum aqui
-import { useProdutos } from "@/hook/queries/useProdutos"; // Importe o hook de produtos
+import { TipoMovimentacao } from "@/enums/TipoMovimentacao";
+import { useProdutos } from "@/hook/queries/useProdutos";
 
 export function TablePedidos() {
   const { useRead: useReadPedidos } = usePedidos();
-  const { useRead: useReadProdutos } = useProdutos(); // Use o hook de produtos
+  const { useRead: useReadProdutos } = useProdutos();
   const { mutateAsync: removePedidos } = useRemove();
-  
+
   const { data: pedidos, isLoading, isFetching } = useReadPedidos();
-  const { data: produtos } = useReadProdutos(); // Busque os produtos
+  const { data: produtos } = useReadProdutos();
 
   const handleChange = usePedidosStore((state) => state.actions.handleChange);
   const openDeleteAlert = useDeleteAlertPedidosStore(
@@ -33,17 +33,15 @@ export function TablePedidos() {
   const columns: ColumnDef<PedidosData>[] = [
     {
       accessorKey: "data",
-      header: ({ column }) => {
-        return (
-          <button
-            className="flex p-2 justify-center items-center hover:bg-gray-400 rounded-xl w-full "
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            DATA
-            <ArrowUpDown className="ml-2 h-4 w-4  " />
-          </button>
-        );
-      },
+      header: ({ column }) => (
+        <button
+          className="flex p-2 justify-center items-center hover:bg-gray-400 rounded-xl w-full"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          DATA
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </button>
+      ),
       cell: ({ getValue }) => {
         const dateValue = new Date(getValue() as string);
         const formattedDate = dateValue.toLocaleDateString("pt-BR");
@@ -51,21 +49,31 @@ export function TablePedidos() {
       },
     },
     {
-      accessorKey: "produtoId",
-      header: ({ column }) => {
-        return (
-          <button
-            className="flex p-2 justify-center items-center hover:bg-gray-400 rounded-xl w-full "
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            PRODUTO
-            <ArrowUpDown className="ml-2 h-4 w-4  " />
-          </button>
-        );
-      },
+      accessorKey: "pedidoProdutos", // Acessar a lista de produtos
+      header: ({ column }) => (
+        <button
+          className="flex p-2 justify-center items-center hover:bg-gray-400 rounded-xl w-full"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          PRODUTOS
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </button>
+      ),
       cell: ({ getValue }) => {
-        const produtoId = getValue() as string;
-        return <span>{getProdutoNome(produtoId)}</span>; // Exiba o nome do produto
+        const produtosArray = getValue() as {
+          produtoId: string;
+          quantidade: number;
+        }[]; // Array de objetos de produtos
+        return (
+          <span>
+            {produtosArray
+              .map(
+                (produto) =>
+                  `${getProdutoNome(produto.produtoId)} (Qtd: ${produto.quantidade})`
+              )
+              .join(", ")}
+          </span>
+        ); // Exibe os nomes dos produtos com a quantidade
       },
     },
     {
@@ -73,26 +81,16 @@ export function TablePedidos() {
       header: "Descrição",
     },
     {
-      accessorKey: "quantidade",
-      header: "Quantidade",
-      cell: ({ getValue }) => {
-        const quantidade = getValue() as number;
-        return <span>{quantidade}</span>;
-      },
-    },
-    {
       accessorKey: "tipo",
-      header: ({ column }) => {
-        return (
-          <button
-            className="flex p-2 justify-center items-center hover:bg-gray-400 rounded-xl w-full "
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            TIPO
-            <ArrowUpDown className="ml-2 h-4 w-4  " />
-          </button>
-        );
-      },
+      header: ({ column }) => (
+        <button
+          className="flex p-2 justify-center items-center hover:bg-gray-400 rounded-xl w-full"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          TIPO
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </button>
+      ),
       cell: ({ getValue }) => {
         const tipo = getValue() as TipoMovimentacao;
         return (

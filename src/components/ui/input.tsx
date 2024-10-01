@@ -1,21 +1,22 @@
 import { InputHTMLAttributes, ReactElement, forwardRef, useEffect, useState } from 'react';
 import { FieldError } from 'react-hook-form';
-import InputMask from 'react-input-mask'
+import InputMask from 'react-input-mask';
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-  icon?: ReactElement
-  iconError?: ReactElement
-  error?: FieldError
-  label?: string
-  maxLength?: number
-  maskType?: 'cpf' | 'cnpj' | 'cep'
+  icon?: ReactElement;
+  iconError?: ReactElement;
+  error?: FieldError;
+  label?: string;
+  maxLength?: number;
+  maskType?: 'cpf' | 'cnpj' | 'cep';
+  customSize?: string; // Renamed prop to avoid conflict
 }
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, icon, iconError, error, label, maskType, maxLength, ...props }, ref) => {
+  ({ className, type, icon, iconError, error, label, maskType, maxLength, customSize, ...props }, ref) => {
 
-    const [mask, setMask] = useState<string>('')
-    const [showPassword, setShowPassword] = useState<boolean>(false)
+    const [mask, setMask] = useState<string>('');
+    const [showPassword, setShowPassword] = useState<boolean>(false);
 
     useEffect(() => {
       if (maskType === 'cpf') {
@@ -23,31 +24,29 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       } else if (maskType === 'cnpj') {
         setMask('99.999.999/9999-99');
       } else if (maskType === 'cep') {
-        setMask('99999-999')
+        setMask('99999-999');
       }
     }, [maskType]);
 
     const handleShowPassword = () => {
       setShowPassword(!showPassword);
-    }
+    };
 
     return (
       <div>
-
-        <div className="w-full flex justify-center items-center ">
-          <div className="relative w-full min-w-[200px] h-10 flex justify-center items-center">
+        <div className="flex justify-center items-center">
+          <div className={`relative ${customSize || 'w-full'} ${customSize || 'min-w-[200px]'} h-10 flex justify-center items-center`}>
             <InputMask
               placeholder=''
               maxLength={maxLength}
               type={type === 'password' ? (showPassword ? 'text' : 'password') : type}
               mask={mask}
-              className={`peer w-full h-full bg-transparent text-brand-blue-500 outline-none focus:outline-none disabled:bg-brand-blue-500 disabled:border-0 transition-all placeholder-shown:border placeholder-shown:border-brand-blue-500 placeholder-shown:border-t-brand-blue-500 border focus:border-2 border-t-transparent focus:border-t-transparent text-sm px-3 py-2.5 rounded-[7px] border-brand-blue-500 focus:border-brand-blue-500 `}
+              className={`peer w-full h-full bg-transparent text-brand-blue-500 outline-none focus:outline-none disabled:bg-brand-blue-500 disabled:border-0 transition-all placeholder-shown:border placeholder-shown:border-brand-blue-500 placeholder-shown:border-t-brand-blue-500 border focus:border-2 border-t-transparent focus:border-t-transparent text-sm px-3 py-2.5 rounded-[7px] border-brand-blue-500 focus:border-brand-blue-500 ${className}`}
               inputRef={ref}
               {...props}
             />
 
             <div className="absolute inset-y-0 right-0 flex items-center pr-3">
-
               {error && iconError ? (
                 <div className="text-red-700">{iconError}</div>
               ) : (
@@ -71,13 +70,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         </div>
         <div className='w-full flex justify-end text-red-700'>
           {error && (
-            <span className='text-xs '>{error.message}</span>
+            <span className='text-xs'>{error.message}</span>
           )}
         </div>
-
-
-
-
       </div>
     );
   },
