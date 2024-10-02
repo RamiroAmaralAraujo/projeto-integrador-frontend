@@ -35,7 +35,7 @@ export function TablePedidos() {
       accessorKey: "data",
       header: ({ column }) => (
         <button
-          className="flex p-2 justify-center items-center hover:bg-gray-400 rounded-xl w-full"
+          className="flex justify-center items-center p-2 hover:bg-gray-400 rounded-xl w-full"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           DATA
@@ -45,14 +45,14 @@ export function TablePedidos() {
       cell: ({ getValue }) => {
         const dateValue = new Date(getValue() as string);
         const formattedDate = dateValue.toLocaleDateString("pt-BR");
-        return <span>{formattedDate}</span>;
+        return <span className="text-center">{formattedDate}</span>;
       },
     },
     {
-      accessorKey: "pedidoProdutos", // Acessar a lista de produtos
+      accessorKey: "pedidoProdutos", 
       header: ({ column }) => (
         <button
-          className="flex p-2 justify-center items-center hover:bg-gray-400 rounded-xl w-full"
+          className="flex justify-center items-center p-2 hover:bg-gray-400 rounded-xl w-full"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           PRODUTOS
@@ -63,28 +63,33 @@ export function TablePedidos() {
         const produtosArray = getValue() as {
           produtoId: string;
           quantidade: number;
-        }[]; // Array de objetos de produtos
+        }[];
         return (
-          <span>
+          <div className="text-center max-w-xs truncate">
             {produtosArray
               .map(
                 (produto) =>
                   `${getProdutoNome(produto.produtoId)} (Qtd: ${produto.quantidade})`
               )
               .join(", ")}
-          </span>
-        ); // Exibe os nomes dos produtos com a quantidade
+          </div>
+        );
       },
     },
     {
       accessorKey: "descricao",
       header: "Descrição",
+      cell: ({ getValue }) => (
+        <div className="text-center max-w-md truncate overflow-hidden">
+          {getValue() as string}
+        </div>
+      ),
     },
     {
       accessorKey: "tipo",
       header: ({ column }) => (
         <button
-          className="flex p-2 justify-center items-center hover:bg-gray-400 rounded-xl w-full"
+          className="flex justify-center items-center p-2 hover:bg-gray-400 rounded-xl w-full"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           TIPO
@@ -107,27 +112,32 @@ export function TablePedidos() {
     {
       header: "Ações",
       accessorKey: "id",
-      size: 120,
       cell: ({ getValue }) => {
         const pedidoId = getValue() as string;
         const pedido = pedidos?.find((pedido) => pedido.id === pedidoId);
         return (
-          <ActionsTable.Root
-            onEdit={() => handleChange(pedido || null)}
-            onDelete={() => openDeleteAlert(pedido?.id)}
-          />
+          <div className="flex justify-center">
+            <ActionsTable.Root
+              onEdit={() => handleChange(pedido || null)}
+              onDelete={() => openDeleteAlert(pedido?.id)}
+            />
+          </div>
         );
       },
     },
   ];
+  
 
   return (
     <>
-      <DataTablePedidos
-        columns={columns}
-        data={pedidos || []}
-        isLoading={isLoading || isFetching}
-      />
+      <div className="overflow-x-auto">
+        <DataTablePedidos
+          columns={columns}
+          data={pedidos || []}
+          isLoading={isLoading || isFetching}
+        />
+      </div>
+
       <AlertDeletePedido onDelete={removePedidos} />
     </>
   );
