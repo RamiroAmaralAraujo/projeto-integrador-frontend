@@ -1,5 +1,5 @@
 import { useForm, Controller, useFieldArray } from "react-hook-form";
-import { ClipboardPlus, AlignLeft } from "lucide-react";
+import { ClipboardPlus, AlignLeft, Trash, Plus } from "lucide-react";
 import { Dialog } from "@/components/Dialog";
 import { FormRoot } from "../../../components/FormRoot";
 import { Input } from "@/components/ui/input";
@@ -10,14 +10,13 @@ import { AuthContext } from "@/Context/AuthContext";
 import { usePedidos } from "@/hook/queries/usePedidos";
 import { usePedidosStore } from "@/store/Pedidos/Index";
 import { ToggleTipoPedido } from "@/components/ToggleTipoPedido/ToggleTipoPedido";
-import { UploadImage } from "@/components/UploadImage/UploadImage";
-import { RegistroPedidos } from "@/components/RegistroPedidos/RegistroPedidos";
 import { useProdutos } from "@/hook/queries/useProdutos";
 import { queryClient } from "@/service/reactQuery";
 import { TipoMovimentacao } from "@/enums/TipoMovimentacao";
 
 const CreatePedidosSchema = z.object({
   id: z.string().optional(),
+  identificador: z.string().optional(),
   tipo: z.enum([TipoMovimentacao.ENTRADA, TipoMovimentacao.SAIDA]),
   produtos: z.array(
     z.object({
@@ -26,8 +25,7 @@ const CreatePedidosSchema = z.object({
     })
   ),
   empresaId: z.string().optional(),
-  descricao: z.string().optional(),
-  ped_url: z.string().optional(),
+  observacao: z.string().optional(),
   data: z.string(),
 });
 
@@ -79,8 +77,12 @@ export function FormPedidos() {
 
   useEffect(() => {
     if (data) {
-      setValue("descricao", data.descricao || "");
-      setValue("data", data.data ? new Date(data.data).toISOString().split('T')[0] : "");
+      setValue("identificador", data.identificador || "");
+      setValue("observacao", data.observacao || "");
+      setValue(
+        "data",
+        data.data ? new Date(data.data).toISOString().split("T")[0] : ""
+      );
       setValue("produtos", data.produtos || [{ produtoId: "", quantidade: 1 }]);
       settipo(data.tipo || TipoMovimentacao.SAIDA);
     } else {
@@ -130,10 +132,6 @@ export function FormPedidos() {
   const isLoadingCreateOrUpdatePedidos =
     isLoadingCreatePedidos || isLoadingUpdatePedidos;
 
-  const handleUploadSuccess = (fileName: string) => {
-    setValue("ped_url", fileName);
-  };
-
   const selectOptions =
     produtos?.map((produto) => ({
       value: produto.id,
@@ -144,73 +142,71 @@ export function FormPedidos() {
     <Dialog.Root open={isOpen} onOpenChange={handleCloseDialog}>
       <Dialog.Content title="Cadastro Pedidos" icon={<ClipboardPlus />}>
         <FormRoot onSubmit={handleSubmit(submitPedidos)}>
-          <div className="flex gap-4">
-            {/* Seção do formulário */}
-            <div className="w-1/2">
+          <div className="flex flex-col gap-4">
+            
+
+            <div className="flex gap-2 w-full mt-4 mb-4">
+              <Input
+                type="date"
+                label="Data*"
+                {...register("data")}
+                error={errors.data}
+              />
               <Input
                 icon={<AlignLeft size={20} />}
                 type="text"
-                label="Descrição*"
-                {...register("descricao")}
-                error={errors.descricao}
+                label="Identificador"
+                {...register("identificador")}
+                error={errors.identificador}
               />
-
-              <div className="flex gap-2 mt-4 mb-4">
-                <Input
-                  type="date"
-                  label="Data*"
-                  {...register("data")}
-                  error={errors.data}
-                />
-                <ToggleTipoPedido
-                  value={tipo}
-                  onChange={(value: TipoMovimentacao) => settipo(value)}
-                />
-              </div>
-
-              <div className="w-full flex gap-4">
-                <div className="w-1/2">
-                  <UploadImage onUploadSuccess={handleUploadSuccess} />
-                </div>
-                <div className="w-1/2">
-                  <RegistroPedidos />
-                </div>
-              </div>
+              <ToggleTipoPedido
+                value={tipo}
+                onChange={(value: TipoMovimentacao) => settipo(value)}
+              />
+            </div>
+            <div className="w-full">
+              <Input
+                icon={<AlignLeft size={20} />}
+                type="text"
+                label="Observação"
+                {...register("observacao")}
+                error={errors.observacao}
+              />
             </div>
 
             {/* Lista de produtos adicionados */}
-            <div className="w-1/2">
+            <div className="w-full">
               <h2 className="text-xl mb-4">Produtos Adicionados</h2>
               <div className="border rounded-2xl p-4 h-80 overflow-y-scroll overflow-x-hidden">
                 {fields.map((field, index) => (
-                  <div key={field.id} className="flex flex-col mb-2">
-                    <div className="flex items-center gap-2">
-                      <Controller
-                        control={control}
-                        name={`produtos.${index}.produtoId`}
-                        render={({ field }) => (
-                          <Select
-                            label="Produto*"
-                            options={selectOptions}
-                            error={errors.produtos?.[index]?.produtoId}
-                            {...field}
-                          />
-                        )}
-                      />
-                      <Controller
-                        control={control}
-                        name={`produtos.${index}.quantidade`}
-                        render={({ field }) => (
-                          <Input
-                            type="number"
-                            customSize="w-[130px]"
-                            label="Quantidade*"
-                            error={errors.produtos?.[index]?.quantidade}
-                            {...field}
-                          />
-                        )}
-                      />
-                    </div>
+                  <div key={field.id} className="flex items-center gap-2 mb-2 ">
+                    <Controller
+                      control={control}
+                      name={`produtos.${index}.produtoId`}
+                      render={({ field }) => (
+                        <Select
+                          label="Produto*"
+                          options={selectOptions}
+                          error={errors.produtos?.[index]?.produtoId}
+                          {...field}
+                        />
+                      )}
+                    />
+                    <Controller
+                      control={control}
+                      name={`produtos.${index}.quantidade`}
+                      render={({ field }) => (
+                        <Input
+                          type="number"
+                          customSize="w-[130px]"
+                          label="Quantidade*"
+                          error={errors.produtos?.[index]?.quantidade}
+                          {...field}
+                        />
+                      )}
+                    />
+
+                    {/* Botão de remover com ícone */}
                     <button
                       type="button"
                       onClick={() => {
@@ -218,14 +214,16 @@ export function FormPedidos() {
                           remove(index);
                         }
                       }}
-                      className={`text-red-600 mt-2 ${
+                      className={`text-red-600 ${
                         fields.length <= 1
                           ? "opacity-50 cursor-not-allowed"
                           : ""
                       }`}
                       disabled={fields.length <= 1}
                     >
-                      Remover produto
+                      <div className="bg-gray-300 rounded-full hover:bg-gray-200 text-red-700 p-2">
+                        <Trash size={20} />
+                      </div>
                     </button>
                   </div>
                 ))}
@@ -241,7 +239,9 @@ export function FormPedidos() {
                 }
                 className="mt-4 text-blue-600"
               >
-                Adicionar Produto
+                <div className="bg-gray-300 rounded-full hover:bg-gray-200 text-brand-blue-400 p-2">
+                  <Plus size={20} />
+                </div>
               </button>
             </div>
           </div>
