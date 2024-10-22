@@ -37,8 +37,8 @@ export function AuthenticatedLayout() {
             icon={<PackageSearch />}
             text="Estoque"
             subItems={[
-              { text: "Produtos", url: "/produtos" },
               { text: "Categorias", url: "/categorias" },
+              { text: "Produtos", url: "/produtos" },
             ]}
             alert
           />

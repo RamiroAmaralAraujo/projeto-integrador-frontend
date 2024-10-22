@@ -62,12 +62,12 @@ export function DataTablePedidos<TData, TValue>({
         <Input
           label="Filtro de Pedidos"
           value={
-            (table.getColumn("pedidoProdutos")?.getFilterValue() as string) ??
+            (table.getColumn("identificador")?.getFilterValue() as string) ??
             ""
           }
           onChange={(event) => {
             const filterValue = event.target.value;
-            table.getColumn("pedidoProdutos")?.setFilterValue(filterValue);
+            table.getColumn("identificador")?.setFilterValue(filterValue);
           }}
         />
       </div>
@@ -87,7 +87,7 @@ export function DataTablePedidos<TData, TValue>({
                           width:
                             header.id === "pedidoProdutos"
                               ? "25%"
-                              : header.id === "descricao"
+                              : header.id === "observacao"
                                 ? "35%"
                                 : undefined,
                         }}
@@ -118,7 +118,7 @@ export function DataTablePedidos<TData, TValue>({
                       style={{
                         maxWidth:
                           cell.column.id === "pedidoProdutos" ||
-                          cell.column.id === "descricao"
+                          cell.column.id === "observacao"
                             ? "150px"
                             : undefined,
                         whiteSpace: "nowrap",

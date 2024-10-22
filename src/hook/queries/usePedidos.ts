@@ -14,9 +14,10 @@ export interface PedidoProdutosData {
 // Interface para os dados de Pedidos
 export interface PedidosData {
   id: string;
+  identificador: string;
   tipo: TipoMovimentacao;
   empresaId: string;
-  descricao: string;
+  observacao: string;
   data: Date;
   createdAt: Date;
   updatedAt: Date;
@@ -30,8 +31,9 @@ export type PedidoProdutosInput = CreatePedidosData['produtos'][number];
 async function create(data: CreatePedidosData) {
   // O payload agora segue o formato correto
   const payload = {
+    identificador: data.identificador,
     tipo: data.tipo === 'ENTRADA' ? TipoMovimentacao.ENTRADA : TipoMovimentacao.SAIDA,
-    descricao: data.descricao,
+    observacao: data.observacao,
     empresaId: data.empresaId,
     data: data.data,
     produtos: data.produtos.map((produto) => ({
@@ -69,8 +71,9 @@ async function remove(id: string) {
 async function update(data: UpdatePedidosData) {
   const id = data.id;
   const payload = {
+    identificador: data.identificador,
     tipo: data.tipo === 'ENTRADA' ? TipoMovimentacao.ENTRADA : TipoMovimentacao.SAIDA,
-    descricao: data.descricao,
+    observacao: data.observacao,
     empresaId: data.empresaId,
     data: data.data,
     produtos: data.produtos.map((produto) => ({

@@ -9,15 +9,12 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { PackagePlus, PackageMinus } from "lucide-react";
 import { TipoMovimentacao } from "@/enums/TipoMovimentacao";
-import { useProdutos } from "@/hook/queries/useProdutos";
 
 export function TablePedidos() {
   const { useRead: useReadPedidos } = usePedidos();
-  const { useRead: useReadProdutos } = useProdutos();
   const { mutateAsync: removePedidos } = useRemove();
 
   const { data: pedidos, isLoading, isFetching } = useReadPedidos();
-  const { data: produtos } = useReadProdutos();
 
   const handleChange = usePedidosStore((state) => state.actions.handleChange);
   const openDeleteAlert = useDeleteAlertPedidosStore(
@@ -25,10 +22,6 @@ export function TablePedidos() {
   );
 
   // Mapeamento do ID do produto para o nome
-  const getProdutoNome = (produtoId: string) => {
-    const produto = produtos?.find((p) => p.id === produtoId);
-    return produto ? produto.nome : "Produto não encontrado";
-  };
 
   const columns: ColumnDef<PedidosData>[] = [
     {
@@ -49,36 +42,17 @@ export function TablePedidos() {
       },
     },
     {
-      accessorKey: "pedidoProdutos", 
-      header: ({ column }) => (
-        <button
-          className="flex justify-center items-center p-2 hover:bg-gray-400 rounded-xl w-full"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          PRODUTOS
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </button>
+      accessorKey: "identificador",
+      header: "Identificador",
+      cell: ({ getValue }) => (
+        <div className="text-center max-w-md truncate overflow-hidden">
+          {getValue() as string}
+        </div>
       ),
-      cell: ({ getValue }) => {
-        const produtosArray = getValue() as {
-          produtoId: string;
-          quantidade: number;
-        }[];
-        return (
-          <div className="text-center max-w-xs truncate">
-            {produtosArray
-              .map(
-                (produto) =>
-                  `${getProdutoNome(produto.produtoId)} (Qtd: ${produto.quantidade})`
-              )
-              .join(", ")}
-          </div>
-        );
-      },
     },
     {
-      accessorKey: "descricao",
-      header: "Descrição",
+      accessorKey: "observacao",
+      header: "Observação",
       cell: ({ getValue }) => (
         <div className="text-center max-w-md truncate overflow-hidden">
           {getValue() as string}
