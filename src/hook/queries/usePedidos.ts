@@ -24,6 +24,10 @@ export interface PedidosData {
   produtos: PedidoProdutosData[];  // Produtos associados ao pedido
 }
 
+interface BackendError {
+  message: string;
+}
+
 // Tipo para representar cada produto dentro de um pedido
 export type PedidoProdutosInput = CreatePedidosData['produtos'][number];
 
@@ -101,13 +105,15 @@ export function useRead() {
 // Hook de criação de pedidos
 export function useCreate() {
   const queryClient = useQueryClient();
-  return useMutation<any, AxiosError, CreatePedidosData>(create, {
+  return useMutation<any, AxiosError<BackendError>, CreatePedidosData>(create, {
     onSuccess(_: CreatePedidosData) {
       queryClient.invalidateQueries({ queryKey: ['PEDIDOS'] });
       toast.success('Pedido cadastrado com sucesso!');
     },
-    onError() {
-      toast.error('Erro ao cadastrar pedido.');
+    onError(error: AxiosError<BackendError>) {
+      // Acessa a mensagem de erro se estiver presente, caso contrário usa uma mensagem padrão
+      const errorMessage = error.response?.data?.message || 'Erro ao cadastrar pedido.';
+      toast.error(`Erro: ${errorMessage}`);
     },
   });
 }
