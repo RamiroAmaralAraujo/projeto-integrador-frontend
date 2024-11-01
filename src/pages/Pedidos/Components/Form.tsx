@@ -16,7 +16,7 @@ import { TipoMovimentacao } from "@/enums/TipoMovimentacao";
 
 const CreatePedidosSchema = z.object({
   id: z.string().optional(),
-  identificador: z.string().optional(),
+  idPedido: z.number().optional(),
   tipo: z.enum([TipoMovimentacao.ENTRADA, TipoMovimentacao.SAIDA]),
   produtos: z.array(
     z.object({
@@ -32,15 +32,10 @@ const CreatePedidosSchema = z.object({
 export type CreatePedidosData = z.infer<typeof CreatePedidosSchema>;
 export type UpdatePedidosData = CreatePedidosData;
 
-export interface PedidoProduto {
-  produtoId: string;
-  quantidade: number;
-}
-
 export function FormPedidos() {
   const [tipo, settipo] = useState<TipoMovimentacao>(TipoMovimentacao.SAIDA);
-
   const { empresaSelecionada } = useContext(AuthContext);
+
   const {
     handleSubmit,
     control,
@@ -77,7 +72,6 @@ export function FormPedidos() {
 
   useEffect(() => {
     if (data) {
-      setValue("identificador", data.identificador || "");
       setValue("observacao", data.observacao || "");
       setValue(
         "data",
@@ -126,6 +120,8 @@ export function FormPedidos() {
     } else {
       await createPedidos({ empresaId: empresaId, ...newPedidos });
     }
+
+    reset(); // Limpa os campos após a criação de um novo pedido
     handleCloseDialog();
   }
 
@@ -143,21 +139,12 @@ export function FormPedidos() {
       <Dialog.Content title="Cadastro Pedidos" icon={<ClipboardPlus />}>
         <FormRoot onSubmit={handleSubmit(submitPedidos)}>
           <div className="flex flex-col gap-4">
-            
-
             <div className="flex gap-2 w-full mt-4 mb-4">
               <Input
                 type="date"
                 label="Data*"
                 {...register("data")}
                 error={errors.data}
-              />
-              <Input
-                icon={<AlignLeft size={20} />}
-                type="text"
-                label="Identificador"
-                {...register("identificador")}
-                error={errors.identificador}
               />
               <ToggleTipoPedido
                 value={tipo}
