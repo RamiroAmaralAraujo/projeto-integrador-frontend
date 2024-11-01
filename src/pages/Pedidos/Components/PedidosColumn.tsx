@@ -25,6 +25,22 @@ export function TablePedidos() {
 
   const columns: ColumnDef<PedidosData>[] = [
     {
+      accessorKey: "idPedido",
+      header: ({ column }) => (
+        <button
+          className="flex justify-center items-center p-2 hover:bg-gray-400 rounded-xl w-full"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          ID
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </button>
+      ),
+      filterFn: (row, columnId, filterValue) => {
+        // Verifica se o valor de filtro está vazio ou corresponde ao ID exato
+        return filterValue === null || row.getValue(columnId) === filterValue;
+      },
+    },
+    {
       accessorKey: "data",
       header: ({ column }) => (
         <button
@@ -40,15 +56,6 @@ export function TablePedidos() {
         const formattedDate = dateValue.toLocaleDateString("pt-BR");
         return <span className="text-center">{formattedDate}</span>;
       },
-    },
-    {
-      accessorKey: "identificador",
-      header: "Identificador",
-      cell: ({ getValue }) => (
-        <div className="text-center max-w-md truncate overflow-hidden">
-          {getValue() as string}
-        </div>
-      ),
     },
     {
       accessorKey: "observacao",
@@ -100,7 +107,6 @@ export function TablePedidos() {
       },
     },
   ];
-  
 
   return (
     <>

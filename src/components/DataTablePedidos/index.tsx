@@ -62,13 +62,14 @@ export function DataTablePedidos<TData, TValue>({
         <Input
           label="Filtro de Pedidos"
           value={
-            (table.getColumn("identificador")?.getFilterValue() as string) ??
-            ""
+            (table.getColumn("idPedido")?.getFilterValue() as string) ?? ""
           }
           onChange={(event) => {
             const filterValue = event.target.value;
-            table.getColumn("identificador")?.setFilterValue(filterValue);
-          }}
+            // Verifica se o valor digitado é um número
+            const numericFilterValue = filterValue !== "" ? Number(filterValue) : null;
+            table.getColumn("idPedido")?.setFilterValue(numericFilterValue);
+          }}          
         />
       </div>
 
