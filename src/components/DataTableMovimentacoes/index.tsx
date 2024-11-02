@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
-
 import NotResult from "../../assets/NotResult.svg";
 
 import {
@@ -24,30 +23,28 @@ interface TableProps<TData, TValue> {
   isLoading?: boolean;
 }
 
-export function DataTablePedidos<TData, TValue>({
+export function DataTableMovimentacoes<TData, TValue>({
   columns,
   data,
   isLoading,
 }: TableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [oldData, setOldData] = useState<any[]>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
 
   const table = useReactTable({
-    getPaginationRowModel: getPaginationRowModel(),
     data,
     columns,
-    onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     state: {
       sorting,
       columnFilters,
     },
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
   });
 
   useEffect(() => {
@@ -58,60 +55,48 @@ export function DataTablePedidos<TData, TValue>({
 
   return (
     <div>
-      <div className="flex items-center py-4">
+      <div className="flex items-center py-4 ">
         <Input
-          label="Pesquisar"
-          value={
-            (table.getColumn("idPedido")?.getFilterValue() as string) ?? ""
+          label='Pesquisar'
+          value={(table.getColumn("produtoNome")?.getFilterValue() as string) ?? ""}
+          onChange={(event) =>
+            table.getColumn("produtoNome")?.setFilterValue(event.target.value)
           }
-          onChange={(event) => {
-            const filterValue = event.target.value;
-            // Verifica se o valor digitado é um número
-            const numericFilterValue = filterValue !== "" ? Number(filterValue) : null;
-            table.getColumn("idPedido")?.setFilterValue(numericFilterValue);
-          }}          
         />
       </div>
 
       <div className="overflow-x-auto shadow-md rounded-2xl mr-14 max-h-[500px] overflow-y-auto">
         <table className="w-full text-sm text-center text-base-text table-fixed">
           <thead className="text-base-subtitle uppercase bg-gray-100">
-            {table.getHeaderGroups().map((headerGroup) => {
-              return (
-                <tr key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => {
-                    return (
-                      <th
-                        scope="col"
-                        className={`p-4 ${header.id === "id" ? "text-center" : ""}`}
-                        style={{
-                          width:
-                            header.id === "pedidoProdutos"
-                              ? "25%"
-                              : header.id === "observacao"
-                                ? "35%"
-                                : undefined,
-                        }}
-                        key={header.id}
-                      >
-                        {flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                      </th>
-                    );
-                  })}
-                </tr>
-              );
-            })}
+            {table.getHeaderGroups().map((headerGroup) => (
+              <tr key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <th
+                    scope="col"
+                    className={`p-4 ${header.id === "id" ? "text-center" : ""}`}
+                    style={{
+                      width:
+                        header.id === "pedidoProdutos"
+                          ? "25%"
+                          : header.id === "observacao"
+                            ? "35%"
+                            : undefined,
+                    }}
+                    key={header.id}
+                  >
+                    {flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
+                  </th>
+                ))}
+              </tr>
+            ))}
           </thead>
           <tbody className="text-center">
             {!isLoading && table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <tr
-                  className="bg-white border-b hover:brightness-90"
-                  key={row.id}
-                >
+                <tr className="bg-white border-b hover:brightness-90" key={row.id}>
                   {row.getVisibleCells().map((cell) => (
                     <td
                       key={cell.id}
@@ -145,10 +130,7 @@ export function DataTablePedidos<TData, TValue>({
                   { length: oldData.length > 0 ? oldData.length : 5 },
                   (_, index) => index
                 ).map((item) => (
-                  <tr
-                    key={item}
-                    className="bg-white border-b hover:brightness-90"
-                  >
+                  <tr key={item} className="bg-white border-b hover:brightness-90">
                     {Array.from(
                       { length: table.getAllColumns().length },
                       (_, index) => index
@@ -177,12 +159,12 @@ export function DataTablePedidos<TData, TValue>({
           label="Anterior"
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
-        ></Button>
+        />
         <Button
           label="Próximo"
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}
-        ></Button>
+        />
       </div>
     </div>
   );
