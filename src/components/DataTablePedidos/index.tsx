@@ -14,7 +14,6 @@ import {
   getFilteredRowModel,
   getSortedRowModel,
 } from "@tanstack/react-table";
-import { Button } from "../ui/button";
 import * as React from "react";
 import { Skeleton } from "../ui/skeleton";
 
@@ -31,9 +30,7 @@ export function DataTablePedidos<TData, TValue>({
 }: TableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [oldData, setOldData] = useState<any[]>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
 
   const table = useReactTable({
     getPaginationRowModel: getPaginationRowModel(),
@@ -61,57 +58,47 @@ export function DataTablePedidos<TData, TValue>({
       <div className="flex items-center py-4">
         <Input
           label="Filtro de Pedidos"
-          value={
-            (table.getColumn("idPedido")?.getFilterValue() as string) ?? ""
-          }
+          value={(table.getColumn("idPedido")?.getFilterValue() as string) ?? ""}
           onChange={(event) => {
             const filterValue = event.target.value;
-            // Verifica se o valor digitado é um número
             const numericFilterValue = filterValue !== "" ? Number(filterValue) : null;
             table.getColumn("idPedido")?.setFilterValue(numericFilterValue);
-          }}          
+          }}
         />
       </div>
 
       <div className="overflow-x-auto shadow-md rounded-2xl mr-14 max-h-[500px] overflow-y-auto">
         <table className="w-full text-sm text-center text-base-text table-fixed">
           <thead className="text-base-subtitle uppercase bg-gray-100">
-            {table.getHeaderGroups().map((headerGroup) => {
-              return (
-                <tr key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => {
-                    return (
-                      <th
-                        scope="col"
-                        className={`p-4 ${header.id === "id" ? "text-center" : ""}`}
-                        style={{
-                          width:
-                            header.id === "pedidoProdutos"
-                              ? "25%"
-                              : header.id === "observacao"
-                                ? "35%"
-                                : undefined,
-                        }}
-                        key={header.id}
-                      >
-                        {flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                      </th>
-                    );
-                  })}
-                </tr>
-              );
-            })}
+            {table.getHeaderGroups().map((headerGroup) => (
+              <tr key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <th
+                    scope="col"
+                    className={`p-4 ${header.id === "id" ? "text-center" : ""}`}
+                    style={{
+                      width:
+                        header.id === "pedidoProdutos"
+                          ? "25%"
+                          : header.id === "observacao"
+                          ? "35%"
+                          : undefined,
+                    }}
+                    key={header.id}
+                  >
+                    {flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
+                  </th>
+                ))}
+              </tr>
+            ))}
           </thead>
           <tbody className="text-center">
             {!isLoading && table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <tr
-                  className="bg-white border-b hover:brightness-90"
-                  key={row.id}
-                >
+                <tr className="bg-white border-b hover:brightness-90" key={row.id}>
                   {row.getVisibleCells().map((cell) => (
                     <td
                       key={cell.id}
@@ -127,10 +114,7 @@ export function DataTablePedidos<TData, TValue>({
                         textOverflow: "ellipsis",
                       }}
                     >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </td>
                   ))}
                 </tr>
@@ -145,10 +129,7 @@ export function DataTablePedidos<TData, TValue>({
                   { length: oldData.length > 0 ? oldData.length : 5 },
                   (_, index) => index
                 ).map((item) => (
-                  <tr
-                    key={item}
-                    className="bg-white border-b hover:brightness-90"
-                  >
+                  <tr key={item} className="bg-white border-b hover:brightness-90">
                     {Array.from(
                       { length: table.getAllColumns().length },
                       (_, index) => index
@@ -171,18 +152,6 @@ export function DataTablePedidos<TData, TValue>({
             </span>
           </div>
         )}
-      </div>
-      <div className="flex items-center justify-end space-x-2 py-4 mr-14">
-        <Button
-          label="Anterior"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        ></Button>
-        <Button
-          label="Próximo"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        ></Button>
       </div>
     </div>
   );
