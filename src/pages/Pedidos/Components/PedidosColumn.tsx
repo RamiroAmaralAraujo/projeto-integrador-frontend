@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { ActionsTable } from "@/components/ActionsTableCell";
 import AlertDeletePedido from "@/components/AlertDeletePedido/index";
 import { DataTablePedidos } from "@/components/DataTablePedidos";
@@ -9,11 +10,14 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { PackagePlus, PackageMinus } from "lucide-react";
 import { TipoMovimentacao } from "@/enums/TipoMovimentacao";
+import { Button } from "@/components/ui/button";
+
+// Substitua pelo caminho correto do componente Button ou use um botão nativo
+ // Ajuste este caminho conforme a localização correta do seu componente Button
 
 export function TablePedidos() {
   const { useRead: useReadPedidos } = usePedidos();
   const { mutateAsync: removePedidos } = useRemove();
-
   const { data: pedidos, isLoading, isFetching } = useReadPedidos();
 
   const handleChange = usePedidosStore((state) => state.actions.handleChange);
@@ -21,7 +25,28 @@ export function TablePedidos() {
     (state) => state.actions.onOpenAlert
   );
 
-  // Mapeamento do ID do produto para o nome
+  // Estados de paginação
+  const [currentPage, setCurrentPage] = useState(0);
+  const itemsPerPage = 5;
+
+  // Função para alternar entre as páginas
+  const handleNextPage = () => {
+    if (pedidos && (currentPage + 1) * itemsPerPage < pedidos.length) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (currentPage > 0) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  // Define os dados da página atual
+  const currentData = pedidos?.slice(
+    currentPage * itemsPerPage,
+    (currentPage + 1) * itemsPerPage
+  );
 
   const columns: ColumnDef<PedidosData>[] = [
     {
@@ -35,10 +60,6 @@ export function TablePedidos() {
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </button>
       ),
-      filterFn: (row, columnId, filterValue) => {
-        // Verifica se o valor de filtro está vazio ou corresponde ao ID exato
-        return filterValue === null || row.getValue(columnId) === filterValue;
-      },
     },
     {
       accessorKey: "data",
@@ -113,11 +134,24 @@ export function TablePedidos() {
       <div className="overflow-x-auto">
         <DataTablePedidos
           columns={columns}
-          data={pedidos || []}
+          data={currentData || []}
           isLoading={isLoading || isFetching}
         />
       </div>
-
+      <div className="flex justify-end mt-4 mr-14 space-x-4">
+        <Button
+          label="Anterior"
+          onClick={handlePreviousPage}
+          disabled={currentPage === 0}
+          className="px-4 py-2 bg-blue-500 text-white rounded-lg disabled:opacity-50 hover:bg-blue-600"
+        />
+        <Button
+          label="Próximo"
+          onClick={handleNextPage}
+          disabled={pedidos ? (currentPage + 1) * itemsPerPage >= pedidos.length : true}
+          className="px-4 py-2 bg-blue-500 text-white rounded-lg disabled:opacity-50 hover:bg-blue-600"
+        />
+      </div>
       <AlertDeletePedido onDelete={removePedidos} />
     </>
   );
