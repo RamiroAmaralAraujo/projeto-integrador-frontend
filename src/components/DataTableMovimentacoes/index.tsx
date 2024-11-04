@@ -30,21 +30,40 @@ export function DataTableMovimentacoes<TData, TValue>({
 }: TableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [oldData, setOldData] = useState<any[]>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    []
+  );
+
+  const [pageIndex, setPageIndex] = useState<number>(0);
+  const [pageSize] = useState<number>(5); 
 
   const table = useReactTable({
+    getPaginationRowModel: getPaginationRowModel(),
     data,
     columns,
+    onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     state: {
       sorting,
       columnFilters,
+      pagination: {
+        pageIndex,
+        pageSize,
+      },
     },
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
+    onPaginationChange: (updater) => {
+      if (typeof updater === "function") {
+        // Usando um updater que recebe o estado atual
+        const updatedPagination = updater({ pageIndex, pageSize });
+        setPageIndex(updatedPagination.pageIndex);
+      } else {
+        // Caso seja um objeto direto
+        setPageIndex(updater.pageIndex);
+      }
+    },
   });
 
   useEffect(() => {
@@ -57,8 +76,10 @@ export function DataTableMovimentacoes<TData, TValue>({
     <div>
       <div className="flex items-center py-4 ">
         <Input
-          label='Pesquisar'
-          value={(table.getColumn("produtoNome")?.getFilterValue() as string) ?? ""}
+          label="Pesquisar"
+          value={
+            (table.getColumn("produtoNome")?.getFilterValue() as string) ?? ""
+          }
           onChange={(event) =>
             table.getColumn("produtoNome")?.setFilterValue(event.target.value)
           }
@@ -96,7 +117,10 @@ export function DataTableMovimentacoes<TData, TValue>({
           <tbody className="text-center">
             {!isLoading && table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
-                <tr className="bg-white border-b hover:brightness-90" key={row.id}>
+                <tr
+                  className="bg-white border-b hover:brightness-90"
+                  key={row.id}
+                >
                   {row.getVisibleCells().map((cell) => (
                     <td
                       key={cell.id}
@@ -130,7 +154,10 @@ export function DataTableMovimentacoes<TData, TValue>({
                   { length: oldData.length > 0 ? oldData.length : 5 },
                   (_, index) => index
                 ).map((item) => (
-                  <tr key={item} className="bg-white border-b hover:brightness-90">
+                  <tr
+                    key={item}
+                    className="bg-white border-b hover:brightness-90"
+                  >
                     {Array.from(
                       { length: table.getAllColumns().length },
                       (_, index) => index
@@ -157,14 +184,14 @@ export function DataTableMovimentacoes<TData, TValue>({
       <div className="flex items-center justify-end space-x-2 py-4 mr-14">
         <Button
           label="Anterior"
-          onClick={() => table.previousPage()}
+          onClick={() => setPageIndex((prev) => Math.max(prev - 1, 0))}
           disabled={!table.getCanPreviousPage()}
-        />
+        ></Button>
         <Button
           label="Próximo"
-          onClick={() => table.nextPage()}
+          onClick={() => setPageIndex((prev) => prev + 1)}
           disabled={!table.getCanNextPage()}
-        />
+        ></Button>
       </div>
     </div>
   );

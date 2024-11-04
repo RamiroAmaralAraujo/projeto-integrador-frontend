@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react'
-import { Input } from "@/components/ui/input"
+import { useEffect, useState } from "react";
+import { Input } from "@/components/ui/input";
 
-import NotResult from "../../assets/NotResult.svg"
+import NotResult from "../../assets/NotResult.svg";
 
 import {
   ColumnDef,
@@ -13,16 +13,15 @@ import {
   ColumnFiltersState,
   getFilteredRowModel,
   getSortedRowModel,
-} from '@tanstack/react-table'
-import { Button } from '../ui/button';
-import * as React from 'react';
-import { Skeleton } from '../ui/skeleton';
-
+} from "@tanstack/react-table";
+import { Button } from "../ui/button";
+import * as React from "react";
+import { Skeleton } from "../ui/skeleton";
 
 interface TableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
-  data: TData[]
-  isLoading?: boolean
+  columns: ColumnDef<TData, TValue>[];
+  data: TData[];
+  isLoading?: boolean;
 }
 
 export function DataTableCategorias<TData, TValue>({
@@ -31,9 +30,14 @@ export function DataTableCategorias<TData, TValue>({
 
   isLoading,
 }: TableProps<TData, TValue>) {
-  const [sorting, setSorting] = React.useState<SortingState>([])
-  const [oldData, setOldData] = useState<any[]>([])
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [oldData, setOldData] = useState<any[]>([]);
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    []
+  );
+
+  const [pageIndex, setPageIndex] = useState<number>(0);
+  const [pageSize] = useState<number>(5); 
 
   const table = useReactTable({
     getPaginationRowModel: getPaginationRowModel(),
@@ -46,23 +50,35 @@ export function DataTableCategorias<TData, TValue>({
     getFilteredRowModel: getFilteredRowModel(),
     state: {
       sorting,
-      columnFilters
+      columnFilters,
+      pagination: {
+        pageIndex,
+        pageSize,
+      },
     },
-  })
+    onPaginationChange: (updater) => {
+      if (typeof updater === "function") {
+        // Usando um updater que recebe o estado atual
+        const updatedPagination = updater({ pageIndex, pageSize });
+        setPageIndex(updatedPagination.pageIndex);
+      } else {
+        // Caso seja um objeto direto
+        setPageIndex(updater.pageIndex);
+      }
+    },
+  });
 
   useEffect(() => {
     if (!isLoading) {
-      setOldData(data)
+      setOldData(data);
     }
-  }, [isLoading, data])
-
-
+  }, [isLoading, data]);
 
   return (
     <div>
       <div className="flex items-center py-4 ">
         <Input
-          label='Pesquisar'
+          label="Pesquisar"
           value={(table.getColumn("nome")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("nome")?.setFilterValue(event.target.value)
@@ -79,8 +95,9 @@ export function DataTableCategorias<TData, TValue>({
                     return (
                       <th
                         scope="col"
-                        className={`p-4 ${header.id === 'id' ? 'text-center' : ''
-                          }`}
+                        className={`p-4 ${
+                          header.id === "id" ? "text-center" : ""
+                        }`}
                         style={{
                           width:
                             header.getSize() !== 150
@@ -91,16 +108,16 @@ export function DataTableCategorias<TData, TValue>({
                       >
                         {flexRender(
                           header.column.columnDef.header,
-                          header.getContext(),
+                          header.getContext()
                         )}
                       </th>
-                    )
+                    );
                   })}
                 </tr>
-              )
+              );
             })}
           </thead>
-          <tbody className='text-center'>
+          <tbody className="text-center">
             {!isLoading && table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <tr
@@ -108,8 +125,14 @@ export function DataTableCategorias<TData, TValue>({
                   key={row.id}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <td key={cell.id} className="p-4 text-center font-semibold items-center">
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    <td
+                      key={cell.id}
+                      className="p-4 text-center font-semibold items-center"
+                    >
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
                     </td>
                   ))}
                 </tr>
@@ -122,7 +145,7 @@ export function DataTableCategorias<TData, TValue>({
               <>
                 {Array.from(
                   { length: oldData.length > 0 ? oldData.length : 5 },
-                  (_, index) => index,
+                  (_, index) => index
                 ).map((item) => (
                   <tr
                     key={item}
@@ -130,7 +153,7 @@ export function DataTableCategorias<TData, TValue>({
                   >
                     {Array.from(
                       { length: table.getAllColumns().length },
-                      (_, index) => index,
+                      (_, index) => index
                     ).map((elm) => (
                       <td className="p-4" key={elm}>
                         <Skeleton className="h-4 w-full rounded-xl bg-gray-300" />
@@ -144,29 +167,25 @@ export function DataTableCategorias<TData, TValue>({
         </table>
         {!isLoading && table.getRowModel().rows?.length === 0 && (
           <div className="w-full p-8 text-center bg-white ">
-            <img src={NotResult} width={185} className='m-auto mb-2' />
-            <span className='font-semibold text-brand-blue-500'>Huum... não foi possível encontrar o que procura.</span>
+            <img src={NotResult} width={185} className="m-auto mb-2" />
+            <span className="font-semibold text-brand-blue-500">
+              Huum... não foi possível encontrar o que procura.
+            </span>
           </div>
         )}
       </div>
       <div className="flex items-center justify-end space-x-2 py-4 mr-14">
-        {/* <Button
-          label='Anterior'
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-
-        >
-
-        </Button>
         <Button
-          label='Próximo'
-          onClick={() => table.nextPage()}
+          label="Anterior"
+          onClick={() => setPageIndex((prev) => Math.max(prev - 1, 0))}
+          disabled={!table.getCanPreviousPage()}
+        ></Button>
+        <Button
+          label="Próximo"
+          onClick={() => setPageIndex((prev) => prev + 1)}
           disabled={!table.getCanNextPage()}
-        >
-
-        </Button> */}
+        ></Button>
       </div>
     </div>
-
-  )
+  );
 }
