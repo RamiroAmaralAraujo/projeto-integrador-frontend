@@ -13,6 +13,7 @@ import PoliticaDePrivacidade from './pages/politicaDePrivacidade/politicaDePriva
 import { Produtos } from './pages/Produtos/Index'
 import { Categorias } from './pages/Categorias/Index'
 import { Pedidos } from './pages/Pedidos/index'
+import { Movimentacoes } from './pages/Movimentacoes/index'
 import { NotFound } from './pages/NotFound/NotFound'
 import { Empresas } from './pages/Empresas/Index'
 import { Configuracoes } from './pages/Configuracoes/Configuracoes'
@@ -106,6 +107,10 @@ export const router = createBrowserRouter([
       {
         path: '/pedidos',
         element: <Pedidos />
+      },
+      {
+        path: '/movimentacoes',
+        element: <Movimentacoes />
       },
       {
         path: '/financeiro',

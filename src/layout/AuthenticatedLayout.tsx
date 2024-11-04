@@ -39,6 +39,7 @@ export function AuthenticatedLayout() {
             subItems={[
               { text: "Categorias", url: "/categorias" },
               { text: "Produtos", url: "/produtos" },
+              { text: "Movimentações", url: "/movimentacoes" },
             ]}
             alert
           />

@@ -62,7 +62,7 @@ export function DataTableProdutos<TData, TValue>({
     <div>
       <div className="flex items-center py-4 ">
         <Input
-          label='Filtro de Produtos'
+          label='Pesquisar'
           value={(table.getColumn("nome")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("nome")?.setFilterValue(event.target.value)

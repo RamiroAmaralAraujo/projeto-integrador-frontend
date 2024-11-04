@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
-
 import NotResult from "../../assets/NotResult.svg";
 
 import {
@@ -14,6 +13,7 @@ import {
   getFilteredRowModel,
   getSortedRowModel,
 } from "@tanstack/react-table";
+import { Button } from "../ui/button";
 import * as React from "react";
 import { Skeleton } from "../ui/skeleton";
 
@@ -23,7 +23,7 @@ interface TableProps<TData, TValue> {
   isLoading?: boolean;
 }
 
-export function DataTablePedidos<TData, TValue>({
+export function DataTableMovimentacoes<TData, TValue>({
   columns,
   data,
   isLoading,
@@ -33,18 +33,18 @@ export function DataTablePedidos<TData, TValue>({
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
 
   const table = useReactTable({
-    getPaginationRowModel: getPaginationRowModel(),
     data,
     columns,
-    onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     state: {
       sorting,
       columnFilters,
     },
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
   });
 
   useEffect(() => {
@@ -55,15 +55,13 @@ export function DataTablePedidos<TData, TValue>({
 
   return (
     <div>
-      <div className="flex items-center py-4">
+      <div className="flex items-center py-4 ">
         <Input
-          label="Pesquisar"
-          value={(table.getColumn("idPedido")?.getFilterValue() as string) ?? ""}
-          onChange={(event) => {
-            const filterValue = event.target.value;
-            const numericFilterValue = filterValue !== "" ? Number(filterValue) : null;
-            table.getColumn("idPedido")?.setFilterValue(numericFilterValue);
-          }}
+          label='Pesquisar'
+          value={(table.getColumn("produtoNome")?.getFilterValue() as string) ?? ""}
+          onChange={(event) =>
+            table.getColumn("produtoNome")?.setFilterValue(event.target.value)
+          }
         />
       </div>
 
@@ -81,8 +79,8 @@ export function DataTablePedidos<TData, TValue>({
                         header.id === "pedidoProdutos"
                           ? "25%"
                           : header.id === "observacao"
-                          ? "35%"
-                          : undefined,
+                            ? "35%"
+                            : undefined,
                     }}
                     key={header.id}
                   >
@@ -114,7 +112,10 @@ export function DataTablePedidos<TData, TValue>({
                         textOverflow: "ellipsis",
                       }}
                     >
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
                     </td>
                   ))}
                 </tr>
@@ -152,6 +153,18 @@ export function DataTablePedidos<TData, TValue>({
             </span>
           </div>
         )}
+      </div>
+      <div className="flex items-center justify-end space-x-2 py-4 mr-14">
+        <Button
+          label="Anterior"
+          onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage()}
+        />
+        <Button
+          label="Próximo"
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
+        />
       </div>
     </div>
   );
