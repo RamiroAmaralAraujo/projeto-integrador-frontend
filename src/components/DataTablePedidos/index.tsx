@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
-
 import NotResult from "../../assets/NotResult.svg";
 
 import {
@@ -30,17 +29,21 @@ export function DataTablePedidos<TData, TValue>({
   isLoading,
 }: TableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [oldData, setOldData] = useState<any[]>([]);
+  const [filteredData, setFilteredData] = useState<TData[]>(data);
+  const [oldData, setOldData] = useState<TData[]>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
 
+  const [startDate, setStartDate] = useState<string | null>(null);
+  const [endDate, setEndDate] = useState<string | null>(null);
+
   const [pageIndex, setPageIndex] = useState<number>(0);
-  const [pageSize] = useState<number>(5); 
+  const [pageSize] = useState<number>(5);
 
   const table = useReactTable({
     getPaginationRowModel: getPaginationRowModel(),
-    data,
+    data: filteredData,
     columns,
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
@@ -57,11 +60,9 @@ export function DataTablePedidos<TData, TValue>({
     },
     onPaginationChange: (updater) => {
       if (typeof updater === "function") {
-        // Usando um updater que recebe o estado atual
         const updatedPagination = updater({ pageIndex, pageSize });
         setPageIndex(updatedPagination.pageIndex);
       } else {
-        // Caso seja um objeto direto
         setPageIndex(updater.pageIndex);
       }
     },
@@ -70,12 +71,28 @@ export function DataTablePedidos<TData, TValue>({
   useEffect(() => {
     if (!isLoading) {
       setOldData(data);
+  
+      // Aplica a filtragem por data
+      const filtered = data.filter((item: any) => {
+        const itemDate = new Date(item.data); // Ajuste caso o formato de `data` seja diferente
+        const start = startDate ? new Date(startDate) : null;
+        const end = endDate ? new Date(endDate) : null;
+  
+        // Adiciona 1 dia na data final apenas para comparação
+        if (end) {
+          end.setDate(end.getDate() + 1);
+        }
+  
+        return (!start || itemDate >= start) && (!end || itemDate < end); // Note que `end` agora é exclusivo
+      });
+  
+      setFilteredData(filtered);
     }
-  }, [isLoading, data]);
+  }, [isLoading, data, startDate, endDate]);
 
   return (
     <div>
-      <div className="flex items-center py-4">
+      <div className="flex items-center py-4 gap-2">
         <Input
           label="Pesquisar"
           value={
@@ -89,39 +106,47 @@ export function DataTablePedidos<TData, TValue>({
             table.getColumn("idPedido")?.setFilterValue(numericFilterValue);
           }}
         />
+        <Input
+          type="date"
+          label="Data Inicial"
+          value={startDate ?? ""}
+          onChange={(event) => setStartDate(event.target.value || null)}
+        />
+        <Input
+          type="date"
+          label="Data Final"
+          value={endDate ?? ""}
+          onChange={(event) => setEndDate(event.target.value || null)}
+        />
       </div>
 
       <div className="overflow-x-auto shadow-md rounded-2xl mr-14 max-h-[500px] overflow-y-auto">
         <table className="w-full text-sm text-center text-base-text table-fixed">
           <thead className="text-base-subtitle uppercase bg-gray-100">
-            {table.getHeaderGroups().map((headerGroup) => {
-              return (
-                <tr key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => {
-                    return (
-                      <th
-                        scope="col"
-                        className={`p-4 ${header.id === "id" ? "text-center" : ""}`}
-                        style={{
-                          width:
-                            header.id === "pedidoProdutos"
-                              ? "25%"
-                              : header.id === "observacao"
-                                ? "35%"
-                                : undefined,
-                        }}
-                        key={header.id}
-                      >
-                        {flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                      </th>
-                    );
-                  })}
-                </tr>
-              );
-            })}
+            {table.getHeaderGroups().map((headerGroup) => (
+              <tr key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <th
+                    scope="col"
+                    className={`p-4 ${header.id === "id" ? "text-center" : ""}`}
+                    style={{
+                      width:
+                        header.id === "pedidoProdutos"
+                          ? "25%"
+                          : header.id === "observacao"
+                            ? "35%"
+                            : undefined,
+                    }}
+                    key={header.id}
+                  >
+                    {flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
+                  </th>
+                ))}
+              </tr>
+            ))}
           </thead>
           <tbody className="text-center">
             {!isLoading && table.getRowModel().rows?.length ? (

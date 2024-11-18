@@ -29,17 +29,21 @@ export function DataTableMovimentacoes<TData, TValue>({
   isLoading,
 }: TableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [oldData, setOldData] = useState<any[]>([]);
+  const [filteredData, setFilteredData] = useState<TData[]>(data);
+  const [oldData, setOldData] = useState<TData[]>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
 
+  const [startDate, setStartDate] = useState<string | null>(null);
+  const [endDate, setEndDate] = useState<string | null>(null);
+
   const [pageIndex, setPageIndex] = useState<number>(0);
-  const [pageSize] = useState<number>(5); 
+  const [pageSize] = useState<number>(5);
 
   const table = useReactTable({
     getPaginationRowModel: getPaginationRowModel(),
-    data,
+    data: filteredData,
     columns,
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
@@ -56,11 +60,9 @@ export function DataTableMovimentacoes<TData, TValue>({
     },
     onPaginationChange: (updater) => {
       if (typeof updater === "function") {
-        // Usando um updater que recebe o estado atual
         const updatedPagination = updater({ pageIndex, pageSize });
         setPageIndex(updatedPagination.pageIndex);
       } else {
-        // Caso seja um objeto direto
         setPageIndex(updater.pageIndex);
       }
     },
@@ -69,12 +71,29 @@ export function DataTableMovimentacoes<TData, TValue>({
   useEffect(() => {
     if (!isLoading) {
       setOldData(data);
+  
+      // Aplica a filtragem por data
+      const filtered = data.filter((item: any) => {
+        const itemDate = new Date(item.data); // Ajuste caso o formato de `data` seja diferente
+        const start = startDate ? new Date(startDate) : null;
+        const end = endDate ? new Date(endDate) : null;
+  
+        // Adiciona 1 dia na data final apenas para comparação
+        if (end) {
+          end.setDate(end.getDate() + 1);
+        }
+  
+        return (!start || itemDate >= start) && (!end || itemDate < end); // Note que `end` agora é exclusivo
+      });
+  
+      setFilteredData(filtered);
     }
-  }, [isLoading, data]);
+  }, [isLoading, data, startDate, endDate]);
+  
 
   return (
     <div>
-      <div className="flex items-center py-4 ">
+      <div className="flex items-center py-4 gap-2">
         <Input
           label="Pesquisar"
           value={
@@ -83,6 +102,18 @@ export function DataTableMovimentacoes<TData, TValue>({
           onChange={(event) =>
             table.getColumn("produtoNome")?.setFilterValue(event.target.value)
           }
+        />
+        <Input
+          type="date"
+          label="Data Inicial"
+          value={startDate ?? ""}
+          onChange={(event) => setStartDate(event.target.value || null)}
+        />
+        <Input
+          type="date"
+          label="Data Final"
+          value={endDate ?? ""}
+          onChange={(event) => setEndDate(event.target.value || null)}
         />
       </div>
 
