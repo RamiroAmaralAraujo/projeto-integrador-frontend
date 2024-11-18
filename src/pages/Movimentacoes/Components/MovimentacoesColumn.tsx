@@ -30,6 +30,38 @@ export function TableMovimentacoes() {
   // Configuração das colunas
   const columns: ColumnDef<typeof data[0]>[] = [
     {
+      accessorKey: "data",
+      header: ({ column }) => (
+        <button
+          className="flex justify-center items-center p-2 hover:bg-gray-400 rounded-xl w-full"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          DATA
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </button>
+      ),
+      cell: ({ getValue }) => {
+        const dateValue = new Date(getValue() as string);
+        const formattedDate = dateValue.toLocaleDateString("pt-BR");
+        return <span className="text-center">{formattedDate}</span>;
+      },
+    },
+    {
+      accessorKey: "idPedido",
+      header: ({ column }) => (
+        <button
+          className="flex justify-center items-center p-2 hover:bg-gray-400 rounded-xl w-full"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          PEDIDO
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </button>
+      ),
+      cell: ({ getValue }) => (
+        <span className="text-center">{String(getValue())}</span>
+      ),
+    },
+    {
       accessorKey: "produtoNome",
       header: ({ column }) => (
         <button
