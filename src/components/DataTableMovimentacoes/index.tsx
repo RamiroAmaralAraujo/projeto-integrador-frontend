@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import NotResult from "../../assets/NotResult.svg";
+import { Printer } from 'lucide-react'
 
 import {
   ColumnDef,
@@ -71,25 +72,24 @@ export function DataTableMovimentacoes<TData, TValue>({
   useEffect(() => {
     if (!isLoading) {
       setOldData(data);
-  
+
       // Aplica a filtragem por data
       const filtered = data.filter((item: any) => {
         const itemDate = new Date(item.data); // Ajuste caso o formato de `data` seja diferente
         const start = startDate ? new Date(startDate) : null;
         const end = endDate ? new Date(endDate) : null;
-  
+
         // Adiciona 1 dia na data final apenas para comparação
         if (end) {
           end.setDate(end.getDate() + 1);
         }
-  
+
         return (!start || itemDate >= start) && (!end || itemDate < end); // Note que `end` agora é exclusivo
       });
-  
+
       setFilteredData(filtered);
     }
   }, [isLoading, data, startDate, endDate]);
-  
 
   return (
     <div>
@@ -213,6 +213,140 @@ export function DataTableMovimentacoes<TData, TValue>({
         )}
       </div>
       <div className="flex items-center justify-end space-x-2 py-4 mr-14">
+        <Button
+          icon={<Printer size={20} />}
+          onClick={() => {
+            const printWindow = window.open(
+              "",
+              "_blank",
+              "width=800,height=600"
+            );
+            if (printWindow) {
+              const content = `
+        <html>
+          <head>
+            <title>Movimentações Filtradas</title>
+            <style>
+              body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                line-height: 1.6;
+                color: #333;
+              }
+              header {
+                background-color: #08264D;
+                color: white;
+                padding: 20px;
+                text-align: center;
+              }
+              header h1 {
+                margin: 0;
+                font-size: 1.8rem;
+              }
+              .content {
+                padding: 20px;
+              }
+              table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+              }
+              th, td {
+                border: 1px solid #ddd;
+                padding: 8px;
+                text-align: center;
+              }
+              th {
+                background-color: #f4f4f4;
+                font-weight: bold;
+              }
+            </style>
+          </head>
+          <body>
+            <header>
+              <h1>Movimentações Filtradas</h1>
+            </header>
+            <div class="content">
+              <table>
+                <thead>
+                  <tr>
+                  ${table
+                    .getHeaderGroups()
+                    .map((headerGroup) =>
+                      headerGroup.headers
+                        .map((header) => {
+                          let headerContent = 
+                            typeof header.column.columnDef.header === 'function'
+                              ? header.column.columnDef.header(header.getContext())
+                              : header.column.columnDef.header;
+                  
+                          // Caso o header seja um componente React ou objeto, extraia apenas o texto
+                          if (typeof headerContent === 'object' && headerContent !== null) {
+                            // Tente obter texto diretamente dos filhos (se for React)
+                            headerContent = headerContent.props?.children;
+                  
+                            // Caso `children` seja um array, converta para string
+                            if (Array.isArray(headerContent)) {
+                              headerContent = headerContent
+                                .map((child) => (typeof child === 'string' ? child : ''))
+                                .join('');
+                            }
+                  
+                            // Como fallback, use uma string vazia se ainda não for texto
+                            headerContent = typeof headerContent === 'string' ? headerContent : '';
+                          }
+                  
+                          return `<th>${headerContent || ''}</th>`;
+                        })
+                        .join("")
+                    )
+                    .join("")}
+                  
+                  
+                  
+                  </tr>
+                </thead>
+                <tbody>
+                  ${filteredData
+                    .map(
+                      (item: any) =>
+                        `<tr>${table
+                          .getAllColumns()
+                          .map((column) => {
+                            const cellValue = column.accessorFn
+                              ? column.id === "data" // Verifica se a coluna é de data
+                                ? new Date(
+                                    column.accessorFn(
+                                      item,
+                                      table.getAllColumns().indexOf(column)
+                                    ) as string | number | Date
+                                  ).toLocaleDateString("pt-BR")
+                                : column.accessorFn(
+                                    item,
+                                    table.getAllColumns().indexOf(column)
+                                  )
+                              : "";
+
+                            return `<td>${cellValue}</td>`;
+                          })
+                          .join("")}</tr>`
+                    )
+                    .join("")}
+                </tbody>
+              </table>
+            </div>
+          </body>
+        </html>
+      `;
+
+              printWindow.document.write(content);
+              printWindow.document.close();
+              printWindow.print();
+            }
+          }}
+        ></Button>
+
         <Button
           label="Anterior"
           onClick={() => setPageIndex((prev) => Math.max(prev - 1, 0))}
