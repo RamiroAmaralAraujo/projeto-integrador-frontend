@@ -21,6 +21,8 @@ import { Finaceiro } from './pages/Pagaveis'
 import { LoadingFullscreen } from './components/LoadingFull/LoadingFullscreen'
 import PrintDuplicatamodel from './pages/PrintDuplicataModel/PrintDuplicataModel'
 import { PrintDuplicataLayout } from './layout/PrintDuplicataLayout'
+import PrintPedidomodel from './pages/PrintPedidoModel/PrintPedidoModel'
+import { PrintPedidoLayout } from './layout/PrintPedidoLayout'
 import { SolucoesSistemaPDV } from './pages/SolucoesSistemaPDV'
 
 
@@ -30,12 +32,18 @@ export const router = createBrowserRouter([
       <AuthProvider>
         <PrintDuplicataLayout>
         </PrintDuplicataLayout>
+        <PrintPedidoLayout>
+        </PrintPedidoLayout>
       </AuthProvider>
     ),
     children: [
       {
         path: '/printduplicata',
         element: <PrintDuplicatamodel />
+      },
+      {
+        path: '/printpedido',
+        element: <PrintPedidomodel />
       },
       {
         path: '/termos-de-uso',
@@ -127,6 +135,10 @@ export const router = createBrowserRouter([
       {
         path: '/printduplicata',
         element: <PrintDuplicatamodel />
+      },
+      {
+        path: '/printpedido',
+        element: <PrintPedidomodel />
       },
     ],
   },

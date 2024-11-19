@@ -9,6 +9,8 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { PackagePlus, PackageMinus } from "lucide-react";
 import { TipoMovimentacao } from "@/enums/TipoMovimentacao";
+import { useShareAlertPedidosStore } from "@/store/ShareAlertPedidosStore"
+import ShareAlertPedidos from "@/components/AlertSharePedido"
 
 export function TablePedidos() {
   const { useRead: useReadPedidos } = usePedidos();
@@ -19,6 +21,7 @@ export function TablePedidos() {
   const openDeleteAlert = useDeleteAlertPedidosStore(
     (state) => state.actions.onOpenAlert
   );
+  const openPrintAlert = useShareAlertPedidosStore((state) => state.actions.handleChangeSelectPedido,)
 
   // Mapeamento do ID do produto para o nome
 
@@ -100,6 +103,7 @@ export function TablePedidos() {
             <ActionsTable.Root
               onEdit={() => handleChange(pedido || null)}
               onDelete={() => openDeleteAlert(pedido?.id)}
+              onPrint={() => openPrintAlert(pedido || null)}
             />
           </div>
         );
@@ -117,6 +121,7 @@ export function TablePedidos() {
         />
       </div>
       <AlertDeletePedido onDelete={removePedidos} />
+      <ShareAlertPedidos />
     </>
   );
 }
