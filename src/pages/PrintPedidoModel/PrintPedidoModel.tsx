@@ -9,15 +9,15 @@ export default function PrintPedidomodel() {
   const { empresaSelecionada, pedidoSelecionado } = useContext(AuthContext);
   const { useRead: useReadPedidos } = usePedidos();
   const { useRead: useReadProdutos } = useProdutos();
-  const { data: pedidos, isLoading, error } = useReadPedidos(); 
+  const { data: pedidos, isLoading, error } = useReadPedidos();
   const { data: produtos } = useReadProdutos();
   const [pedido, setPedido] = useState<PedidosData | null>(null);
+  const [isPrintReady, setIsPrintReady] = useState(false); // Novo estado
 
-  
-  // Função para obter o nome da categoria pelo ID
+  // Função para obter o nome do produto pelo ID
   const getProdutoNome = (produtoId: string) => {
     const produto = produtos?.find((cat) => cat.id === produtoId);
-    return produto ? produto.nome : "Produto não encontrada";
+    return produto ? produto.nome : "Produto não encontrado";
   };
 
   // Atualiza o estado do pedido baseado no contexto e na lista de pedidos
@@ -30,13 +30,19 @@ export default function PrintPedidomodel() {
     }
   }, [pedidos, pedidoSelecionado]);
 
-  // Logs para diagnóstico
+  // Garante que a impressão só ocorre quando tudo está pronto
   useEffect(() => {
-    console.log("Pedidos carregados:", pedidos);
-    console.log("Empresa selecionada:", empresaSelecionada);
-    console.log("Pedido selecionado:", pedidoSelecionado);
-    console.log("Pedido final:", pedido);
-  }, [pedidos, empresaSelecionada, pedidoSelecionado, pedido]);
+    if (empresaSelecionada && pedidoSelecionado && pedido) {
+      setIsPrintReady(true);
+    }
+  }, [empresaSelecionada, pedidoSelecionado, pedido]);
+
+  // Chama a impressão assim que a página estiver pronta
+  useEffect(() => {
+    if (isPrintReady) {
+      window.print();
+    }
+  }, [isPrintReady]);
 
   if (isLoading) {
     return <p>Carregando pedidos...</p>;
