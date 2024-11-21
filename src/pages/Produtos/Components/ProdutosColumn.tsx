@@ -44,7 +44,17 @@ export function TableProdutos() {
     },
     {
       accessorKey: "preco",
-      header: "PREÇO",
+      header: ({ column }) => {
+        return (
+          <button
+            className="flex p-2 justify-center items-center hover:bg-gray-400 rounded-xl w-full "
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            PREÇO
+            <ArrowUpDown className="ml-2 h-4 w-4  " />
+          </button>
+        );
+      },
       cell: ({ getValue }) => {
         const valor = getValue() as number;
         const formattedValor = `R$ ${valor.toFixed(2)}`;
@@ -61,7 +71,17 @@ export function TableProdutos() {
     },
     {
       accessorKey: "quantidade",
-      header: "Quantidade",
+      header: ({ column }) => {
+        return (
+          <button
+            className="flex p-2 justify-center items-center hover:bg-gray-400 rounded-xl w-full "
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            QUANTIDADE
+            <ArrowUpDown className="ml-2 h-4 w-4  " />
+          </button>
+        );
+      },
     },
     {
       accessorKey: "sku",
