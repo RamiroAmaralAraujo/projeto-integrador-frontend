@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 
 
-export function PrintDuplicataLayout() {
+export function PrintLayout() {
 
 
   return (

@@ -20,9 +20,8 @@ import { Configuracoes } from './pages/Configuracoes/Configuracoes'
 import { Finaceiro } from './pages/Pagaveis'
 import { LoadingFullscreen } from './components/LoadingFull/LoadingFullscreen'
 import PrintDuplicatamodel from './pages/PrintDuplicataModel/PrintDuplicataModel'
-import { PrintDuplicataLayout } from './layout/PrintDuplicataLayout'
+import { PrintLayout } from './layout/PrintLayout'
 import PrintPedidomodel from './pages/PrintPedidoModel/PrintPedidoModel'
-import { PrintPedidoLayout } from './layout/PrintPedidoLayout'
 import { SolucoesSistemaPDV } from './pages/SolucoesSistemaPDV'
 
 
@@ -30,10 +29,8 @@ export const router = createBrowserRouter([
   {
     element: (
       <AuthProvider>
-        <PrintDuplicataLayout>
-        </PrintDuplicataLayout>
-        <PrintPedidoLayout>
-        </PrintPedidoLayout>
+        <PrintLayout>
+        </PrintLayout>
       </AuthProvider>
     ),
     children: [
