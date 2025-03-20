@@ -23,6 +23,7 @@ import PrintDuplicatamodel from './pages/PrintDuplicataModel/PrintDuplicataModel
 import { PrintLayout } from './layout/PrintLayout'
 import PrintPedidomodel from './pages/PrintPedidoModel/PrintPedidoModel'
 import { SolucoesSistemaPDV } from './pages/SolucoesSistemaPDV'
+import { Atendimentos } from './pages/Atendimentos/Index'
 
 
 export const router = createBrowserRouter([
@@ -136,6 +137,10 @@ export const router = createBrowserRouter([
       {
         path: '/printpedido',
         element: <PrintPedidomodel />
+      },
+      {
+        path: '/atendimentos',
+        element: <Atendimentos />
       },
     ],
   },

@@ -7,6 +7,7 @@ import {
   ShoppingBasket,
   PackageSearch,
   Receipt,
+  MessageCircleMore,
 } from "lucide-react";
 import { SidebarItem } from "../components/Sidebar/Componentes/SidebarItem";
 
@@ -53,6 +54,12 @@ export function AuthenticatedLayout() {
             icon={<Receipt />}
             text="Financeiro"
             url="/financeiro"
+            alert
+          />
+          <SidebarItem
+            icon={<MessageCircleMore />}
+            text="Atendimentos"
+            url="/atendimentos"
             alert
           />
         </SidebarForm>
