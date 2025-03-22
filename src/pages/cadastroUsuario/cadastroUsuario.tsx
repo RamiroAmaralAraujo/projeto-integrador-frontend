@@ -65,7 +65,7 @@ export function CadastroUsuario() {
       };
 
       await signUp(newData);
-      navigate("/dashboard");
+      navigate("/dashboard/geral");
       toast.success("Cadastro realizado com sucesso!");
     } catch (error: unknown) {
       if (axios.isAxiosError<Error>(error)) {

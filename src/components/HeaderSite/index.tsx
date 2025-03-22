@@ -59,7 +59,7 @@ export function HeaderSite() {
 
         <div className="flex items-center gap-6">
           <div className="bg-white p-1 pl-3 pr-3 rounded-full flex justify-center hover:bg-gray-100">
-            <Link to="/dashboard" className="text-brand-blue-500 font-bold">AREA DO CLIENTE</Link>
+            <Link to="/dashboard/geral" className="text-brand-blue-500 font-bold">AREA DO CLIENTE</Link>
           </div>
           <button 
             className="md:hidden text-white py-2 px-4 rounded hover:bg-brand-blue-400" 

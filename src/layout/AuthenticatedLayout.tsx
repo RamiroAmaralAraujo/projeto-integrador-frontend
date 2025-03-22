@@ -30,8 +30,12 @@ export function AuthenticatedLayout() {
         <SidebarForm>
           <SidebarItem
             icon={<LayoutDashboard />}
-            text="Dashboard"
-            url="/dashboard"
+            text="Dashboards"
+            subItems={[
+              { text: "Geral", url: "/dashboard/geral" },
+              { text: "Vendas", url: "/dashboard/vendas" },
+              { text: "Duplicatas", url: "/dashboard/duplicatas" },
+            ]}
             alert
           />
           <SidebarItem
