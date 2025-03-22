@@ -6,7 +6,7 @@ export function UnauthenticatedLayout() {
   const { isAuthenticated } = useAuth()
 
   if (isAuthenticated) {
-    return <Navigate to="/dashboard" />
+    return <Navigate to="/dashboard/geral" />
   }
 
   return (

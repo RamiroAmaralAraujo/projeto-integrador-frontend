@@ -148,7 +148,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       navigate("/loading");
 
       setTimeout(() => {
-        navigate("/dashboard");
+        navigate("/dashboard/geral");
       }, 5000);
     } catch (error: unknown) {
       if (axios.isAxiosError<Error>(error)) {

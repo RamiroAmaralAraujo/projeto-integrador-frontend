@@ -3,7 +3,7 @@ import { createBrowserRouter } from 'react-router-dom'
 import { AuthProvider } from './Context/AuthContext'
 import { UnauthenticatedLayout } from './layout/UnauthenticatedLayout'
 import { AuthenticatedLayout } from './layout/AuthenticatedLayout'
-import { Dashboard } from './pages/Dashboard/dashboard'
+import { DashboardDuplicatas } from './pages/DashboardDuplicatas/dashboard'
 import { Login } from './pages/login/login'
 import { CadastroUsuario } from './pages/cadastroUsuario/cadastroUsuario'
 import TermosDeUso from './pages/termosDeUso/termosDeUso'
@@ -24,6 +24,7 @@ import { PrintLayout } from './layout/PrintLayout'
 import PrintPedidomodel from './pages/PrintPedidoModel/PrintPedidoModel'
 import { SolucoesSistemaPDV } from './pages/SolucoesSistemaPDV'
 import { Atendimentos } from './pages/Atendimentos/Index'
+import { DashboardConstruction } from './pages/DashboardConstruction/dashboard'
 
 
 export const router = createBrowserRouter([
@@ -95,8 +96,16 @@ export const router = createBrowserRouter([
     ),
     children: [
       {
-        path: '/dashboard',
-        element: <Dashboard />
+        path: '/dashboard/geral',
+        element: <DashboardConstruction />
+      },
+      {
+        path: '/dashboard/duplicatas',
+        element: <DashboardDuplicatas />
+      },
+      {
+        path: '/dashboard/vendas',
+        element: <DashboardConstruction />
       },
       {
         path: '/loading',

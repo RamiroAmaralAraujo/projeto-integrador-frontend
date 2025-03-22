@@ -10,7 +10,7 @@ import { CardBalanco } from './Components/CardBalanco';
 import { useContext } from 'react';
 import { AuthContext } from '@/Context/AuthContext';
 
-export function Dashboard() {
+export function DashboardDuplicatas() {
 
   const { empresaSelecionada } = useContext(AuthContext)
 
