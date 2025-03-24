@@ -22,7 +22,7 @@ type User = {
   userName: string;
   userCPF: string;
   userEmail: string;
-  tg_pdv: boolean;
+  master: boolean;
 };
 
 type SignInCredentials = {
@@ -127,7 +127,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         userName: userData.userName,
         userCPF: userData.userCPF,
         userEmail: userData.userEmail,
-        tg_pdv: userData.tg_pdv,
+        master: userData.master,
       });
     }
 
@@ -151,7 +151,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       setTimeout(() => {
         navigate("/dashboard/geral");
-      }, 5000);
+      }, 3000);
     } catch (error: unknown) {
       if (axios.isAxiosError<Error>(error)) {
         toast.error(error.response?.data.message);

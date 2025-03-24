@@ -19,16 +19,22 @@ export interface EmpresasData {
   logo_url: String
 }
 
+
+
+
 async function create(data: CreateEmpresasData) {
   const response = await api.post('empresas', data)
   return response.data
 }
 
-async function read(usuarioID: string) {
-  const response = await api.get('empresas',{params: {usuarioID}})
-  
-  return response.data
-
+async function read(usuarioID: string, isMaster: boolean) {
+  if (!isMaster) {
+    const response = await api.get('empresas', { params: { usuarioID } })
+    return response.data
+  } else if (isMaster) {
+    const response = await api.get('empresas')
+    return response.data
+  }
 }
 
 async function remove(id: string) {
@@ -59,11 +65,12 @@ async function readempresa(data: EmpresasData) {
 
 export function useRead() {
   const { user } = useContext(AuthContext)
+  const usuarioID = user?.sub || ''
+  const isMaster = user?.master || false
  
-
   return useQuery<EmpresasData[]>({
     queryKey: ['EMPRESAS'],
-    queryFn: () => read(user?.sub || ''),
+    queryFn: () => read(usuarioID, isMaster),
     onSuccess() {},
     onError() {},
   })

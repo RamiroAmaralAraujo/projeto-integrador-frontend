@@ -28,10 +28,7 @@ export function AuthenticatedLayout() {
   }
 
 
-  if (!user?.tg_pdv) {
-
-    console.log({user})
-
+  if (!user?.master) {
   return (
     <>
       <div className=" min-h-screen flex bg-slate-200">
@@ -82,6 +79,4 @@ export function AuthenticatedLayout() {
     </>
   );
   }
-
-  console.log({user})
 }
