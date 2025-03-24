@@ -24,7 +24,7 @@ interface TableProps<TData, TValue> {
   isLoading?: boolean;
 }
 
-export function DataTable<TData, TValue>({
+export function DataTableEmpresas<TData, TValue>({
   columns,
   data,
 

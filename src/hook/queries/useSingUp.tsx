@@ -7,7 +7,7 @@ type User = {
   email: string
   cpf: string
   password: string
-  tg_pdv: boolean
+  master: boolean
 }
 
 async function signUp(data: User) {
