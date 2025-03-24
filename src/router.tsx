@@ -25,6 +25,7 @@ import PrintPedidomodel from './pages/PrintPedidoModel/PrintPedidoModel'
 import { SolucoesSistemaPDV } from './pages/SolucoesSistemaPDV'
 import { Atendimentos } from './pages/Atendimentos/Index'
 import { DashboardConstruction } from './pages/DashboardConstruction/dashboard'
+import { AuthenticatedMasterLayout } from './layout/AuthenticatedMasterLayout'
 
 
 export const router = createBrowserRouter([
@@ -92,6 +93,8 @@ export const router = createBrowserRouter([
       <AuthProvider>
         <AuthenticatedLayout>
         </AuthenticatedLayout>
+        <AuthenticatedMasterLayout>
+        </AuthenticatedMasterLayout>
       </AuthProvider>
     ),
     children: [

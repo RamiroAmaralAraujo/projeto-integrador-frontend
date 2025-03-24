@@ -22,6 +22,7 @@ type User = {
   userName: string;
   userCPF: string;
   userEmail: string;
+  tg_pdv: boolean;
 };
 
 type SignInCredentials = {
@@ -126,6 +127,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         userName: userData.userName,
         userCPF: userData.userCPF,
         userEmail: userData.userEmail,
+        tg_pdv: userData.tg_pdv,
       });
     }
 

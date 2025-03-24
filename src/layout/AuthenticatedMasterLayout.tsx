@@ -4,20 +4,21 @@ import { LoadingFullscreen } from "../components/LoadingFull/LoadingFullscreen";
 import SidebarForm from "../components/Sidebar/Componentes/SidebarForm";
 import {
   LayoutDashboard,
-  ShoppingBasket,
   PackageSearch,
-  Receipt,
-  MessageCircleMore,
+
 } from "lucide-react";
 import { SidebarItem } from "../components/Sidebar/Componentes/SidebarItem";
 import { useContext } from "react";
 
-export function AuthenticatedLayout() {
+
+
+
+export function AuthenticatedMasterLayout() {
   const { isAuthenticated, isAuthenticating } = useAuth();
+  
+  const { user } = useContext(AuthContext)
 
   const location = useLocation();
-
-  const { user } = useContext(AuthContext)
 
   if (!isAuthenticating) {
     return <LoadingFullscreen />;
@@ -27,11 +28,12 @@ export function AuthenticatedLayout() {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
+  
 
-  if (!user?.tg_pdv) {
+  if (user?.tg_pdv) {
 
     console.log({user})
-
+    
   return (
     <>
       <div className=" min-h-screen flex bg-slate-200">
@@ -56,24 +58,7 @@ export function AuthenticatedLayout() {
             ]}
             alert
           />
-          <SidebarItem
-            icon={<ShoppingBasket />}
-            text="Pedidos"
-            url="/pedidos"
-            alert
-          />
-          <SidebarItem
-            icon={<Receipt />}
-            text="Financeiro"
-            url="/financeiro"
-            alert
-          />
-          <SidebarItem
-            icon={<MessageCircleMore />}
-            text="Atendimentos"
-            url="/atendimentos"
-            alert
-          />
+          
         </SidebarForm>
         <div className="max-w-[1440px] m-auto  w-full h-screen">
           <Outlet />
@@ -82,6 +67,4 @@ export function AuthenticatedLayout() {
     </>
   );
   }
-
-  console.log({user})
 }
