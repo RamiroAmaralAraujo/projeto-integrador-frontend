@@ -1,7 +1,6 @@
 
 import { Page } from '@/components/Page'
 
-import { SelectEmpresaButton } from "@/components/SelectEmpresaButton/SelectEmpresaButton";
 import { TableAtendimentos } from './Components/AtendimentosColumn';
 
 export function Atendimentos() {
@@ -12,7 +11,9 @@ export function Atendimentos() {
       <Page.Root>
         <Page.Header>
           <Page.Title title="Atendimentos" />
-          <SelectEmpresaButton />
+          <div className='py-8'>
+          
+          </div>
         </Page.Header>
 
         <TableAtendimentos />

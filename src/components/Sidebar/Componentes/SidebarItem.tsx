@@ -26,6 +26,9 @@ export function SidebarItem({ icon, text, alert, url, subItems }: SidebarItemPro
 
   const empresaSelected = empresaSelecionada?.id;
 
+  const { user } = useContext(AuthContext)
+  const isMaster = user?.master;
+
   useEffect(() => {
     if (subItems && isAnySubItemActive) {
       setIsPopoverOpen(true);
@@ -43,7 +46,7 @@ export function SidebarItem({ icon, text, alert, url, subItems }: SidebarItemPro
 
   return (
     <>
-      {empresaSelected && (
+      {(empresaSelected || isMaster)&&(
         <li
           className={`
             mb-2 relative flex flex-col items-center py-2 px-3 my-1 font-medium rounded-xl cursor-pointer transition-colors group justify-center hover:bg-brand-blue-300 shadow-md
@@ -88,7 +91,7 @@ export function SidebarItem({ icon, text, alert, url, subItems }: SidebarItemPro
         </li>
       )}
 
-      {!empresaSelected && (
+      {(!empresaSelected && !isMaster) && (
         <li
           className={`
             mb-2 relative flex items-center py-2 px-3 my-1 font-medium rounded-xl cursor-not-allowed transition-colors group justify-center shadow-md opacity-45

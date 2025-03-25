@@ -193,6 +193,7 @@ export function FormProdutos() {
                 render={({ field }) => (
                   <Select
                     label="Categoria*"
+                    text="Selecione a Categoria"
                     options={selectOptions}
                     error={errors.categoriaId}
                     {...field}

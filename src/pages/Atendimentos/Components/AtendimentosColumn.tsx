@@ -64,6 +64,10 @@ export function TableAtendimentos() {
       header: "Solicitante",
     },
     {
+      accessorKey: "empresaNome",
+      header: "Empresa",
+    },
+    {
       accessorKey: "nota",
       header: "Avaliação",
       cell: ({ getValue }) => {

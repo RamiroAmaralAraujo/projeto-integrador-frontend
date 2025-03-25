@@ -136,6 +136,7 @@ export function FormCategorias() {
 
           <div className="w-full">
             <Select
+              text="Selecione a Categoria"
               label="Categoria Pai"
               id="parentId"
               {...register("parentId")}

@@ -1,16 +1,21 @@
-import { ReactNode, createContext, useState } from "react";
+import { ReactNode, createContext, useContext, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import LogoSemFundoAzul from "../../../assets/LogoSemFundoAzul.svg";
 import { PopoverPerfil } from "../../PopoverPerfil/Index";
+import { AuthContext } from "@/Context/AuthContext";
 
 interface SidebarProps {
   children: ReactNode;
 }
 
+
+
 export const SidebarContext = createContext<{ expanded: boolean }>({ expanded: true });
 
 
 export default function SidebarForm({ children }: SidebarProps) {
+  const { user } = useContext(AuthContext)
+  const usuarioMaster = user?.master
   const [expanded, setExpanded] = useState(true);
 
   return (
@@ -28,7 +33,13 @@ export default function SidebarForm({ children }: SidebarProps) {
                 <span className="font-bold">Core</span>
                 <span className="font-semibold">Commerce</span>
               </div>
-            </div>
+              { usuarioMaster && (
+                <div className="bg-brand-blue-500 text-white rounded-full px-2 mt-3 py-1 font-bold">
+                  <span className="animate-pulse">Master</span>
+                </div>
+              )}
+              </div>
+              
 
             <SidebarContext.Provider value={{ expanded }}>
               <ul className="flex-1 px-3 ">{children}</ul>

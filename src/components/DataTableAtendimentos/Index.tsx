@@ -17,6 +17,7 @@ import {
 import { Button } from "../ui/button";
 import * as React from "react";
 import { Skeleton } from "../ui/skeleton";
+import { Select } from "../ui/select";
 
 interface TableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -31,7 +32,7 @@ export function DataTableAtendimentos<TData, TValue>({
 }: TableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [filteredData, setFilteredData] = useState<TData[]>(data);
-  const [oldData, setOldData] = useState<any[]>([]);
+  const [oldData, setOldData] = useState<TData[]>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
@@ -40,7 +41,11 @@ export function DataTableAtendimentos<TData, TValue>({
   const [endDate, setEndDate] = useState<string | null>(null);
 
   const [pageIndex, setPageIndex] = useState<number>(0);
-  const [pageSize] = useState<number>(5); 
+  const [pageSize] = useState<number>(5);
+
+  const empresas = Array.from(
+    new Set(data.map((item: any) => item.empresaNome))
+  ).filter(Boolean);
 
   const table = useReactTable({
     getPaginationRowModel: getPaginationRowModel(),
@@ -95,7 +100,7 @@ export function DataTableAtendimentos<TData, TValue>({
 
   return (
     <div>
-      <div className="flex items-center py-4 gap-4 ">
+      <div className="flex items-center py-4 gap-4 pr-14 ">
         <Input
           label="Filtro de Protocolos"
           value={
@@ -107,12 +112,24 @@ export function DataTableAtendimentos<TData, TValue>({
         />
         <Input
           label="Filtro de Solicitantes"
-          value={
-            (table.getColumn("nome")?.getFilterValue() as string) ?? ""
-          }
+          value={(table.getColumn("nome")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("nome")?.setFilterValue(event.target.value)
           }
+        />
+        <Select
+          label=""
+          text="Todas as Empresas"
+          value={
+            (table.getColumn("empresaNome")?.getFilterValue() as string) ?? ""
+          }
+          onChange={(event) =>
+            table.getColumn("empresaNome")?.setFilterValue(event.target.value)
+          }
+          options={[
+            { value: "", label: "Todas as Empresas" },
+            ...empresas.map((empresa) => ({ value: empresa, label: empresa })),
+          ]}
         />
         <Input
           type="date"

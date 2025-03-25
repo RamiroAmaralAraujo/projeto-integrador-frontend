@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Input } from "@/components/ui/input";
 
 import NotResult from "../../assets/NotResult.svg";
 
@@ -17,6 +16,7 @@ import {
 import { Button } from "../ui/button";
 import * as React from "react";
 import { Skeleton } from "../ui/skeleton";
+import { Select } from "../ui/select";
 
 interface TableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -38,6 +38,10 @@ export function DataTableEmpresas<TData, TValue>({
 
   const [pageIndex, setPageIndex] = useState<number>(0);
   const [pageSize] = useState<number>(5); 
+
+  const empresas = Array.from(
+    new Set(data.map((item: any) => item.empresaNome))
+  ).filter(Boolean);
 
   const table = useReactTable({
     getPaginationRowModel: getPaginationRowModel(),
@@ -76,15 +80,20 @@ export function DataTableEmpresas<TData, TValue>({
 
   return (
     <div>
-      <div className="flex items-center py-4 ">
-        <Input
-          label="Filtro de Empresas"
+      <div className="flex items-center py-4 w-28">
+      <Select
+          label=""
+          text="Todas as Empresas"
           value={
             (table.getColumn("empresaNome")?.getFilterValue() as string) ?? ""
           }
           onChange={(event) =>
             table.getColumn("empresaNome")?.setFilterValue(event.target.value)
           }
+          options={[
+            { value: "", label: "Todas as Empresas" },
+            ...empresas.map((empresa) => ({ value: empresa, label: empresa })),
+          ]}
         />
       </div>
       <div className="overflow-x-auto shadow-md rounded-2xl mr-14 max-h-[500px]  overflow-y-auto  ">

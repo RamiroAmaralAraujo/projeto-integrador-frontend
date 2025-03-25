@@ -1,67 +1,86 @@
-import { SelectHTMLAttributes, ReactElement, forwardRef } from 'react';
-import { FieldError } from 'react-hook-form';
+import { useState, useRef } from "react";
+import { SelectHTMLAttributes, ReactElement, forwardRef } from "react";
+import { FieldError } from "react-hook-form";
 
 export interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
   icon?: ReactElement;
   iconError?: ReactElement;
   error?: FieldError;
   label?: string;
+  text?: string;
   options: { value: string; label: string }[];
 }
 
 const Select = forwardRef<HTMLSelectElement, SelectProps>(
-  ({ className, icon, iconError, error, label, options, ...props }, ref) => {
+  ({ className, icon, iconError, error, label, options, text, ...props }) => {
+    const [search, setSearch] = useState(""); // Estado para pesquisa
+    const [isOpen, setIsOpen] = useState(false); // Controla a visibilidade das opções
+    const containerRef = useRef<HTMLDivElement>(null); // Referência para fechar ao clicar fora
+
+    // Filtra as opções com base na pesquisa do usuário
+    const filteredOptions = options.filter((option) =>
+      option.label.toLowerCase().includes(search.toLowerCase())
+    );
+
     return (
-      <div className="w-full">
-        <div className="w-full flex justify-center items-center">
-          <div className="relative w-full min-w-[200px] h-10 flex justify-center items-center">
-            <select
-              className={`peer w-full h-full bg-transparent text-brand-blue-500 outline-none focus:outline-none disabled:bg-brand-blue-500 disabled:border-0 transition-all border border-brand-blue-500 focus:border-2 focus:border-brand-blue-500 text-sm px-3 py-2.5 rounded-[7px] appearance-none`}
-              ref={ref}
-              {...props}
+      <div className="relative w-full" ref={containerRef}>
+        <div className="relative w-full min-w-[200px]">
+          {/* Campo de entrada para pesquisa */}
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            onFocus={() => setIsOpen(true)}
+            placeholder={text}
+            className="peer w-full border border-brand-blue-500 px-3 py-2 rounded-[7px] text-brand-blue-500 focus:outline-none bg-transparent placeholder:text-brand-blue-500"
+          />
+
+          {/* Ícone de seta */}
+          <div
+            className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            <svg
+              className="w-5 h-5 text-gray-400"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
             >
-              <option value="" disabled hidden>
-                Selecione uma opção
-              </option>
-              {options.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-
-            <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-              {error && iconError ? (
-                <div className="text-red-700">{iconError}</div>
-              ) : (
-                icon && <div className="text-brand-blue-400">{icon}</div>
-              )}
-              {/* Ícone padrão de seta para baixo */}
-              <svg
-                className="w-5 h-5 text-gray-400"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.25 8.29a.75.75 0 01-.02-1.06z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </div>
-
-            {label && (
-              <label
-                className="absolute left-3 -top-1.5 bg-white px-1 text-[11px] text-brand-blue-500 pointer-events-none peer-placeholder-shown:text-sm peer-placeholder-shown:top-2.5 peer-focus:text-[11px] transition-all"
-                htmlFor={props.id}
-              >
-                {label}
-              </label>
-            )}
+              <path
+                fillRule="evenodd"
+                d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.25 8.29a.75.75 0 01-.02-1.06z"
+                clipRule="evenodd"
+              />
+            </svg>
           </div>
+
+          {/* Dropdown de opções */}
+          {isOpen && (
+            <ul className="absolute left-0 mt-1 w-full bg-white border border-gray-300  shadow-lg max-h-40 overflow-y-auto z-50 rounded-xl">
+              {filteredOptions.length > 0 ? (
+                filteredOptions.map((option) => (
+                  <li
+                    key={option.value}
+                    className="px-4 py-2 cursor-pointer hover:bg-gray-200"
+                    onClick={() => {
+                      setSearch(option.label);
+                      setIsOpen(false);
+                      if (props.onChange) {
+                        props.onChange({ target: { value: option.value } } as any);
+                      }
+                    }}
+                  >
+                    {option.label}
+                  </li>
+                ))
+              ) : (
+                <li className="px-4 py-2 text-gray-500">Nenhuma opção encontrada</li>
+              )}
+            </ul>
+          )}
         </div>
+
+        {/* Exibe erro, se houver */}
         <div className="w-full flex justify-end text-red-700">
           {error && <span className="text-xs">{error.message}</span>}
         </div>
@@ -70,6 +89,6 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
   }
 );
 
-Select.displayName = 'Select';
+Select.displayName = "Select";
 
 export { Select };

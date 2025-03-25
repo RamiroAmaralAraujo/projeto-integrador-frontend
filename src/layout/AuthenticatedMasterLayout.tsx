@@ -39,12 +39,6 @@ export function AuthenticatedMasterLayout() {
           <SidebarForm>
             <SidebarItem
               icon={<LayoutDashboard />}
-              text="MASTER"
-              url="/dashboard/geral"
-              alert
-            />
-            <SidebarItem
-              icon={<LayoutDashboard />}
               text="Dashboards"
               subItems={[
                 { text: "Geral", url: "/dashboard/geral" },
@@ -77,7 +71,7 @@ export function AuthenticatedMasterLayout() {
             />
             <SidebarItem
               icon={<MessageCircleMore />}
-              text="Atendimentos"
+              text="ChatWhatsapp"
               url="/atendimentos"
               alert
             />

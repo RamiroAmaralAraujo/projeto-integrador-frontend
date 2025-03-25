@@ -173,6 +173,7 @@ export function FormPedidos() {
                       render={({ field }) => (
                         <Select
                           label="Produto*"
+                          text="Selecione o Produto"
                           options={selectOptions}
                           error={errors.produtos?.[index]?.produtoId}
                           {...field}

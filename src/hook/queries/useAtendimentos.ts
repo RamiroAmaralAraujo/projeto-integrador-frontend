@@ -16,20 +16,19 @@ export interface AtendimentosData {
 
 
 
-async function read(empresaId: string) {
-  const response = await api.get('atendimento',{params: {empresaId}})
+async function read() {
+  const response = await api.get('atendimento')
   
   return response.data
 }
 
 
 export function useRead() {
-  const storedEmpresa = localStorage.getItem('EmpresaStorage')
   
 
   return useQuery<[AtendimentosData]>({
     queryKey: ['ATENDIMENTOS'],
-    queryFn: () => read(storedEmpresa || ''),
+    queryFn: () => read(),
     onSuccess() {},
     onError() {},
   })

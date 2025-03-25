@@ -6,8 +6,7 @@ import {
   LayoutDashboard,
   ShoppingBasket,
   PackageSearch,
-  Receipt,
-  MessageCircleMore,
+  Receipt
 } from "lucide-react";
 import { SidebarItem } from "../components/Sidebar/Componentes/SidebarItem";
 import { useContext } from "react";
@@ -63,12 +62,6 @@ export function AuthenticatedLayout() {
             icon={<Receipt />}
             text="Financeiro"
             url="/financeiro"
-            alert
-          />
-          <SidebarItem
-            icon={<MessageCircleMore />}
-            text="Atendimentos"
-            url="/atendimentos"
             alert
           />
         </SidebarForm>
