@@ -66,11 +66,9 @@ export function DataTableAtendimentos<TData, TValue>({
     },
     onPaginationChange: (updater) => {
       if (typeof updater === "function") {
-        // Usando um updater que recebe o estado atual
         const updatedPagination = updater({ pageIndex, pageSize });
         setPageIndex(updatedPagination.pageIndex);
       } else {
-        // Caso seja um objeto direto
         setPageIndex(updater.pageIndex);
       }
     },
@@ -82,7 +80,7 @@ export function DataTableAtendimentos<TData, TValue>({
 
       // Aplica a filtragem por data
       const filtered = data.filter((item: any) => {
-        const itemDate = new Date(item.data); // Ajuste caso o formato de `data` seja diferente
+        const itemDate = new Date(item.createdAt); // Ajuste caso o formato de `data` seja diferente
         const start = startDate ? new Date(startDate) : null;
         const end = endDate ? new Date(endDate) : null;
 
