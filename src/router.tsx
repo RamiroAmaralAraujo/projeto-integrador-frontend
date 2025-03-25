@@ -26,6 +26,7 @@ import { SolucoesSistemaPDV } from './pages/SolucoesSistemaPDV'
 import { Atendimentos } from './pages/Atendimentos/Index'
 import { DashboardConstruction } from './pages/DashboardConstruction/dashboard'
 import { AuthenticatedMasterLayout } from './layout/AuthenticatedMasterLayout'
+import { Usuarios } from './pages/Usuarios/Index'
 
 
 export const router = createBrowserRouter([
@@ -153,6 +154,10 @@ export const router = createBrowserRouter([
       {
         path: '/atendimentos',
         element: <Atendimentos />
+      },
+      {
+        path: '/usuarios',
+        element: <Usuarios />
       },
     ],
   },

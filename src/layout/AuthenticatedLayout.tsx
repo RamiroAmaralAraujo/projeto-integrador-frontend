@@ -6,7 +6,8 @@ import {
   LayoutDashboard,
   ShoppingBasket,
   PackageSearch,
-  Receipt
+  Receipt,
+  Building,
 } from "lucide-react";
 import { SidebarItem } from "../components/Sidebar/Componentes/SidebarItem";
 import { useContext } from "react";
@@ -32,38 +33,50 @@ export function AuthenticatedLayout() {
     <>
       <div className=" min-h-screen flex bg-slate-200">
         <SidebarForm>
-          <SidebarItem
-            icon={<LayoutDashboard />}
-            text="Dashboards"
-            subItems={[
-              { text: "Geral", url: "/dashboard/geral" },
-              { text: "Vendas", url: "/dashboard/vendas" },
-              { text: "Duplicatas", url: "/dashboard/duplicatas" },
-            ]}
-            alert
-          />
-          <SidebarItem
-            icon={<PackageSearch />}
-            text="Estoque"
-            subItems={[
-              { text: "Categorias", url: "/categorias" },
-              { text: "Produtos", url: "/produtos" },
-              { text: "Movimentações", url: "/movimentacoes" },
-            ]}
-            alert
-          />
-          <SidebarItem
-            icon={<ShoppingBasket />}
-            text="Pedidos"
-            url="/pedidos"
-            alert
-          />
-          <SidebarItem
-            icon={<Receipt />}
-            text="Financeiro"
-            url="/financeiro"
-            alert
-          />
+          <div>
+
+            <SidebarItem
+              icon={<LayoutDashboard />}
+              text="Dashboards"
+              subItems={[
+                { text: "Geral", url: "/dashboard/geral" },
+                { text: "Vendas", url: "/dashboard/vendas" },
+                { text: "Duplicatas", url: "/dashboard/duplicatas" },
+              ]}
+              alert
+            />
+            <SidebarItem
+              icon={<PackageSearch />}
+              text="Estoque"
+              subItems={[
+                { text: "Categorias", url: "/categorias" },
+                { text: "Produtos", url: "/produtos" },
+                { text: "Movimentações", url: "/movimentacoes" },
+              ]}
+              alert
+            />
+            <SidebarItem
+              icon={<ShoppingBasket />}
+              text="Pedidos"
+              url="/pedidos"
+              alert
+            />
+            <SidebarItem
+              icon={<Receipt />}
+              text="Financeiro"
+              url="/financeiro"
+              alert
+            />
+          </div>
+          <div className="mt-5 mb-5 border border-brand-blue-100 rounded-full"></div>
+          <div>
+              <SidebarItem 
+                icon={<Building />}
+                text="Empresas"
+                url="/empresas"
+                alert
+              />
+          </div>
         </SidebarForm>
         <div className="max-w-[1440px] m-auto  w-full h-screen">
           <Outlet />
