@@ -1,6 +1,5 @@
 import { Page } from '@/components/Page'
 import { TableUsuarios } from './Components/UsuariosColumn';
-import { SelectEmpresaButton } from '@/components/SelectEmpresaButton/SelectEmpresaButton';
 
 export function Usuarios() {
 
@@ -9,7 +8,9 @@ export function Usuarios() {
       <Page.Root>
         <Page.Header>
           <Page.Title title="Usuarios" />
-          <SelectEmpresaButton />
+          <div className='py-8'>
+          
+          </div>
         </Page.Header>
         <TableUsuarios />
 
