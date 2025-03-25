@@ -45,7 +45,7 @@ export function AuthenticatedMasterLayout() {
                 text="Dashboards"
                 subItems={[
                   { text: "Geral", url: "/dashboard/geral" },
-                  { text: "Atendimentos", url: "/dashboard/atendimentos" },
+                  { text: "Vendas", url: "/dashboard/vendas" },
                   { text: "Duplicatas", url: "/dashboard/duplicatas" },
                 ]}
                 alert
@@ -91,6 +91,14 @@ export function AuthenticatedMasterLayout() {
                 icon={<MessageCircleMore />}
                 text="ChatWhatsapp"
                 url="/atendimentos"
+                alert
+              />
+              <SidebarItem
+                icon={<LayoutDashboard />}
+                text="Monitoramento"
+                subItems={[
+                  { text: "Atendimentos", url: "/dashboard/atendimentos" },
+                ]}
                 alert
               />
             </div>
