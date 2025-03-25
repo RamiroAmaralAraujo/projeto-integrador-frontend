@@ -27,6 +27,7 @@ import { Atendimentos } from './pages/Atendimentos/Index'
 import { DashboardConstruction } from './pages/DashboardConstruction/dashboard'
 import { AuthenticatedMasterLayout } from './layout/AuthenticatedMasterLayout'
 import { Usuarios } from './pages/Usuarios/Index'
+import { DashboardAtendimentos } from './pages/DashboardAtedimentos/Components/dashboard'
 
 
 export const router = createBrowserRouter([
@@ -108,8 +109,8 @@ export const router = createBrowserRouter([
         element: <DashboardDuplicatas />
       },
       {
-        path: '/dashboard/vendas',
-        element: <DashboardConstruction />
+        path: '/dashboard/atendimentos',
+        element: <DashboardAtendimentos />
       },
       {
         path: '/loading',

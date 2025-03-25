@@ -45,7 +45,7 @@ export function AuthenticatedMasterLayout() {
                 text="Dashboards"
                 subItems={[
                   { text: "Geral", url: "/dashboard/geral" },
-                  { text: "Vendas", url: "/dashboard/vendas" },
+                  { text: "Atendimentos", url: "/dashboard/atendimentos" },
                   { text: "Duplicatas", url: "/dashboard/duplicatas" },
                 ]}
                 alert
