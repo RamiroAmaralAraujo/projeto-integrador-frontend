@@ -21,27 +21,27 @@ export function GraficoPizzaAtendimentos() {
     {
       name: 'Péssimo', 
       value: Nota1,     
-      color: 'red-700',     
+      color: 'red-500',     
     },
     {
       name: 'Ruim',
       value: Nota2,
-      color: 'orange-400',
+      color: 'orange-500',
     },
     {
       name: 'Neutro',
       value: Nota3,
-      color: 'yellow-400',
+      color: 'yellow-500',
     },
     {
       name: 'Bom',
       value: Nota4,
-      color: 'green-500',
+      color: 'blue-500',
     },
     {
       name: 'Ótimo',
       value: Nota5,
-      color: 'green-700',
+      color: 'green-500',
     },
   ];
 

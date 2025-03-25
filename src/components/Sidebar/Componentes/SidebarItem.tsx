@@ -5,6 +5,7 @@ import { AuthContext } from "@/Context/AuthContext";
 import { ChevronDown, ChevronUp } from 'lucide-react';
 
 interface SidebarItemProps {
+  id?: string;
   icon: ReactNode;
   text: string;
   url?: string;
@@ -12,7 +13,7 @@ interface SidebarItemProps {
   subItems?: { text: string; url: string }[];
 }
 
-export function SidebarItem({ icon, text, alert, url, subItems }: SidebarItemProps) {
+export function SidebarItem({ id, icon, text, alert, url, subItems }: SidebarItemProps) {
   const { expanded } = useContext(SidebarContext);
   const { empresaSelecionada } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -21,13 +22,8 @@ export function SidebarItem({ icon, text, alert, url, subItems }: SidebarItemPro
   const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
   const activeLink = location.pathname === url;
-  
   const isAnySubItemActive = subItems?.some(subItem => location.pathname === subItem.url);
-
   const empresaSelected = empresaSelecionada?.id;
-
-  const { user } = useContext(AuthContext)
-  const isMaster = user?.master;
 
   useEffect(() => {
     if (subItems && isAnySubItemActive) {
@@ -46,7 +42,7 @@ export function SidebarItem({ icon, text, alert, url, subItems }: SidebarItemPro
 
   return (
     <>
-      {((empresaSelected || isMaster) || text === "Empresas")&&(
+      {(empresaSelected || id === "Geral") && (
         <li
           className={`
             mb-2 relative flex flex-col items-center py-2 px-3 my-1 font-medium rounded-xl cursor-pointer transition-colors group justify-center hover:bg-brand-blue-300 shadow-md
@@ -91,7 +87,7 @@ export function SidebarItem({ icon, text, alert, url, subItems }: SidebarItemPro
         </li>
       )}
 
-      {(!empresaSelected && !isMaster && text !== "Empresas") && (
+      {(!empresaSelected && id !== "Geral") && (
         <li
           className={`
             mb-2 relative flex items-center py-2 px-3 my-1 font-medium rounded-xl cursor-not-allowed transition-colors group justify-center shadow-md opacity-45

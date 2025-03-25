@@ -10,7 +10,9 @@ export function Grafico() {
   if (!atendimento) {
     return (
       <div className='bg-gray-50 w-full rounded-xl shadow-lg opacity-50'>
-        <h3 className="p-6 text-tremor-content dark:text-dark-tremor-content font-semibold text-lg">Atendimentos Realizados (Dia)</h3>
+        <h3 className="p-6 text-tremor-content dark:text-dark-tremor-content font-semibold text-lg">
+          Atendimentos Realizados (Dia)
+        </h3>
         <div className='w-full flex justify-center items-center opacity-45'>
           <img src={skeletonGrafico} width={650} alt="Skeleton" />
         </div>
@@ -21,34 +23,41 @@ export function Grafico() {
   // Ordena os atendimentos por data de criação
   atendimento.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
 
-  // Objeto auxiliar para contar o número de atendimentos por data
-  const acumuladoPorData: { [key: string]: number } = {};
+  // Objeto auxiliar para contar o número de atendimentos por data e por nota
+  const acumuladoPorData: { [key: string]: { [key: string]: number } } = {};
 
   atendimento.forEach((atendimento) => {
-    // Formata apenas a data (sem hora) para considerar somente o dia
-    const dataCriacao = format(new Date(atendimento.createdAt).setHours(0, 0, 0, 0), 'dd/MM/yy'); // Remove as horas
+    // Formata a data para considerar apenas o dia
+    const dataCriacao = format(new Date(atendimento.createdAt).setHours(0, 0, 0, 0), 'dd/MM/yy');
+    const nota = String(atendimento.nota);
 
-    // Conta o número de atendimentos por data
-    if (acumuladoPorData[dataCriacao]) {
-      acumuladoPorData[dataCriacao] += 1; // Incrementa 1 para cada atendimento no mesmo dia
-    } else {
-      acumuladoPorData[dataCriacao] = 1; // Inicia com 1 se for o primeiro atendimento no dia
+    // Inicializa o objeto de data se não existir
+    if (!acumuladoPorData[dataCriacao]) {
+      acumuladoPorData[dataCriacao] = { "1": 0, "2": 0, "3": 0, "4": 0, "5": 0 };
     }
+
+    // Incrementa o contador da nota específica
+    acumuladoPorData[dataCriacao][nota] += 1;
   });
 
   // Convertendo o objeto acumulado em um array para o gráfico
   const chartData = Object.keys(acumuladoPorData).map((date) => ({
     date,
-    total: acumuladoPorData[date], // 'total' agora representa o número de atendimentos
+    "Nota 1": acumuladoPorData[date]["1"],
+    "Nota 2": acumuladoPorData[date]["2"],
+    "Nota 3": acumuladoPorData[date]["3"],
+    "Nota 4": acumuladoPorData[date]["4"],
+    "Nota 5": acumuladoPorData[date]["5"],
   }));
 
   // Função para formatar os valores
-  const dataFormatter = (number: number | bigint) =>
-    `${number}`; // Mostra a quantidade de atendimentos
+  const dataFormatter = (number: number | bigint) => `${number}`;
 
   return (
     <div className='bg-gray-50 w-full rounded-xl shadow-lg p-2 pr-6'>
-      <h3 className="p-6 text-tremor-content dark:text-dark-tremor-content font-semibold text-lg">Atendimentos Realizados (Dia)</h3>
+      <h3 className="p-6 text-tremor-content dark:text-dark-tremor-content font-semibold text-lg">
+        Atendimentos Realizados (Dia)
+      </h3>
       <AreaChart
         className="mt-4 h-72"
         animationDuration={5000}
@@ -56,8 +65,8 @@ export function Grafico() {
         data={chartData}
         index="date"
         yAxisWidth={65}
-        categories={['total']} 
-        colors={['indigo']} 
+        categories={['Nota 1', 'Nota 2', 'Nota 3', 'Nota 4', 'Nota 5']}
+        colors={['red', 'orange', 'yellow', 'blue', 'green']}
         valueFormatter={dataFormatter}
         curveType="monotone"
       />

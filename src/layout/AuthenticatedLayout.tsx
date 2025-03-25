@@ -71,6 +71,7 @@ export function AuthenticatedLayout() {
           <div className="mt-5 mb-5 border border-brand-blue-100 rounded-full"></div>
           <div>
               <SidebarItem 
+                id="Geral"
                 icon={<Building />}
                 text="Empresas"
                 url="/empresas"
