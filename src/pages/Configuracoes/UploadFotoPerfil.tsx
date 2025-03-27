@@ -1,9 +1,8 @@
 import { ImageUp } from 'lucide-react';
 import { Button } from '../../components/ui/button';
-import React, { useContext, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { AuthContext } from '@/Context/AuthContext';
 
 
 export function UploadFotoPerfil() {
@@ -92,6 +91,7 @@ export function UploadFotoPerfil() {
   };
 
   return (
+    <div>
     <div
       className={` w-52 flex flex-col items-center justify-around p-5 rounded-xl border border-dashed border-base-hover border-brand-blue-500 ${isDraggingOver ? 'border-4 bg-gray-200 opacity-45' : ''
         }`}
@@ -132,7 +132,12 @@ export function UploadFotoPerfil() {
           </div>
         )}
 
+        
+
       </div>
+      
+    </div>
+    
     </div>
   );
 }
