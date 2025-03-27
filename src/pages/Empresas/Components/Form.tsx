@@ -1,30 +1,36 @@
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Store, Building, MapPinned, MapPin, Building2, Home, Flag } from 'lucide-react'
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Store,
+  Building,
+  MapPinned,
+  MapPin,
+  Building2,
+  Home,
+  Flag,
+} from "lucide-react";
 import { TiBusinessCard } from "react-icons/ti";
 
-import { useEmpresasStore } from '@/store/Empresas/Index'
+import { useEmpresasStore } from "@/store/Empresas/Index";
 
+import { Dialog } from "@/components/Dialog";
+import { FormRoot } from "../../../components/FormRoot";
+import { Input } from "@/components/ui/input";
 
-import { Dialog } from '@/components/Dialog'
-import { FormRoot } from '../../../components/FormRoot'
-import { Input } from '@/components/ui/input'
-
-
-import { z } from 'zod'
-import { useEmpresas } from '@/hook/queries/useEmpresas'
-import { useContext, useEffect } from 'react'
-import { AuthContext } from '@/Context/AuthContext'
-import { queryClient } from '@/service/reactQuery';
-import { UploadImage } from '@/components/UploadImage/UploadImage';
-import { RegistroEmpresas } from '@/components/RegistroEmpresas/RegistroEmpresas';
-
-
+import { z } from "zod";
+import { useEmpresas } from "@/hook/queries/useEmpresas";
+import { useContext, useEffect } from "react";
+import { AuthContext } from "@/Context/AuthContext";
+import { queryClient } from "@/service/reactQuery";
+import { UploadImage } from "@/components/UploadImage/UploadImage";
+import { RegistroEmpresas } from "@/components/RegistroEmpresas/RegistroEmpresas";
 
 const CreateEmpresasSchema = z.object({
   id: z.string().optional(),
-  empresaNome: z.string().nonempty({ message: 'Nome da Empresa é obrigatório' }),
-  cnpj_cpf: z.string().nonempty({ message: 'CNPJ ou CPF é obrigatório' }),
+  empresaNome: z
+    .string()
+    .nonempty({ message: "Nome da Empresa é obrigatório" }),
+  cnpj_cpf: z.string().nonempty({ message: "CNPJ ou CPF é obrigatório" }),
   endereco: z.string().optional(),
   bairro: z.string().optional(),
   cidade: z.string().optional(),
@@ -32,15 +38,13 @@ const CreateEmpresasSchema = z.object({
   logo_url: z.string().optional(),
   cep: z.string().optional(),
   usuarioID: z.string().optional(),
+});
 
-})
-
-export type CreateEmpresasData = z.infer<typeof CreateEmpresasSchema>
-export type UpdateEmpresasData = CreateEmpresasData
+export type CreateEmpresasData = z.infer<typeof CreateEmpresasSchema>;
+export type UpdateEmpresasData = CreateEmpresasData;
 
 export function Form() {
-
-  const { user } = useContext(AuthContext)
+  const { user } = useContext(AuthContext);
 
   const {
     handleSubmit,
@@ -50,38 +54,38 @@ export function Form() {
     formState: { errors },
   } = useForm<CreateEmpresasData>({
     resolver: zodResolver(CreateEmpresasSchema),
-  })
+  });
 
   const { data, handleCloseDialog, isOpen } = useEmpresasStore((state) => {
     return {
       data: state.empresas,
       handleCloseDialog: state.actions.handleCloseDialog,
       isOpen: state.isOpen,
-    }
-  })
-  const { useCreate, useUpdate } = useEmpresas()
-  const { mutateAsync: createEmpresas, isLoading: isLoadingCreateEmpresas } = useCreate()
-  const { mutateAsync: updateEmpresas, isLoading: isLoadingUpdateCategory } = useUpdate()
-
+    };
+  });
+  const { useCreate, useUpdate } = useEmpresas();
+  const { mutateAsync: createEmpresas, isLoading: isLoadingCreateEmpresas } =
+    useCreate();
+  const { mutateAsync: updateEmpresas, isLoading: isLoadingUpdateCategory } =
+    useUpdate();
 
   async function submitEmpresas(newEmpresas: CreateEmpresasData) {
-    const empresasId = data?.id
-    const usuarioID = user?.sub
+    const empresasId = data?.id;
+    const usuarioID = user?.sub;
 
     if (empresasId) {
-      await updateEmpresas({ id: empresasId, ...newEmpresas })
-      queryClient.invalidateQueries({ queryKey: ['EMPRESAS'] })
-      handleCloseDialog()
-      return
+      await updateEmpresas({ id: empresasId, ...newEmpresas });
+      queryClient.invalidateQueries({ queryKey: ["EMPRESAS"] });
+      handleCloseDialog();
+      return;
     }
 
-
-    await createEmpresas({ usuarioID: usuarioID, ...newEmpresas })
-    handleCloseDialog()
+    await createEmpresas({ usuarioID: usuarioID, ...newEmpresas });
+    handleCloseDialog();
   }
 
   const isLoadingCreateOrUpdateEmpresas =
-    isLoadingCreateEmpresas || isLoadingUpdateCategory
+    isLoadingCreateEmpresas || isLoadingUpdateCategory;
 
   useEffect(() => {
     if (!isOpen) {
@@ -90,93 +94,90 @@ export function Form() {
   }, [isOpen, reset]);
 
   const handleUploadLogoSuccess = (fileName: string) => {
-    setValue('logo_url', fileName);
+    setValue("logo_url", fileName);
   };
 
   return (
     <Dialog.Root open={isOpen} onOpenChange={handleCloseDialog}>
-      <Dialog.Content title='Cadastro Empresa' icon={<Store />}>
+      <Dialog.Content title="Cadastro Empresa" icon={<Store />}>
         <FormRoot onSubmit={handleSubmit(submitEmpresas)}>
-
           <Input
             defaultValue={data?.empresaNome}
             icon={<Building size={20} />}
-            label='Empresa Nome*'
-            {...register('empresaNome')}
+            label="Empresa Nome*"
+            {...register("empresaNome")}
             error={errors.empresaNome}
           />
 
           <Input
-            defaultValue={data ? data.cnpj_cpf?.toString() ?? '' : ''}
+            defaultValue={data ? data.cnpj_cpf?.toString() ?? "" : ""}
             icon={<TiBusinessCard size={20} />}
-            label='CNPJ/CPF*'
-            maskType='cnpj'
-            {...register('cnpj_cpf')}
+            label="CNPJ/CPF*"
+            maskType="cnpj_cpf"
+            maxLength={18}
+            {...register("cnpj_cpf")}
             error={errors.cnpj_cpf}
           />
 
-          <div className='grid-cols-2 flex gap-2'>
-            <div className='w-full'>
+          <div className="grid-cols-2 flex gap-2">
+            <div className="w-full">
               <Input
-                defaultValue={data ? data.endereco?.toString() ?? '' : ''}
+                defaultValue={data ? data.endereco?.toString() ?? "" : ""}
                 icon={<MapPinned size={20} />}
-                label='Endereço'
-                {...register('endereco')}
+                label="Endereço"
+                {...register("endereco")}
                 error={errors.endereco}
               />
             </div>
             <Input
-              defaultValue={data ? data.bairro?.toString() ?? '' : ''}
+              defaultValue={data ? data.bairro?.toString() ?? "" : ""}
               icon={<Home size={20} />}
-              label='Bairro'
-              {...register('bairro')}
+              label="Bairro"
+              {...register("bairro")}
               error={errors.bairro}
             />
           </div>
-          <div className='grid-cols-2 flex gap-2'>
-            <div className='w-full'>
+          <div className="grid-cols-2 flex gap-2">
+            <div className="w-full">
               <Input
-                defaultValue={data ? data.cidade?.toString() ?? '' : ''}
+                defaultValue={data ? data.cidade?.toString() ?? "" : ""}
                 icon={<Building2 size={20} />}
-                label='Cidade'
-                {...register('cidade')}
+                label="Cidade"
+                {...register("cidade")}
                 error={errors.cidade}
               />
             </div>
 
             <Input
-              defaultValue={data ? data.uf?.toString() ?? '' : ''}
+              defaultValue={data ? data.uf?.toString() ?? "" : ""}
               icon={<Flag size={20} />}
-              label='UF'
+              label="UF"
               maxLength={2}
-              {...register('uf')}
+              {...register("uf")}
               error={errors.uf}
             />
 
             <Input
-              defaultValue={data ? data.cep?.toString() ?? '' : ''}
+              defaultValue={data ? data.cep?.toString() ?? "" : ""}
               icon={<MapPin size={20} />}
-              label='CEP'
-              maskType='cep'
-              {...register('cep')}
+              label="CEP"
+              maskType="cep"
+              {...register("cep")}
               error={errors.cep}
             />
-
           </div>
-          <div className='flex w-full gap-4'>
-            <div className='w-full'>
+          <div className="flex w-full gap-4">
+            <div className="w-full">
               <UploadImage onUploadSuccess={handleUploadLogoSuccess} />
             </div>
-            <div className='w-full'>
+            <div className="w-full">
               <RegistroEmpresas />
             </div>
           </div>
 
-
-
           <Dialog.Actions isLoading={isLoadingCreateOrUpdateEmpresas} />
         </FormRoot>
       </Dialog.Content>
-    </Dialog.Root >
-  )
+    </Dialog.Root>
+  );
 }

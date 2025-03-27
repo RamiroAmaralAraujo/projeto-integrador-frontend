@@ -1,6 +1,12 @@
-import { InputHTMLAttributes, ReactElement, forwardRef, useEffect, useState } from 'react';
-import { FieldError } from 'react-hook-form';
-import InputMask from 'react-input-mask';
+import {
+  InputHTMLAttributes,
+  ReactElement,
+  forwardRef,
+  useEffect,
+  useState,
+} from "react";
+import { FieldError } from "react-hook-form";
+import InputMask from "react-input-mask";
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   icon?: ReactElement;
@@ -8,42 +14,112 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   error?: FieldError;
   label?: string;
   maxLength?: number;
-  maskType?: 'cpf' | 'cnpj' | 'cep' | 'telefone' ;
-  customSize?: string; // Renamed prop to avoid conflict
+  maskType?: "cpf" | "cnpj" | "cep" | "telefone" | "cnpj_cpf";
+  customSize?: string;
 }
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, icon, iconError, error, label, maskType, maxLength, customSize, ...props }, ref) => {
-
-    const [mask, setMask] = useState<string>('');
+  (
+    {
+      className,
+      type,
+      icon,
+      iconError,
+      error,
+      label,
+      maskType,
+      maxLength,
+      customSize,
+      onChange,
+      ...props
+    },
+    ref
+  ) => {
+    const [mask, setMask] = useState<string>("");
     const [showPassword, setShowPassword] = useState<boolean>(false);
+    const [value, setValue] = useState<string>("");
+
+    const formatCpfCnpj = (value: string): string => {
+      const cleanedValue = value.replace(/\D/g, "");
+      if (cleanedValue.length <= 11) {
+        return cleanedValue
+          .replace(/(\d{3})(\d)/, "$1.$2")
+          .replace(/(\d{3})(\d)/, "$1.$2")
+          .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+      } else {
+        return cleanedValue
+          .replace(/(\d{2})(\d)/, "$1.$2")
+          .replace(/(\d{3})(\d)/, "$1.$2")
+          .replace(/(\d{3})(\d)/, "$1/$2")
+          .replace(/(\d{4})(\d{1,2})$/, "$1-$2");
+      }
+    };
 
     useEffect(() => {
-      if (maskType === 'cpf') {
-        setMask('999.999.999-99');
-      } else if (maskType === 'cnpj') {
-        setMask('99.999.999/9999-99');
-      } else if (maskType === 'cep') {
-        setMask('99999-999');
-      } else if (maskType === 'telefone') {
-        setMask('(99) 9 9999-9999');
-      } 
+      switch (maskType) {
+        case "cpf":
+          setMask("999.999.999-99");
+          break;
+        case "cnpj":
+          setMask("99.999.999/9999-99");
+          break;
+        case "cep":
+          setMask("99999-999");
+          break;
+        case "telefone":
+          setMask("(99) 9 9999-9999");
+          break;
+        case "cnpj_cpf":
+          setMask("");
+          break;
+        default:
+          setMask("");
+      }
     }, [maskType]);
 
     const handleShowPassword = () => {
       setShowPassword(!showPassword);
     };
 
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      let value = event.target.value;
+      if (maskType === "cnpj_cpf") {
+        value = formatCpfCnpj(value);
+        setValue(value);
+      } else {
+        setValue(value);
+      }
+      if (onChange) {
+        onChange({
+          ...event,
+          target: {
+            ...event.target,
+            value: value,
+          },
+        });
+      }
+    };
+
     return (
       <div>
         <div className="flex justify-center items-center">
-          <div className={`relative ${customSize || 'w-full'} ${customSize || 'min-w-[200px]'} h-10 flex justify-center items-center`}>
+          <div
+            className={`relative ${customSize || "w-full"} ${customSize || "min-w-[200px]"} h-10 flex justify-center items-center`}
+          >
             <InputMask
-              placeholder=''
+              placeholder=""
               maxLength={maxLength}
-              type={type === 'password' ? (showPassword ? 'text' : 'password') : type}
-              mask={mask}
-              className={`peer w-full h-full bg-transparent text-brand-blue-500 outline-none focus:outline-none disabled:bg-brand-blue-500 disabled:border-0 transition-all placeholder-shown:border placeholder-shown:border-brand-blue-500 placeholder-shown:border-t-brand-blue-500 border focus:border-2 border-t-transparent focus:border-t-transparent text-sm px-3 py-2.5 rounded-[7px] border-brand-blue-500 focus:border-brand-blue-500 ${className}`}
+              type={
+                type === "password"
+                  ? showPassword
+                    ? "text"
+                    : "password"
+                  : type
+              }
+              mask={maskType === "cnpj_cpf" ? "" : mask}
+              value={value}
+              onChange={handleChange}
+              className={`peer w-full h-full bg-transparent text-brand-blue-500 outline-none transition-all placeholder-shown:border placeholder-shown:border-brand-blue-500 placeholder-shown:border-t-brand-blue-500 border focus:border-2 border-t-transparent focus:border-t-transparent text-sm px-3 py-2.5 rounded-[7px] border-brand-blue-500 ${className}`}
               inputRef={ref}
               {...props}
             />
@@ -53,7 +129,10 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
                 <div className="text-red-700">{iconError}</div>
               ) : (
                 icon && (
-                  <div onClick={handleShowPassword} className="text-brand-blue-400 cursor-pointer">
+                  <div
+                    onClick={handleShowPassword}
+                    className="text-brand-blue-400 cursor-pointer"
+                  >
                     {icon}
                   </div>
                 )
@@ -70,16 +149,14 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             )}
           </div>
         </div>
-        <div className='w-full flex justify-end text-red-700'>
-          {error && (
-            <span className='text-xs'>{error.message}</span>
-          )}
+        <div className="w-full flex justify-end text-red-700">
+          {error && <span className="text-xs">{error.message}</span>}
         </div>
       </div>
     );
-  },
+  }
 );
 
-Input.displayName = 'Input';
+Input.displayName = "Input";
 
 export { Input };
