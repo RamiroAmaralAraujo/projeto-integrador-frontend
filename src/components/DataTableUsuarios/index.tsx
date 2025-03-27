@@ -112,12 +112,12 @@ export function DataTableUsuarios<TData, TValue>({
                         className={`p-4 ${
                           header.id === "id" ? "text-center" : ""
                         }`}
-                        style={{
-                          width:
-                            header.getSize() !== 150
-                              ? header.getSize()
-                              : undefined,
-                        }}
+                        // style={{
+                        //   width:
+                        //     header.getSize() !== 150
+                        //       ? header.getSize()
+                        //       : undefined,
+                        // }}
                         key={header.id}
                       >
                         {flexRender(

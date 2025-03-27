@@ -60,7 +60,7 @@ export function Grafico() {
       </h3>
       <AreaChart
         className="mt-4 h-72"
-        animationDuration={5000}
+        animationDuration={8000}
         showAnimation={true}
         data={chartData}
         index="date"

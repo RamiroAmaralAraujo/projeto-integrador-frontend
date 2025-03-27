@@ -8,7 +8,7 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   error?: FieldError;
   label?: string;
   maxLength?: number;
-  maskType?: 'cpf' | 'cnpj' | 'cep';
+  maskType?: 'cpf' | 'cnpj' | 'cep' | 'telefone' ;
   customSize?: string; // Renamed prop to avoid conflict
 }
 
@@ -25,7 +25,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         setMask('99.999.999/9999-99');
       } else if (maskType === 'cep') {
         setMask('99999-999');
-      }
+      } else if (maskType === 'telefone') {
+        setMask('(99) 9 9999-9999');
+      } 
     }, [maskType]);
 
     const handleShowPassword = () => {
