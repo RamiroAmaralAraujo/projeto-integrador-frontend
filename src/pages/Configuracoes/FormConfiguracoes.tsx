@@ -61,16 +61,22 @@ export function FormConfiguracoes() {
 
   const handleTrocarSenha = async () => {
     try {
-      if (user?.userEmail) {
-        await api.post("/auth/forgot-password", { email: user.userEmail });
-      } else {
-        toast.error("Usuário não encontrado.");
-      }
-      toast.success("Link para troca de senha enviado para o seu e-mail!");
+        localStorage.removeItem('token');
+        
+        const apiUrl = import.meta.env.VITE_API;
+        const response = await api.get(`${apiUrl}auth/generate-reset-link/${userId}`);
+        const { link } = response.data;
+        if (link) {
+            window.location.href = link;
+        } else {
+            toast.error("Erro ao gerar o link de troca de senha.");
+        }
     } catch (error) {
-      toast.error("Erro ao enviar o link de troca de senha.");
+        toast.error("Erro ao gerar o link de troca de senha.");
     }
-  };
+};
+
+
 
   if (isLoading) {
     return <p>Carregando...</p>;
