@@ -1,6 +1,6 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "@/Context/AuthContext";
 import { Pencil, Check } from "lucide-react";
 import { useReadUsuario } from "@/hook/queries/useUsuarios";
@@ -14,12 +14,23 @@ export function FormConfiguracoes() {
   const { data: userData, isLoading, refetch } = useReadUsuario(userId); // Aqui adicionamos o refetch
 
   const [isEditing, setIsEditing] = useState(false);
-  const [username, setUsername] = useState(userData?.userName || "");
-  const [telefone, setTelefone] = useState(userData?.telefone || "");
-  const [endereco, setEndereco] = useState(userData?.endereco || "");
-  const [cidade, setCidade] = useState(userData?.cidade || "");
-  const [estado, setEstado] = useState(userData?.estado || "");
-  const [cep, setCep] = useState(userData?.cep || "");
+  const [username, setUsername] = useState("");
+  const [telefone, setTelefone] = useState("");
+  const [endereco, setEndereco] = useState("");
+  const [cidade, setCidade] = useState("");
+  const [estado, setEstado] = useState("");
+  const [cep, setCep] = useState("");
+
+  useEffect(() => {
+    if (userData) {
+      setUsername(userData.userName || "");
+      setTelefone(userData.telefone || "");
+      setEndereco(userData.endereco || "");
+      setCidade(userData.cidade || "");
+      setEstado(userData.estado || "");
+      setCep(userData.cep || "");
+    }
+  }, [userData]);
 
   const handleEditClick = () => {
     setIsEditing(!isEditing);
@@ -100,7 +111,7 @@ export function FormConfiguracoes() {
       </div>
       <div className="w-full mb-4">
         <Input
-          label="Endereço"
+          label="Endereço*"
           value={endereco}
           onChange={(e) => setEndereco(e.target.value)}
         />
