@@ -1,14 +1,16 @@
 import { DataTableAtendimentos } from "@/components/DataTableAtendimentos/Index";
-import { AtendimentosData, useAtendimentos } from "@/hook/queries/useAtendimentos";
+import {
+  AtendimentosData,
+  useAtendimentos,
+} from "@/hook/queries/useAtendimentos";
 import { ColumnDef } from "@tanstack/react-table";
-import { Angry, Frown, Meh, Smile, Laugh, ArrowUpDown} from "lucide-react";
+import { Angry, Frown, Meh, Smile, Laugh, ArrowUpDown } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
+import { useAuth } from "@/Context/AuthContext";
 
 import { format } from "date-fns";
 import { toZonedTime } from "date-fns-tz";
-import {ptBR} from "date-fns/locale/pt-BR";
-
-
+import { ptBR } from "date-fns/locale/pt-BR";
 
 export function TableAtendimentos() {
   const { useRead } = useAtendimentos();
@@ -40,22 +42,28 @@ export function TableAtendimentos() {
     {
       accessorKey: "telefone",
       header: "Telefone",
-      cell: ({ getValue }) => {
-        const telefone = getValue() as string;
+      cell: ({ row }) => {
+        const { user } = useAuth(); // Obtém o usuário do contexto
+        const telefone = row.getValue("telefone") as string;
+        const protocolo = row.getValue("protocolo") as string;
+        const nome = row.getValue("nome") as string;
+        const responsavel = user?.userName || "Irineu";
+        
+        const mensagem = `Olá, ${nome}! Tudo bem? 😊\n\nMeu nome é ${responsavel} e faço parte da equipe de atendimento da CoreCommerce.\n\nNotamos que o atendimento com o protocolo #${protocolo} não atingiu nossas expectativas de qualidade, e queremos entender melhor como podemos melhorar.\n\nPoderia compartilhar um pouco mais sobre o que aconteceu? Estamos aqui para ajudar e garantir a melhor experiência para você!\n\nDesde já, agradecemos sua colaboração e feedback! 💙`        
+        const linkWhatsapp = `https://wa.me/${telefone}?text=${encodeURIComponent(mensagem)}`;
+
         return (
-        <div className="flex gap-2 justify-center items-center">
-         <a
-            href={`https://wa.me/${telefone}?text=${encodeURIComponent(
-            `Olá, observamos que um de seus atendimentos, teve uma nota abaixo do nosso padrão de qualidade. Poderíamos conversar sobre essa avaliação?`
-            )}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-green-500 hover:underline"
->
-            {formatPhone(telefone)}
-         </a>
-          <FaWhatsapp size={20} color="green"/>
-        </div>
+          <div className="flex gap-2 justify-center items-center">
+            <a
+              href={linkWhatsapp}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-green-500 hover:underline"
+            >
+              {formatPhone(telefone)}
+            </a>
+            <FaWhatsapp size={20} color="green" />
+          </div>
         );
       },
     },
@@ -129,7 +137,7 @@ export function TableAtendimentos() {
             icon: Meh,
             color: "text-gray-500",
           };
-    
+
         return (
           <div className="flex justify-center items-center">
             <Icon className={`h-6 w-6 ${color}`} />
@@ -137,7 +145,6 @@ export function TableAtendimentos() {
         );
       },
     },
-    
     {
       accessorKey: "createdAt",
       header: "Data / Hora",
@@ -145,7 +152,7 @@ export function TableAtendimentos() {
         const date = new Date(getValue() as string);
         const timeZone = "America/Sao_Paulo"; // Define o fuso horário brasileiro
         const zonedDate = toZonedTime(date, timeZone); // Ajusta para o fuso correto
-  
+
         return format(zonedDate, `dd/MM/yyyy 📆  HH:mm 🕑`, { locale: ptBR });
       },
     },
