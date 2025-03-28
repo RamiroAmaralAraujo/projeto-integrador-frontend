@@ -9,7 +9,6 @@ export interface AtendimentosData {
   nome:            string
   nota:            number
   createdAt:       Date
-  empresaNome:     string
   empresaId:       string
 
 }

@@ -7,12 +7,16 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Angry, Frown, Meh, Smile, Laugh, ArrowUpDown } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
 import { useAuth } from "@/Context/AuthContext";
+import { useEmpresas } from "@/hook/queries/useEmpresas";
 
 import { format } from "date-fns";
 import { toZonedTime } from "date-fns-tz";
 import { ptBR } from "date-fns/locale/pt-BR";
 
 export function TableAtendimentos() {
+  const { useRead: useReadEmpresas } = useEmpresas();
+  const { data: empresas } = useReadEmpresas();
+
   const { useRead } = useAtendimentos();
   const { data: atendimentos, isLoading, isFetching } = useRead();
 
@@ -25,6 +29,11 @@ export function TableAtendimentos() {
     return `(${ddd}) ${secondPart}-${thirdPart}`;
   };
 
+  const getEmpresaNome = (empresaId: string): string => {
+    const empresa = empresas?.find((emp) => emp.id === empresaId);
+    return empresa ? empresa.empresaNome : "Empresa não encontrada";
+  };
+  
   // Mapeamento de notas para ícones e cores
   const notaIcons = {
     1: { icon: Angry, color: "text-red-500" },
@@ -47,7 +56,7 @@ export function TableAtendimentos() {
         const telefone = row.getValue("telefone") as string;
         const protocolo = row.getValue("protocolo") as string;
         const nome = row.getValue("nome") as string;
-        const empresa = row.getValue("empresaNome") as string;
+        const empresa = getEmpresaNome(row.getValue("empresaId") as string);
         const nota = row.getValue("nota") as number;
         const data = row.getValue("createdAt") as string;
         const responsavel = user?.userName || "Irineu";
@@ -106,7 +115,7 @@ export function TableAtendimentos() {
       ),
     },
     {
-      accessorKey: "empresaNome",
+      accessorKey: "empresaId",
       header: ({ column }) => {
         return (
           <button
@@ -119,17 +128,21 @@ export function TableAtendimentos() {
         );
       },
       size: 200,
-      cell: (info) => (
-        <div className="flex justify-center items-center">
-          <span
-            className="block max-w-[180px] whitespace-nowrap overflow-hidden text-ellipsis text-center"
-            title={info.getValue() as string} // Mostrar o nome completo ao passar o mouse
-          >
-            {info.getValue() as string}
-          </span>
-        </div>
-      ),
-    },
+      cell: (info) => {
+        const empresaId = info.getValue() as string;
+        const empresaNome = getEmpresaNome(empresaId);
+        return (
+          <div className="flex justify-center items-center">
+            <span
+              className="block max-w-[180px] whitespace-nowrap overflow-hidden text-ellipsis text-center"
+              title={empresaNome}
+            >
+              {empresaNome}
+            </span>
+          </div>
+        );
+      },
+    },    
     {
       accessorKey: "nota",
       header: ({ column }) => {
@@ -164,8 +177,8 @@ export function TableAtendimentos() {
       header: "Data / Hora",
       cell: ({ getValue }) => {
         const date = new Date(getValue() as string);
-        const timeZone = "America/Sao_Paulo"; // Define o fuso horário brasileiro
-        const zonedDate = toZonedTime(date, timeZone); // Ajusta para o fuso correto
+        const timeZone = "America/Sao_Paulo";
+        const zonedDate = toZonedTime(date, timeZone);
 
         return format(zonedDate, `dd/MM/yyyy 📆  HH:mm 🕑`, { locale: ptBR });
       },
