@@ -107,7 +107,7 @@ export function FormConfiguracoes() {
 
       <div className="p-6">
         <div>
-          <h3 className="text-xl font-semibold mb-8">Informações Pessoais</h3>
+          <h3 className="text-lg text-brand-blue-500 font-medium mb-8">Informações Pessoais</h3>
 
           <div className="grid-cols-2 flex gap-2 mb-4">
             <div className="w-full">
@@ -176,7 +176,7 @@ export function FormConfiguracoes() {
         </div>
 
         <div>
-          <h3 className="text-xl font-semibold mb-8">Segurança</h3>
+          <h3 className="text-lg text-brand-blue-500 font-medium mb-8">Segurança</h3>
           <Button label="Trocar Senha" onClick={handleTrocarSenha} />
         </div>
       </div>
