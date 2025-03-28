@@ -93,7 +93,7 @@ export function UploadFotoPerfil() {
   return (
     <div>
     <div
-      className={` w-52 flex flex-col items-center justify-around p-5 rounded-xl border border-dashed border-base-hover border-brand-blue-500 ${isDraggingOver ? 'border-4 bg-gray-200 opacity-45' : ''
+      className={` w-44 flex flex-col items-center justify-around p-5 rounded-xl border border-dashed border-base-hover border-brand-blue-500 ${isDraggingOver ? 'border-4 bg-gray-200 opacity-45' : ''
         }`}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
@@ -108,9 +108,9 @@ export function UploadFotoPerfil() {
         onChange={handleFileChange}
       />
       <div className='flex flex-col justify-center items-center'>
-        <div className="w-[150px] flex justify-center mb-4  rounded-2xl">
+        <div className="w-[120px] flex justify-center mb-4  rounded-2xl">
           {previewUrl ? (
-            <img src={previewUrl} alt="Preview" className="w-52 " />
+            <img src={previewUrl} alt="Preview" className="w-44 " />
           ) : (
             <img src="https://thumbs.dreamstime.com/b/s%C3%ADmbolo-de-perfil-masculino-inteligente-retrato-estilo-desenho-animado-m%C3%ADnimo-166146967.jpg" alt="" />
           )}
