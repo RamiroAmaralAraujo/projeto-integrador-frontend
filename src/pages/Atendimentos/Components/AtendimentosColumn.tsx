@@ -47,9 +47,22 @@ export function TableAtendimentos() {
         const telefone = row.getValue("telefone") as string;
         const protocolo = row.getValue("protocolo") as string;
         const nome = row.getValue("nome") as string;
+        const empresa = row.getValue("empresaNome") as string;
+        const nota = row.getValue("nota") as number;
+        const data = row.getValue("createdAt") as string;
         const responsavel = user?.userName || "Irineu";
-        
-        const mensagem = `Olá, ${nome}! Tudo bem? 😊\n\nMeu nome é ${responsavel} e faço parte da equipe de atendimento da CoreCommerce.\n\nNotamos que o atendimento com o protocolo #${protocolo} não atingiu nossas expectativas de qualidade, e queremos entender melhor como podemos melhorar.\n\nPoderia compartilhar um pouco mais sobre o que aconteceu? Estamos aqui para ajudar e garantir a melhor experiência para você!\n\nDesde já, agradecemos sua colaboração e feedback! 💙`        
+
+        // Formatando a data para exibição
+        const formattedDate = new Date(data).toLocaleString("pt-BR", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+
+        // Mensagem aprimorada com mais contexto
+        const mensagem = `Olá, ${nome}! Tudo bem? 😊\n\nMeu nome é ${responsavel} e faço parte da equipe de atendimento da CoreCommerce.\n\nNotamos que o atendimento realizado em *${formattedDate}* para a empresa *${empresa}* com o protocolo *#${protocolo}* recebeu uma nota de *${nota}/5* e não atingiu nossas expectativas de qualidade. Gostaríamos de entender melhor o que aconteceu para podermos melhorar nossos serviços.\n\nPoderia compartilhar um pouco mais sobre a sua experiência? Estamos aqui para ajudar e garantir a melhor experiência para você!\n\nDesde já, agradecemos sua colaboração e feedback! 💙`;
         const linkWhatsapp = `https://wa.me/${telefone}?text=${encodeURIComponent(mensagem)}`;
 
         return (
@@ -132,11 +145,12 @@ export function TableAtendimentos() {
       },
       cell: ({ getValue }) => {
         const nota = getValue() as number;
-        const { icon: Icon, color } =
-          notaIcons[nota as keyof typeof notaIcons] || {
-            icon: Meh,
-            color: "text-gray-500",
-          };
+        const { icon: Icon, color } = notaIcons[
+          nota as keyof typeof notaIcons
+        ] || {
+          icon: Meh,
+          color: "text-gray-500",
+        };
 
         return (
           <div className="flex justify-center items-center">
