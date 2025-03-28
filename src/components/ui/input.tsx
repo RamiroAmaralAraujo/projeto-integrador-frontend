@@ -37,7 +37,22 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
   ) => {
     const [mask, setMask] = useState<string>("");
     const [showPassword, setShowPassword] = useState<boolean>(false);
-    const [value, setValue] = useState<string>("");
+    const [value, setValue] = useState<string>(props.value ? String(props.value) : "");
+
+    useEffect(() => {
+      if (props.value !== value) {
+        let formattedValue = props.value ? String(props.value) : "";
+        if (maskType === "cep") {
+          formattedValue = formatCep(formattedValue);
+        }
+        setValue(formattedValue);
+      }
+    }, [props.value]);    
+    
+    const formatCep = (value: string): string => {
+      const cleanedValue = value.replace(/\D/g, "");
+      return cleanedValue.replace(/^(\d{5})(\d{3})$/, "$1-$2");
+    };    
 
     const formatCpfCnpj = (value: string): string => {
       const cleanedValue = value.replace(/\D/g, "");
@@ -63,14 +78,8 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         case "cnpj":
           setMask("99.999.999/9999-99");
           break;
-        case "cep":
-          setMask("99999-999");
-          break;
         case "telefone":
           setMask("(99) 9 9999-9999");
-          break;
-        case "cnpj_cpf":
-          setMask("");
           break;
         default:
           setMask("");
@@ -85,10 +94,12 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       let value = event.target.value;
       if (maskType === "cnpj_cpf") {
         value = formatCpfCnpj(value);
-        setValue(value);
-      } else {
-        setValue(value);
+      } else if (maskType === "cep") {
+        value = formatCep(value);
       }
+    
+      setValue(value);
+    
       if (onChange) {
         onChange({
           ...event,

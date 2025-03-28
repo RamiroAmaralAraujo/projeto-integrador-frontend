@@ -1,6 +1,12 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
-import { ClipboardPlus, AlignLeft, ScanBarcode, CircleDollarSign, PackageOpen } from "lucide-react";
+import {
+  ClipboardPlus,
+  AlignLeft,
+  ScanBarcode,
+  CircleDollarSign,
+  PackageOpen,
+} from "lucide-react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -16,7 +22,6 @@ import { useCategorias } from "@/hook/queries/useCategorias";
 import { useProdutosStore } from "@/store/Produtos/Index";
 import { queryClient } from "@/service/reactQuery";
 
-// Schema de validação com Zod
 const CreateProdutosSchema = z.object({
   id: z.string().optional(),
   nome: z.string().nonempty("Nome do Produto é obrigatório."),
@@ -29,20 +34,17 @@ const CreateProdutosSchema = z.object({
   empresaId: z.string().optional(),
 });
 
-// Tipos derivados do schema
 export type CreateProdutosData = z.infer<typeof CreateProdutosSchema>;
 export type UpdateProdutosData = CreateProdutosData & { id: string };
 
 export function FormProdutos() {
   const [preco, setPreco] = useState("0");
 
-  // Contexto de autenticação para obter a empresa selecionada
   const { empresaSelecionada } = useContext(AuthContext);
 
-  // React Hook Form com validação Zod
   const {
     handleSubmit,
-    control, // Usaremos Controller para componentes personalizados
+    control, 
     register,
     reset,
     setValue,
@@ -51,7 +53,6 @@ export function FormProdutos() {
     resolver: zodResolver(CreateProdutosSchema),
   });
 
-  // Gerenciador de estado para produtos
   const {
     data: produtoData,
     handleCloseDialog,
@@ -62,47 +63,35 @@ export function FormProdutos() {
     isOpen: state.isOpen,
   }));
 
-  // Hooks para criar e atualizar produtos
   const { useCreate, useUpdate } = useProdutos();
   const { mutateAsync: createProdutos, isLoading: isLoadingCreateProdutos } =
     useCreate();
   const { mutateAsync: updateProdutos, isLoading: isLoadingUpdateProdutos } =
     useUpdate();
 
-  // Hook para ler categorias
   const { useRead } = useCategorias();
-  const {
-    data: categorias,
-    error: errorCategorias,
-  } = useRead();
+  const { data: categorias, error: errorCategorias } = useRead();
 
-  // Manipulador de mudança no campo de preço
   const handleChangePreco = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPreco(e.target.value);
   };
 
-  // Função de submissão do formulário
   async function submitProdutos(newProdutos: CreateProdutosData) {
     const produtosId = produtoData?.id;
     const empresaId = empresaSelecionada?.id;
 
-    // Atualiza o preço com o valor numérico
     newProdutos.preco = parseFloat(preco);
 
     try {
       if (produtosId) {
-        // Atualiza um produto existente
         await updateProdutos({ id: produtosId, ...newProdutos });
         queryClient.invalidateQueries({ queryKey: ["PRODUTOS"] });
       } else {
-        // Cria um novo produto
         await createProdutos({ empresaId: empresaId!, ...newProdutos });
         queryClient.invalidateQueries({ queryKey: ["PRODUTOS"] });
       }
-      
-      // Fechar o diálogo após a criação ou edição
-      handleCloseDialog();
 
+      handleCloseDialog();
     } catch (error) {
       console.error("Erro ao criar ou atualizar o produto", error);
     }
@@ -111,29 +100,33 @@ export function FormProdutos() {
   const isLoadingCreateOrUpdateProdutos =
     isLoadingCreateProdutos || isLoadingUpdateProdutos;
 
-  // Resetar o formulário quando o diálogo for fechado
   useEffect(() => {
     if (!isOpen) {
       reset();
-      setPreco("0");
     }
   }, [isOpen, reset]);
 
-  // Preencher o preço ao editar um produto
   useEffect(() => {
     if (produtoData) {
-      setPreco(produtoData.preco.toString());
+      setValue("nome", produtoData.nome || "");
+      setValue(
+        "preco",
+        produtoData.preco ? parseFloat(produtoData.preco.toFixed(2)) : 0
+      );
+      setValue("descricao", produtoData.descricao || "");
+      setValue("categoriaId", produtoData.categoriaId || "");
+      setValue("sku", produtoData.sku || "");
+      setPreco(produtoData.preco?.toFixed(2) || "0");
     } else {
+      reset();
       setPreco("0");
     }
-  }, [produtoData]);
+  }, [produtoData, setValue, reset]);
 
-  // Manipulador para sucesso no upload da imagem
   const handleUploadSuccess = (fileName: string) => {
     setValue("prod_url", fileName);
   };
 
-  // Preparar opções para o Select
   const selectOptions =
     categorias?.map((categoria) => ({
       value: categoria.id,
@@ -148,7 +141,6 @@ export function FormProdutos() {
           <div className="grid-cols-2 flex gap-2">
             <div className="w-full">
               <Input
-                defaultValue={produtoData ? produtoData.nome : ""}
                 icon={<PackageOpen size={20} />}
                 label="Nome do Produto*"
                 {...register("nome")}
@@ -157,7 +149,6 @@ export function FormProdutos() {
             </div>
             <div className="w-full">
               <Input
-                defaultValue={produtoData ? produtoData.preco.toFixed(2) : ""}
                 type="number"
                 step="0.01"
                 icon={<CircleDollarSign size={20} />}
@@ -175,7 +166,6 @@ export function FormProdutos() {
           <div className="w-full mt-4">
             <Input
               icon={<AlignLeft size={20} />}
-              defaultValue={produtoData ? produtoData.descricao : ""}
               type="text"
               label="Descrição*"
               {...register("descricao")}
@@ -189,7 +179,6 @@ export function FormProdutos() {
               <Controller
                 control={control}
                 name="categoriaId"
-                defaultValue={produtoData ? produtoData.categoriaId : ""}
                 render={({ field }) => (
                   <Select
                     label="Categoria*"
@@ -209,7 +198,6 @@ export function FormProdutos() {
 
             <div className="w-full">
               <Input
-                defaultValue={produtoData ? produtoData.sku : ""}
                 icon={<ScanBarcode size={20} />}
                 label="SKU*"
                 {...register("sku")}

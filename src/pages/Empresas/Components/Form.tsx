@@ -93,6 +93,20 @@ export function Form() {
     }
   }, [isOpen, reset]);
 
+  useEffect(() => {
+    if (data) {
+      setValue("empresaNome", data.empresaNome || "");
+      setValue("cnpj_cpf", data.cnpj_cpf?.toString() || "");
+      setValue("endereco", data.endereco?.toString() || "");
+      setValue("bairro", data.bairro?.toString() || "");
+      setValue("cidade", data.cidade?.toString() || "");
+      setValue("uf", data.uf?.toString() || "");
+      setValue("cep", data.cep?.toString() || "");
+    } else {
+      reset();
+    }
+  }, [data, setValue, reset]);  
+
   const handleUploadLogoSuccess = (fileName: string) => {
     setValue("logo_url", fileName);
   };
@@ -102,7 +116,6 @@ export function Form() {
       <Dialog.Content title="Cadastro Empresa" icon={<Store />}>
         <FormRoot onSubmit={handleSubmit(submitEmpresas)}>
           <Input
-            defaultValue={data?.empresaNome}
             icon={<Building size={20} />}
             label="Empresa Nome*"
             {...register("empresaNome")}
@@ -110,7 +123,6 @@ export function Form() {
           />
 
           <Input
-            defaultValue={data ? data.cnpj_cpf?.toString() ?? "" : ""}
             icon={<TiBusinessCard size={20} />}
             label="CNPJ/CPF*"
             maskType="cnpj_cpf"
@@ -122,7 +134,6 @@ export function Form() {
           <div className="grid-cols-2 flex gap-2">
             <div className="w-full">
               <Input
-                defaultValue={data ? data.endereco?.toString() ?? "" : ""}
                 icon={<MapPinned size={20} />}
                 label="Endereço"
                 {...register("endereco")}
@@ -130,7 +141,6 @@ export function Form() {
               />
             </div>
             <Input
-              defaultValue={data ? data.bairro?.toString() ?? "" : ""}
               icon={<Home size={20} />}
               label="Bairro"
               {...register("bairro")}
@@ -140,7 +150,6 @@ export function Form() {
           <div className="grid-cols-2 flex gap-2">
             <div className="w-full">
               <Input
-                defaultValue={data ? data.cidade?.toString() ?? "" : ""}
                 icon={<Building2 size={20} />}
                 label="Cidade"
                 {...register("cidade")}
@@ -149,7 +158,6 @@ export function Form() {
             </div>
 
             <Input
-              defaultValue={data ? data.uf?.toString() ?? "" : ""}
               icon={<Flag size={20} />}
               label="UF"
               maxLength={2}
@@ -158,9 +166,9 @@ export function Form() {
             />
 
             <Input
-              defaultValue={data ? data.cep?.toString() ?? "" : ""}
               icon={<MapPin size={20} />}
               label="CEP"
+              maxLength={8}
               maskType="cep"
               {...register("cep")}
               error={errors.cep}

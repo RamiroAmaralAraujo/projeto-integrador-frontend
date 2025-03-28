@@ -61,22 +61,22 @@ export function FormConfiguracoes() {
 
   const handleTrocarSenha = async () => {
     try {
-        localStorage.removeItem('token');
-        
-        const apiUrl = import.meta.env.VITE_API;
-        const response = await api.get(`${apiUrl}auth/generate-reset-link/${userId}`);
-        const { link } = response.data;
-        if (link) {
-            window.location.href = link;
-        } else {
-            toast.error("Erro ao gerar o link de troca de senha.");
-        }
-    } catch (error) {
+      localStorage.removeItem("token");
+
+      const apiUrl = import.meta.env.VITE_API;
+      const response = await api.get(
+        `${apiUrl}auth/generate-reset-link/${userId}`
+      );
+      const { link } = response.data;
+      if (link) {
+        window.location.href = link;
+      } else {
         toast.error("Erro ao gerar o link de troca de senha.");
+      }
+    } catch (error) {
+      toast.error("Erro ao gerar o link de troca de senha.");
     }
-};
-
-
+  };
 
   if (isLoading) {
     return <p>Carregando...</p>;
@@ -138,7 +138,7 @@ export function FormConfiguracoes() {
 
           <div className="w-full mb-4">
             <Input
-              label="Endereço*"
+              label="Endereço"
               value={endereco}
               onChange={(e) => setEndereco(e.target.value)}
             />
@@ -162,6 +162,7 @@ export function FormConfiguracoes() {
             <div className="w-full">
               <Input
                 label="CEP"
+                maxLength={8}
                 maskType="cep"
                 value={cep}
                 onChange={(e) => setCep(e.target.value)}
