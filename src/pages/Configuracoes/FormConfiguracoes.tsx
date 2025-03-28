@@ -1,41 +1,80 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "@/Context/AuthContext";
 import { Pencil, Check } from "lucide-react";
 import { useReadUsuario } from "@/hook/queries/useUsuarios";
-import { api } from "@/service/api"; // Certifique-se de que o caminho está correto
-import { toast } from "react-toastify"; // Certifique-se de importar o toast
+import { api } from "@/service/api";
+import { toast } from "react-toastify";
 
 export function FormConfiguracoes() {
   const { user } = useContext(AuthContext);
   const userId = user?.sub ?? "";
 
-  const { data: userData, isLoading, refetch } = useReadUsuario(userId); // Aqui adicionamos o refetch
+  const { data: userData, isLoading, refetch } = useReadUsuario(userId);
 
   const [isEditing, setIsEditing] = useState(false);
-  const [username, setUsername] = useState(userData?.userName || "");
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [telefone, setTelefone] = useState("");
+  const [endereco, setEndereco] = useState("");
+  const [cidade, setCidade] = useState("");
+  const [estado, setEstado] = useState("");
+  const [cep, setCep] = useState("");
+
+  useEffect(() => {
+    if (userData) {
+      setUsername(userData.userName || "");
+      setEmail(userData.email || "");
+      setTelefone(userData.telefone || "");
+      setEndereco(userData.endereco || "");
+      setCidade(userData.cidade || "");
+      setEstado(userData.estado || "");
+      setCep(userData.cep || "");
+    }
+  }, [userData]);
 
   const handleEditClick = () => {
     setIsEditing(!isEditing);
   };
 
-  // Função para atualizar o nome de usuário
   const handleUpdateClick = async () => {
     try {
-      const apiUrl = import.meta.env.VITE_API; // Acessando a variável de ambiente
+      const apiUrl = import.meta.env.VITE_API;
       await api.patch(`${apiUrl}usuarios/${userId}`, {
-        userName: username, // Novo nome de usuário
+        userName: username,
+        email,
+        telefone,
+        endereco,
+        cidade,
+        estado,
+        cep,
       });
 
-      // Feedback de sucesso
-      toast.success("Nome de usuário atualizado com sucesso!");
-      setIsEditing(false); // Após atualizar, desabilitar o modo de edição
-
-      // Chamar o refetch para obter os dados atualizados em tempo real
+      toast.success("Dados atualizados com sucesso!");
+      setIsEditing(false);
       refetch();
     } catch (error) {
-      toast.error(`Erro ao atualizar nome de usuário`);
+      toast.error("Erro ao atualizar os dados");
+    }
+  };
+
+  const handleTrocarSenha = async () => {
+    try {
+      localStorage.removeItem("token");
+
+      const apiUrl = import.meta.env.VITE_API;
+      const response = await api.get(
+        `${apiUrl}auth/generate-reset-link/${userId}`
+      );
+      const { link } = response.data;
+      if (link) {
+        window.location.href = link;
+      } else {
+        toast.error("Erro ao gerar o link de troca de senha.");
+      }
+    } catch (error) {
+      toast.error("Erro ao gerar o link de troca de senha.");
     }
   };
 
@@ -45,7 +84,7 @@ export function FormConfiguracoes() {
 
   return (
     <>
-      <div className="flex justify-center items-center mb-6 gap-4 w-full">
+      <div className="flex justify-center items-center gap-2 w-full px-6">
         {isEditing ? (
           <div className="w-full">
             <Input
@@ -65,47 +104,80 @@ export function FormConfiguracoes() {
           {isEditing ? <Check size={20} /> : <Pencil size={20} />}
         </button>
       </div>
-      <div className="grid-cols-2 flex gap-2 mb-4">
-        <div className="w-full">
-          <Input
-            label="Email*"
-            className="opacity-50 cursor-not-allowed"
-            value={userData?.email || ""}
-            readOnly
-          />
-        </div>
-        <div className="w-full">
-          <Input
-            label="CPF*"
-            className="opacity-50 cursor-not-allowed"
-            maskType="cpf"
-            value={userData?.cpf || ""}
-            readOnly={true}
-          />
-        </div>
-        <div className="w-full">
-          <Input label="Telefone" maskType="telefone" readOnly className="opacity-50 cursor-not-allowed"  />
-        </div>
-      </div>
-      <div className="w-full mb-4">
-        <Input label="Endereço*" className="opacity-50 cursor-not-allowed"  readOnly  />
-      </div>
-      <div className="grid-cols-2 flex gap-2 mb-4">
-        <div className="w-full">
-          <Input label="Cidade" className="opacity-50 cursor-not-allowed"  readOnly   />
-        </div>
-        <div className="w-full">
-          <Input label="UF" maxLength={2} className="opacity-50 cursor-not-allowed"  readOnly   />
-        </div>
-        <div className="w-full">
-          <Input label="CEP" maskType="cep" className="opacity-50 cursor-not-allowed"  readOnly   />
-        </div>
-      </div>
-      <div className="flex justify-end items-end">
-        <div className="flex gap-4">
-          <div className="w-20">
+
+      <div className="p-6">
+        <div>
+          <h3 className="text-lg text-brand-blue-500 font-medium mb-8">Informações Pessoais</h3>
+
+          <div className="grid-cols-2 flex gap-2 mb-4">
+            <div className="w-full">
+              <Input
+                label="CPF*"
+                className="opacity-50 cursor-not-allowed"
+                maskType="cpf"
+                value={userData?.cpf || ""}
+                readOnly
+              />
+            </div>
+            <div className="w-full">
+              <Input
+                label="E-mail*"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+            <div className="w-full">
+              <Input
+                label="Telefone"
+                maskType="telefone"
+                value={telefone}
+                onChange={(e) => setTelefone(e.target.value)}
+              />
+            </div>
+          </div>
+
+          <div className="w-full mb-4">
+            <Input
+              label="Endereço"
+              value={endereco}
+              onChange={(e) => setEndereco(e.target.value)}
+            />
+          </div>
+          <div className="grid-cols-2 flex gap-2 mb-4">
+            <div className="w-full">
+              <Input
+                label="Cidade"
+                value={cidade}
+                onChange={(e) => setCidade(e.target.value)}
+              />
+            </div>
+            <div className="w-full">
+              <Input
+                label="UF"
+                maxLength={2}
+                value={estado}
+                onChange={(e) => setEstado(e.target.value)}
+              />
+            </div>
+            <div className="w-full">
+              <Input
+                label="CEP"
+                maxLength={8}
+                maskType="cep"
+                value={cep}
+                onChange={(e) => setCep(e.target.value)}
+              />
+            </div>
+          </div>
+
+          <div className="flex justify-end items-end">
             <Button label="Atualizar" onClick={handleUpdateClick} />
           </div>
+        </div>
+
+        <div>
+          <h3 className="text-lg text-brand-blue-500 font-medium mb-8">Segurança</h3>
+          <Button label="Trocar Senha" onClick={handleTrocarSenha} />
         </div>
       </div>
     </>

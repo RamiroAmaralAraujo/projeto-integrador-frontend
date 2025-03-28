@@ -12,14 +12,19 @@ export interface UsuarioData {
   email: string;
   cpf: string;
   password: string;
+  endereco: string;
+  cidade: string;
+  estado: string;
+  cep: string;
+  telefone: string;
   createAt: string;
   updatedAt: string;
   master: boolean;
 }
 
 // Função para ler todos os usuários
-async function readUsuarios(): Promise<UsuarioData[]> {
-  const response = await api.get('usuarios');
+export async function readUsuarios(): Promise<UsuarioData[]> {
+  const response = await api.get("/usuarios");
   return response.data;
 }
 

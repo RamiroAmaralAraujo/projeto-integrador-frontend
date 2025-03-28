@@ -1,16 +1,22 @@
 import { DataTableAtendimentos } from "@/components/DataTableAtendimentos/Index";
-import { AtendimentosData, useAtendimentos } from "@/hook/queries/useAtendimentos";
+import {
+  AtendimentosData,
+  useAtendimentos,
+} from "@/hook/queries/useAtendimentos";
 import { ColumnDef } from "@tanstack/react-table";
-import { Angry, Frown, Meh, Smile, Laugh, ArrowUpDown} from "lucide-react";
+import { Angry, Frown, Meh, Smile, Laugh, ArrowUpDown } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
+import { useAuth } from "@/Context/AuthContext";
+import { useEmpresas } from "@/hook/queries/useEmpresas";
 
 import { format } from "date-fns";
 import { toZonedTime } from "date-fns-tz";
-import {ptBR} from "date-fns/locale/pt-BR";
-
-
+import { ptBR } from "date-fns/locale/pt-BR";
 
 export function TableAtendimentos() {
+  const { useRead: useReadEmpresas } = useEmpresas();
+  const { data: empresas } = useReadEmpresas();
+
   const { useRead } = useAtendimentos();
   const { data: atendimentos, isLoading, isFetching } = useRead();
 
@@ -23,6 +29,11 @@ export function TableAtendimentos() {
     return `(${ddd}) ${secondPart}-${thirdPart}`;
   };
 
+  const getEmpresaNome = (empresaId: string): string => {
+    const empresa = empresas?.find((emp) => emp.id === empresaId);
+    return empresa ? empresa.empresaNome : "Empresa não encontrada";
+  };
+  
   // Mapeamento de notas para ícones e cores
   const notaIcons = {
     1: { icon: Angry, color: "text-red-500" },
@@ -40,22 +51,41 @@ export function TableAtendimentos() {
     {
       accessorKey: "telefone",
       header: "Telefone",
-      cell: ({ getValue }) => {
-        const telefone = getValue() as string;
+      cell: ({ row }) => {
+        const { user } = useAuth(); // Obtém o usuário do contexto
+        const telefone = row.getValue("telefone") as string;
+        const protocolo = row.getValue("protocolo") as string;
+        const nome = row.getValue("nome") as string;
+        const empresa = getEmpresaNome(row.getValue("empresaId") as string);
+        const nota = row.getValue("nota") as number;
+        const data = row.getValue("createdAt") as string;
+        const responsavel = user?.userName || "Irineu";
+
+        // Formatando a data para exibição
+        const formattedDate = new Date(data).toLocaleString("pt-BR", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+
+        // Mensagem aprimorada com mais contexto
+        const mensagem = `Olá, ${nome}! Tudo bem? 😊\n\nMeu nome é ${responsavel} e faço parte da equipe de atendimento da CoreCommerce.\n\nNotamos que o atendimento realizado em *${formattedDate}* para a empresa *${empresa}* com o protocolo *#${protocolo}* recebeu uma nota de *${nota}/5* e não atingiu nossas expectativas de qualidade. Gostaríamos de entender melhor o que aconteceu para podermos melhorar nossos serviços.\n\nPoderia compartilhar um pouco mais sobre a sua experiência? Estamos aqui para ajudar e garantir a melhor experiência para você!\n\nDesde já, agradecemos sua colaboração e feedback! 💙`;
+        const linkWhatsapp = `https://wa.me/${telefone}?text=${encodeURIComponent(mensagem)}`;
+
         return (
-        <div className="flex gap-2 justify-center items-center">
-         <a
-            href={`https://wa.me/${telefone}?text=${encodeURIComponent(
-            `Olá, observamos que um de seus atendimentos, teve uma nota abaixo do nosso padrão de qualidade. Poderíamos conversar sobre essa avaliação?`
-            )}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-green-500 hover:underline"
->
-            {formatPhone(telefone)}
-         </a>
-          <FaWhatsapp size={20} color="green"/>
-        </div>
+          <div className="flex gap-2 justify-center items-center">
+            <a
+              href={linkWhatsapp}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-green-500 hover:underline"
+            >
+              {formatPhone(telefone)}
+            </a>
+            <FaWhatsapp size={20} color="green" />
+          </div>
         );
       },
     },
@@ -85,7 +115,7 @@ export function TableAtendimentos() {
       ),
     },
     {
-      accessorKey: "empresaNome",
+      accessorKey: "empresaId",
       header: ({ column }) => {
         return (
           <button
@@ -98,17 +128,21 @@ export function TableAtendimentos() {
         );
       },
       size: 200,
-      cell: (info) => (
-        <div className="flex justify-center items-center">
-          <span
-            className="block max-w-[180px] whitespace-nowrap overflow-hidden text-ellipsis text-center"
-            title={info.getValue() as string} // Mostrar o nome completo ao passar o mouse
-          >
-            {info.getValue() as string}
-          </span>
-        </div>
-      ),
-    },
+      cell: (info) => {
+        const empresaId = info.getValue() as string;
+        const empresaNome = getEmpresaNome(empresaId);
+        return (
+          <div className="flex justify-center items-center">
+            <span
+              className="block max-w-[180px] whitespace-nowrap overflow-hidden text-ellipsis text-center"
+              title={empresaNome}
+            >
+              {empresaNome}
+            </span>
+          </div>
+        );
+      },
+    },    
     {
       accessorKey: "nota",
       header: ({ column }) => {
@@ -124,12 +158,13 @@ export function TableAtendimentos() {
       },
       cell: ({ getValue }) => {
         const nota = getValue() as number;
-        const { icon: Icon, color } =
-          notaIcons[nota as keyof typeof notaIcons] || {
-            icon: Meh,
-            color: "text-gray-500",
-          };
-    
+        const { icon: Icon, color } = notaIcons[
+          nota as keyof typeof notaIcons
+        ] || {
+          icon: Meh,
+          color: "text-gray-500",
+        };
+
         return (
           <div className="flex justify-center items-center">
             <Icon className={`h-6 w-6 ${color}`} />
@@ -137,15 +172,14 @@ export function TableAtendimentos() {
         );
       },
     },
-    
     {
       accessorKey: "createdAt",
       header: "Data / Hora",
       cell: ({ getValue }) => {
         const date = new Date(getValue() as string);
-        const timeZone = "America/Sao_Paulo"; // Define o fuso horário brasileiro
-        const zonedDate = toZonedTime(date, timeZone); // Ajusta para o fuso correto
-  
+        const timeZone = "America/Sao_Paulo";
+        const zonedDate = toZonedTime(date, timeZone);
+
         return format(zonedDate, `dd/MM/yyyy 📆  HH:mm 🕑`, { locale: ptBR });
       },
     },
