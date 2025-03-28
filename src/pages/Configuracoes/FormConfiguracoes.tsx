@@ -15,27 +15,33 @@ export function FormConfiguracoes() {
 
   const [isEditing, setIsEditing] = useState(false);
   const [username, setUsername] = useState(userData?.userName || "");
+  const [telefone, setTelefone] = useState(userData?.telefone || "");
+  const [endereco, setEndereco] = useState(userData?.endereco || "");
+  const [cidade, setCidade] = useState(userData?.cidade || "");
+  const [estado, setEstado] = useState(userData?.estado || "");
+  const [cep, setCep] = useState(userData?.cep || "");
 
   const handleEditClick = () => {
     setIsEditing(!isEditing);
   };
 
-  // Função para atualizar o nome de usuário
   const handleUpdateClick = async () => {
     try {
-      const apiUrl = import.meta.env.VITE_API; // Acessando a variável de ambiente
+      const apiUrl = import.meta.env.VITE_API;
       await api.patch(`${apiUrl}usuarios/${userId}`, {
-        userName: username, // Novo nome de usuário
+        userName: username,
+        telefone,
+        endereco,
+        cidade,
+        estado,
+        cep,
       });
 
-      // Feedback de sucesso
-      toast.success("Nome de usuário atualizado com sucesso!");
-      setIsEditing(false); // Após atualizar, desabilitar o modo de edição
-
-      // Chamar o refetch para obter os dados atualizados em tempo real
+      toast.success("Dados atualizados com sucesso!");
+      setIsEditing(false);
       refetch();
     } catch (error) {
-      toast.error(`Erro ao atualizar nome de usuário`);
+      toast.error("Erro ao atualizar os dados");
     }
   };
 
@@ -80,25 +86,48 @@ export function FormConfiguracoes() {
             className="opacity-50 cursor-not-allowed"
             maskType="cpf"
             value={userData?.cpf || ""}
-            readOnly={true}
+            readOnly
           />
         </div>
         <div className="w-full">
-          <Input label="Telefone" maskType="telefone" readOnly className="opacity-50 cursor-not-allowed"  />
+          <Input
+            label="Telefone"
+            maskType="telefone"
+            value={telefone}
+            onChange={(e) => setTelefone(e.target.value)}
+          />
         </div>
       </div>
       <div className="w-full mb-4">
-        <Input label="Endereço*" className="opacity-50 cursor-not-allowed"  readOnly  />
+        <Input
+          label="Endereço"
+          value={endereco}
+          onChange={(e) => setEndereco(e.target.value)}
+        />
       </div>
       <div className="grid-cols-2 flex gap-2 mb-4">
         <div className="w-full">
-          <Input label="Cidade" className="opacity-50 cursor-not-allowed"  readOnly   />
+          <Input
+            label="Cidade"
+            value={cidade}
+            onChange={(e) => setCidade(e.target.value)}
+          />
         </div>
         <div className="w-full">
-          <Input label="UF" maxLength={2} className="opacity-50 cursor-not-allowed"  readOnly   />
+          <Input
+            label="UF"
+            maxLength={2}
+            value={estado}
+            onChange={(e) => setEstado(e.target.value)}
+          />
         </div>
         <div className="w-full">
-          <Input label="CEP" maskType="cep" className="opacity-50 cursor-not-allowed"  readOnly   />
+          <Input
+            label="CEP"
+            maskType="cep"
+            value={cep}
+            onChange={(e) => setCep(e.target.value)}
+          />
         </div>
       </div>
       <div className="flex justify-end items-end">
