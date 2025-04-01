@@ -1,11 +1,22 @@
 import { ImageUp } from 'lucide-react';
-import { Button } from '../../components/ui/button';
-import React, { useRef, useState } from 'react';
+import { Button } from '../ui/button';
+import React, { useContext, useRef, useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { AuthContext } from '@/Context/AuthContext';
+import { useReadUsuario } from '@/hook/queries/useUsuarios';
+
+interface UploadImageProps {
+  onUploadSuccess: (fileName: string) => void;
+}
 
 
-export function UploadFotoPerfil() {
+export function UploadFotoPerfil({ onUploadSuccess }: UploadImageProps) {
+
+  const { user } = useContext(AuthContext)
+  const userId = user?.sub ?? "";
+  const { data: userData} = useReadUsuario(userId);
+
 
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -78,7 +89,7 @@ export function UploadFotoPerfil() {
         });
 
         const uploadedFileName = response.data.fileName;
-
+        onUploadSuccess(uploadedFileName);
         toast.success(`Arquivo "${uploadedFileName}" enviado com sucesso!`);
       }
 
@@ -112,7 +123,7 @@ export function UploadFotoPerfil() {
           {previewUrl ? (
             <img src={previewUrl} alt="Preview" className="w-44 " />
           ) : (
-            <img src="https://thumbs.dreamstime.com/b/s%C3%ADmbolo-de-perfil-masculino-inteligente-retrato-estilo-desenho-animado-m%C3%ADnimo-166146967.jpg" alt="" />
+            <img src={`https://core-commerce.s3.sa-east-1.amazonaws.com/${userData?.foto_url}`}  alt="" />           
           )}
         </div>
         

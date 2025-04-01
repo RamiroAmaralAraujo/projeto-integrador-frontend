@@ -6,6 +6,7 @@ import { Pencil, Check } from "lucide-react";
 import { useReadUsuario } from "@/hook/queries/useUsuarios";
 import { api } from "@/service/api";
 import { toast } from "react-toastify";
+import { UploadFotoPerfil } from "@/components/UploadFotoPerfil/UploadFotoPerfil";
 
 export function FormConfiguracoes() {
   const { user } = useContext(AuthContext);
@@ -21,6 +22,7 @@ export function FormConfiguracoes() {
   const [cidade, setCidade] = useState("");
   const [estado, setEstado] = useState("");
   const [cep, setCep] = useState("");
+  const [foto_url, setFoto_url] = useState("");
 
   useEffect(() => {
     if (userData) {
@@ -31,6 +33,7 @@ export function FormConfiguracoes() {
       setCidade(userData.cidade || "");
       setEstado(userData.estado || "");
       setCep(userData.cep || "");
+      setFoto_url(userData.foto_url || "");
     }
   }, [userData]);
 
@@ -38,8 +41,17 @@ export function FormConfiguracoes() {
     setIsEditing(!isEditing);
   };
 
+  const handleUploadLogoSuccess = (fileName: string) => {
+    setFoto_url(fileName) 
+  };
+
   const handleUpdateClick = async () => {
     try {
+      setFoto_url((prevFotoUrl) => {
+        console.log("Atualizando URL da foto:", prevFotoUrl);
+        return prevFotoUrl;
+      });
+  
       const apiUrl = import.meta.env.VITE_API;
       await api.patch(`${apiUrl}usuarios/${userId}`, {
         userName: username,
@@ -49,8 +61,9 @@ export function FormConfiguracoes() {
         cidade,
         estado,
         cep,
+        foto_url,
       });
-
+  
       toast.success("Dados atualizados com sucesso!");
       setIsEditing(false);
       refetch();
@@ -84,6 +97,9 @@ export function FormConfiguracoes() {
 
   return (
     <>
+      <div className="flex justify-center items-center mb-4">
+        <UploadFotoPerfil onUploadSuccess={handleUploadLogoSuccess} />
+      </div>    
       <div className="flex justify-center items-center gap-2 w-full px-6">
         {isEditing ? (
           <div className="w-full">

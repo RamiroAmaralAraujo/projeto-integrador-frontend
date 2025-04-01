@@ -17,6 +17,7 @@ export interface UsuarioData {
   estado: string;
   cep: string;
   telefone: string;
+  foto_url: string;
   createAt: string;
   updatedAt: string;
   master: boolean;
