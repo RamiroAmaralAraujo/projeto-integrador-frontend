@@ -38,7 +38,6 @@ export type CreateProdutosData = z.infer<typeof CreateProdutosSchema>;
 export type UpdateProdutosData = CreateProdutosData & { id: string };
 
 export function FormProdutos() {
-  const [preco, setPreco] = useState("0");
 
   const { empresaSelecionada } = useContext(AuthContext);
 
@@ -72,15 +71,11 @@ export function FormProdutos() {
   const { useRead } = useCategorias();
   const { data: categorias, error: errorCategorias } = useRead();
 
-  const handleChangePreco = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPreco(e.target.value);
-  };
 
   async function submitProdutos(newProdutos: CreateProdutosData) {
     const produtosId = produtoData?.id;
     const empresaId = empresaSelecionada?.id;
 
-    newProdutos.preco = parseFloat(preco);
 
     try {
       if (produtosId) {
@@ -116,10 +111,9 @@ export function FormProdutos() {
       setValue("descricao", produtoData.descricao || "");
       setValue("categoriaId", produtoData.categoriaId || "");
       setValue("sku", produtoData.sku || "");
-      setPreco(produtoData.preco?.toFixed(2) || "0");
     } else {
       reset();
-      setPreco("0");
+      
     }
   }, [produtoData, setValue, reset]);
 
@@ -156,7 +150,6 @@ export function FormProdutos() {
                 {...register("preco", {
                   valueAsNumber: true,
                 })}
-                onChange={handleChangePreco}
                 error={errors.preco}
               />
             </div>
