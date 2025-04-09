@@ -74,10 +74,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User>();
   const [isAuthenticating, setAuthenticating] = useState(false);
 
-  console.log({ duplicataSelecionada });
-  console.log({ categoriaSelecionada });
-  console.log({ produtoSelecionado });
-  console.log({ pedidoSelecionado });
+
 
   const isAuthenticated = !!user;
   const navigate = useNavigate();

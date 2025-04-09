@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 import { ActionsTable } from '.'
-import { Pencil, Trash, CheckCircle, Printer } from 'lucide-react'
+import { Pencil, Trash, CheckCircle, Printer, UserRoundSearch, Search  } from 'lucide-react'
 
 interface ActionsTableCellProps {
   defaultActions?: boolean
@@ -8,11 +8,13 @@ interface ActionsTableCellProps {
   onDelete?: () => void
   onPrint?: () => void
   onSelectEmpresa?: () => void
+  onIdentificaResp?: () => void
+  onInformacao?: () => void
   children?: ReactNode
 }
 
 export function ActionsTableCell(props: ActionsTableCellProps) {
-  const { defaultActions = true, children, onEdit, onDelete, onSelectEmpresa, onPrint } = props
+  const { defaultActions = true, children, onEdit, onDelete, onSelectEmpresa, onIdentificaResp, onInformacao, onPrint } = props
 
   return (
     <div className="flex items-center justify-center gap-2">
@@ -50,6 +52,23 @@ export function ActionsTableCell(props: ActionsTableCellProps) {
               />
             </div>
           )}
+
+          {onInformacao && (
+            <div className='bg-gray-300 rounded-full text-brand-blue-500 hover:bg-gray-200 '>
+              <ActionsTable.Action icon={<Search  size={20} />} onClick={onInformacao} />
+            </div>
+          )}
+
+          {onIdentificaResp && (
+            <div className='bg-gray-300 rounded-full hover:bg-gray-200 text-green-50 hover:text-brand-blue-500'>
+              <ActionsTable.Action
+                onClick={onIdentificaResp}
+                icon={<UserRoundSearch  size={20} />}
+              />
+            </div>
+          )}
+
+          
         </>
       )}
 

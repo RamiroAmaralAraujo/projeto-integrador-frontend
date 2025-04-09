@@ -1,36 +1,42 @@
 import { Fragment, useRef } from 'react'
 import { Transition } from '@headlessui/react'
-import { Printer, Share2, Download } from 'lucide-react'
-import { useShareAlertPedidosStore } from '@/store/ShareAlertPedidosStore'
+import { AlertTriangle } from 'lucide-react'
+import { UseMutateAsyncFunction } from 'react-query'
+import { AxiosError } from 'axios'
+import { queryClient } from '@/service/reactQuery'
+import { useDeleteAlertTicketStore } from '@/store/DeleteAlertTicketStore/Index'
 
 
+interface AlertDeleteTicketProps {
+  onDelete: UseMutateAsyncFunction<
+    any,
+    AxiosError<unknown, any>,
+    string,
+    unknown
+  >
+}
 
-
-export default function ShareAlertPedidos() {
+export default function AlertDeleteTicket(props: AlertDeleteTicketProps) {
+  const { onDelete } = props
 
 
   const cancelButtonRef = useRef(null)
 
 
   const {
-    pedido,
+    id,
     isOpen,
-    actions: { handleCloseDialog },
-  } = useShareAlertPedidosStore()
-
-  function printPedido() {
-    if (pedido) {
-
-      localStorage.setItem('PedidoStorage', pedido.id)
+    actions: { onCloseAlert, setLoading },
+  } = useDeleteAlertTicketStore()
 
 
-      const width = 793;
-      const height = 1122;
-      const left = window.screenX + (window.innerWidth - width) / 2;
-      const top = window.screenY + (window.innerHeight - height) / 2;
-
-      window.open('/printpedido', '_blank', `width=${width}, height=${height}, left=${left}, top=${top}`);
-    }
+  function handleSubmit() {
+    setLoading(true)
+    onDelete(id || '').finally(() => {
+      queryClient.invalidateQueries({ queryKey: ['TICKET'] });
+      setLoading(false)
+      onCloseAlert()
+    })
   }
 
   return (
@@ -65,47 +71,32 @@ export default function ShareAlertPedidos() {
             <div className="inline-block align-bottom bg-white rounded-xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
               <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                 <div className="sm:flex sm:items-start">
-                  <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-brand-blue-200 sm:mx-0 sm:h-10 sm:w-10">
-                    <Share2 className="h-6 w-6 text-brand-blue-500" aria-hidden="true" />
+                  <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                    <AlertTriangle className="h-6 w-6 text-red-600" aria-hidden="true" />
                   </div>
                   <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                    <h3 className="text-lg leading-6 font-medium text-gray-900">RECIBO DIGITAL</h3>
+                    <h3 className="text-lg leading-6 font-medium text-gray-900">EXCLUIR TICKET</h3>
                     <div className="mt-2">
                       <p className="text-sm text-gray-500">
-                        Você pode utilizar a central de compartilhamento de Canhotos Digitais, para imprimir ou realizar o download do arquivo necessario.
+                        A exlcusão apaga todos os registros do ticket no Banco de Dados, assim todas as informações referentes a esse ticket serão deletadas.
                       </p>
-                      <span className="text-sm text-gray-500 font-medium">Para gerar o aquivo de compartilhamento da pedido, selecione a opção desejada. </span>
+                      <span className="text-sm text-gray-500 font-medium">Você tem certeza que deseja realizar a exclusão desse ticket?</span>
                     </div>
-
                   </div>
                 </div>
               </div>
-              <div className='w-full h-40 flex flex-1 gap-2 justify-center items-center p-2'>
-
-                <button
-                  type="button"
-                  className=" justify-center  rounded-xl h-1/2 w-1/3  inline-flex items-center  border border-transparent shadow-sm px-4 py-2 bg-brand-blue-200 text-base font-medium text-brand-blue-500 hover:bg-brand-blue-400 hover:text-brand-blue-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-blue-500"
-                  onClick={printPedido}
-                >
-                  <Printer size={60} />
-                </button>
-
-                <button
-                  type="button"
-                  className=" justify-center  rounded-xl h-1/2 w-1/3  inline-flex items-center  border border-transparent shadow-sm px-4 py-2 bg-brand-blue-200 text-base font-medium text-brand-blue-500 hover:bg-brand-blue-400 hover:text-brand-blue-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-blue-500"
-                  onClick={printPedido}
-                >
-                  <Download size={60} />
-                </button>
-
-
-              </div>
               <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse">
-
+                <button
+                  type="button"
+                  className="rounded-xl w-full inline-flex justify-center  border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"
+                  onClick={handleSubmit}
+                >
+                  Excluir
+                </button>
                 <button
                   type="button"
                   className="rounded-xl mt-3 w-full inline-flex justify-center border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-blue-400 sm:mt-0 sm:w-auto sm:text-sm"
-                  onClick={handleCloseDialog}
+                  onClick={onCloseAlert}
                   ref={cancelButtonRef}
                 >
                   Cancelar

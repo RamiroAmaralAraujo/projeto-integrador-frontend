@@ -48,7 +48,7 @@ export function FormConfiguracoes() {
   const handleUpdateClick = async () => {
     try {
       setFoto_url((prevFotoUrl) => {
-        console.log("Atualizando URL da foto:", prevFotoUrl);
+        
         return prevFotoUrl;
       });
   

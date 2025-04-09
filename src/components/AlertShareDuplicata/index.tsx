@@ -22,8 +22,6 @@ export default function ShareAlertDuplicatass() {
     if (duplicata) {
 
       localStorage.setItem('DuplicataStorage', duplicata.id)
-      const retornoDuplicata = duplicata;
-      console.log({ retornoDuplicata });
 
 
       const width = 793;

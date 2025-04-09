@@ -10,6 +10,7 @@ import {
   MessageCircleMore,
   Building,
   UsersRound,
+  Ticket,
 } from "lucide-react";
 import { SidebarItem } from "../components/Sidebar/Componentes/SidebarItem";
 import { useContext } from "react";
@@ -89,6 +90,15 @@ export function AuthenticatedMasterLayout() {
                 url="/empresas"
                 alert
               />
+              <div>
+              <SidebarItem 
+                id="Geral"
+                icon={<Ticket />}
+                text="Tickets"
+                url="/tickets"
+                alert
+              />
+              </div>
               <SidebarItem 
                 id="Geral"
                 icon={<MessageCircleMore />}

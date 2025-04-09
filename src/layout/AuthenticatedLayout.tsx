@@ -8,6 +8,7 @@ import {
   PackageSearch,
   Receipt,
   Building,
+  Ticket,
 } from "lucide-react";
 import { SidebarItem } from "../components/Sidebar/Componentes/SidebarItem";
 import { useContext } from "react";
@@ -75,6 +76,15 @@ export function AuthenticatedLayout() {
                 icon={<Building />}
                 text="Empresas"
                 url="/empresas"
+                alert
+              />
+          </div>
+          <div>
+              <SidebarItem 
+                id="Geral"
+                icon={<Ticket />}
+                text="Tickets"
+                url="/tickets"
                 alert
               />
           </div>

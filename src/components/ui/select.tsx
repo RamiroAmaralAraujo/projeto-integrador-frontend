@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { SelectHTMLAttributes, ReactElement, forwardRef } from "react";
 import { FieldError } from "react-hook-form";
 
@@ -12,10 +12,17 @@ export interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
 }
 
 const Select = forwardRef<HTMLSelectElement, SelectProps>(
-  ({ className, icon, iconError, error, label, options, text, ...props }) => {
+  ({ className, icon, iconError, error, label, options, text, value, ...props }) => {
     const [search, setSearch] = useState(""); // Estado para pesquisa
     const [isOpen, setIsOpen] = useState(false); // Controla a visibilidade das opções
     const containerRef = useRef<HTMLDivElement>(null); // Referência para fechar ao clicar fora
+
+    useEffect(() => {
+      const selectedOption = options.find((opt) => opt.value === value);
+      if (selectedOption) {
+        setSearch(selectedOption.label);
+      }
+    }, [value, options]);
 
     // Filtra as opções com base na pesquisa do usuário
     const filteredOptions = options.filter((option) =>

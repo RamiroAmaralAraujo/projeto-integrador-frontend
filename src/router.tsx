@@ -30,6 +30,7 @@ import { Usuarios } from "./pages/Usuarios/Index";
 import { DashboardAtendimentos } from "./pages/DashboardAtedimentos/Components/dashboard";
 import { ForgotPassword } from "./pages/ForgotPassword/Index";
 import { ResetPassword } from "./pages/ResetPassword/Index";
+import { Ticket } from "./pages/Ticket";
 
 export const router = createBrowserRouter([
   {
@@ -145,6 +146,10 @@ export const router = createBrowserRouter([
       {
         path: "/empresas",
         element: <Empresas />,
+      },
+      {
+        path: "/tickets",
+        element: <Ticket />,
       },
       {
         path: "/configuracoes",
