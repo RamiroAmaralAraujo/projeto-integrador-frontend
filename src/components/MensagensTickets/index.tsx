@@ -23,7 +23,7 @@ export function MensagensTicketForm() {
     };
 
     try {
-      const response = await fetch(`http://core-commerce-api.onrender.com/ticketmensagem`, {
+      const response = await fetch(`https://core-commerce-api.onrender.com/ticketmensagem`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
