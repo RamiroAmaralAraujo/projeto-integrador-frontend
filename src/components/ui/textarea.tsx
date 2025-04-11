@@ -27,6 +27,7 @@ import {
         customSize,
         maxLength,
         value,
+        disabled,
         onChange,
         ...props
       },
@@ -56,11 +57,12 @@ import {
               className={`relative ${customSize || "w-full"} ${customSize || "min-w-[200px]"} min-h-[100px] flex justify-center items-start`}
             >
               <textarea
+                disabled={disabled}
                 ref={ref}
                 maxLength={maxLength}
                 value={value}
                 onChange={handleChange}
-                className={`peer w-full h-full bg-transparent text-brand-blue-500 outline-none transition-all placeholder-shown:border placeholder-shown:border-brand-blue-500 placeholder-shown:border-t-brand-blue-500 border focus:border-2 border-t-transparent focus:border-t-transparent text-sm px-3 py-2.5 rounded-[7px] border-brand-blue-500 resize-none ${className}`}
+                className={`peer w-full h-full bg-transparent text-brand-blue-500 outline-none transition-all placeholder-shown:border placeholder-shown:border-brand-blue-500 placeholder-shown:border-t-brand-blue-500 border focus:border-2 border-t-transparent focus:border-t-transparent text-sm px-3 py-2.5 rounded-[7px] border-brand-blue-500 resize-none ${className} ${disabled ? "bg-gray-100 cursor-not-allowed opacity-60 border-gray-300" : "border-brand-blue-500"}`}
                 {...props}
               />
   

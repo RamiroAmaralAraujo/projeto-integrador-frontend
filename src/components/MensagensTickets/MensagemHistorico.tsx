@@ -76,13 +76,32 @@ function MensagemComUsuario({ msg }: { msg: MensagensTicketData }) {
 export function MensagemHistorico() {
   const { data: mensagens, isLoading } = useRead();
 
-  if (isLoading) return <div>Carregando mensagens...</div>;
+  if (isLoading)
+    return (
+      <>
+        <div className="flex justify-start mb-4">
+          <div className="w-5/6 h-32 bg-gray-200 rounded-2xl animate-pulse" />
+        </div>
+        <div className="flex justify-end mb-4">
+          <div className="w-5/6 h-32 bg-gray-200 rounded-2xl animate-pulse" />
+        </div>
+      </>
+    );
 
   if (!mensagens || mensagens.length === 0)
     return (
-      <div className="flex justify-center items-center">
+      <>
+        <div className="flex justify-center items-center flex-col">
+          <div>
+            <h1 className="font-bold text-lg text-brand-blue-500">
+              Ainda não foram adicionadas mensagens à esse Ticket.
+            </h1>
+          </div>
+          <div className="flex justify-center items-center -mt-6">
             <img src={NotResult} alt="" width={200} />
-      </div>
+          </div>
+        </div>
+      </>
     );
 
   return (

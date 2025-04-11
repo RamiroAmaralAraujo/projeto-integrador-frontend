@@ -125,7 +125,7 @@ export function TableUsuarios() {
       size: 200,
       cell: (info) => (
         <div className="flex justify-center items-center">
-          <span className="truncate">{info.getValue() ? "Sim" : "Não"}</span>
+          <span className="truncate">{info.getValue() ? "Sim" : ""}</span>
         </div>
       ),
     },

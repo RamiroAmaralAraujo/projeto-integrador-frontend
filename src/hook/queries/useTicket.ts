@@ -113,7 +113,6 @@ export function useUpdate() {
   return useMutation<any, AxiosError, UpdateTicketData>(update, {
     onSuccess(_: UpdateTicketData) {
       queryCliente.invalidateQueries({ queryKey: ['TICKET'] })
-      toast.success('Ticket Atualizado com sucesso!')
     },
     onError() {console.log("erro")},
   })

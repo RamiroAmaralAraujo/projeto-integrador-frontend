@@ -15,6 +15,11 @@ export function MensagensTicketForm() {
 
   const enviarMensagem = async () => {
 
+    if (!mensagem.trim()) {
+      toast.error("Mensagem não pode ser vazia!");
+      return;
+    }
+
     const payload = {
       usuarioID: user?.sub ?? "",
       ticketId: data?.id ?? "",
@@ -46,13 +51,14 @@ export function MensagensTicketForm() {
         label="Mensagem"
         value={mensagem}
         onChange={(e) => setMensagem(e.target.value)}
-        maxLength={1500}
+        maxLength={500}
         customSize="w-full h-32"
         icon={<SquarePen size={20} />}
       />
 
       <div className="flex w-full items-end justify-end">
       <button
+        type="button"
         onClick={enviarMensagem}
         className="mt-2 flex items-center gap-2 bg-brand-blue-500 text-white px-4 py-2 rounded hover:bg-brand-blue-400"
       >

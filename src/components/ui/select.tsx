@@ -9,13 +9,14 @@ export interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
   label?: string;
   text?: string;
   options: { value: string; label: string }[];
+  disabled?: boolean;
 }
 
 const Select = forwardRef<HTMLSelectElement, SelectProps>(
-  ({ className, icon, iconError, error, label, options, text, value, ...props }) => {
-    const [search, setSearch] = useState(""); // Estado para pesquisa
-    const [isOpen, setIsOpen] = useState(false); // Controla a visibilidade das opções
-    const containerRef = useRef<HTMLDivElement>(null); // Referência para fechar ao clicar fora
+  ({ className, icon, iconError, error, label, options, text, value, disabled, ...props }) => {
+    const [search, setSearch] = useState("");
+    const [isOpen, setIsOpen] = useState(false);
+    const containerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
       const selectedOption = options.find((opt) => opt.value === value);
@@ -24,7 +25,6 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
       }
     }, [value, options]);
 
-    // Filtra as opções com base na pesquisa do usuário
     const filteredOptions = options.filter((option) =>
       option.label.toLowerCase().includes(search.toLowerCase())
     );
@@ -32,20 +32,25 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
     return (
       <div className="relative w-full" ref={containerRef}>
         <div className="relative w-full min-w-[200px]">
-          {/* Campo de entrada para pesquisa */}
           <input
             type="text"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            onFocus={() => setIsOpen(true)}
+            onChange={(e) => !disabled && setSearch(e.target.value)}
+            onFocus={() => !disabled && setIsOpen(true)}
             placeholder={text}
-            className="peer w-full border border-brand-blue-500 px-3 py-2 rounded-[7px] text-brand-blue-500 focus:outline-none bg-transparent placeholder:text-brand-blue-500"
+            disabled={disabled}
+            className={`peer w-full border px-3 py-2 rounded-[7px] text-brand-blue-500 focus:outline-none bg-transparent placeholder:text-brand-blue-500
+              ${disabled ? "bg-gray-100 cursor-not-allowed opacity-60 border-gray-300" : "border-brand-blue-500"}
+            `}
           />
 
-          {/* Ícone de seta */}
           <div
-            className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
-            onClick={() => setIsOpen(!isOpen)}
+            className={`absolute inset-y-0 right-0 flex items-center pr-3 ${
+              disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"
+            }`}
+            onClick={() => {
+              if (!disabled) setIsOpen(!isOpen);
+            }}
           >
             <svg
               className="w-5 h-5 text-gray-400"
@@ -61,9 +66,8 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
             </svg>
           </div>
 
-          {/* Dropdown de opções */}
-          {isOpen && (
-            <ul className="absolute left-0 mt-1 w-full bg-white border border-gray-300  shadow-lg max-h-40 overflow-y-auto z-50 rounded-xl">
+          {isOpen && !disabled && (
+            <ul className="absolute left-0 mt-1 w-full bg-white border border-gray-300 shadow-lg max-h-40 overflow-y-auto z-50 rounded-xl">
               {filteredOptions.length > 0 ? (
                 filteredOptions.map((option) => (
                   <li
@@ -87,7 +91,6 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
           )}
         </div>
 
-        {/* Exibe erro, se houver */}
         <div className="w-full flex justify-end text-red-700">
           {error && <span className="text-xs">{error.message}</span>}
         </div>

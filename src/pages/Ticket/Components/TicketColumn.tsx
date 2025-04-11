@@ -11,7 +11,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown , Clock, CircleDashed, CheckCircle, UserRoundSearch } from "lucide-react";
 import { useContext, useMemo } from "react";
 import { LiaCircle, LiaExclamationCircleSolid} from "react-icons/lia";
-import { PiCaretCircleUp, PiCaretCircleDown,  } from "react-icons/pi";
+import { PiCaretCircleUp, PiCaretCircleDown, PiQuestion } from "react-icons/pi";
 
 import { format } from "date-fns";
 import { toZonedTime } from "date-fns-tz";
@@ -81,10 +81,10 @@ export function TableTicket() {
             <div className="flex justify-center items-center">
               <span
               className={`w-8 h-8 flex justify-center items-center ${
-                  prioridade === "BAIXA" ? "bg-green-500": prioridade === "MEDIA" ? "bg-yellow-500" : prioridade === "ALTA" ? "bg-orange-500" : "bg-red-500"
+                  prioridade === "BAIXA" ? "bg-green-500": prioridade === "MEDIA" ? "bg-yellow-500" : prioridade === "ALTA" ? "bg-orange-500" : prioridade === "URGENTE" ? "bg-red-500": "bg-gray-500"
                 }  text-white font-bold  rounded-full`}
               >
-                {prioridade === 'BAIXA' ? <PiCaretCircleDown size={19}/>: prioridade === "MEDIA" ? <LiaCircle size={19}/> : prioridade === "ALTA" ?  <PiCaretCircleUp size={19}/> : <LiaExclamationCircleSolid size={19} /> }     
+                {prioridade === 'BAIXA' ? <PiCaretCircleDown size={19}/>: prioridade === "MEDIA" ? <LiaCircle size={19}/> : prioridade === "ALTA" ?  <PiCaretCircleUp size={19}/> : prioridade === "URGENTE" ? <LiaExclamationCircleSolid size={19} /> : <PiQuestion size={19} /> }   
               </span>
             </div>
           );
@@ -119,7 +119,7 @@ export function TableTicket() {
             <div className="flex justify-center items-center">
               <span
                 className={`w-8 h-8 flex justify-center items-center ${
-                  status === "ABERTO" ? "bg-green-500": status === "ANDAMENTO" ? "bg-yellow-500" :  "bg-gray-500" 
+                  status === "ABERTO" ? "bg-gray-500": status === "ANDAMENTO" ? "bg-yellow-500" :  "bg-brand-blue-500" 
                 } text-white font-bold py-1 px-2 rounded-full`}
               >
                 {status === 'ABERTO' ? <CircleDashed />: status === "ANDAMENTO" ? <Clock /> :  <CheckCircle /> }   
