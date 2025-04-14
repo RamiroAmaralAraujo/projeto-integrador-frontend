@@ -108,6 +108,8 @@ export function Form() {
 
   const isLoading = isLoadingCreateTicket || isLoadingUpdateTicket;
 
+  const ticketFechado = data?.status === "FECHADO";
+
   const selectOptionsCategoria = [
     { value: "SUPORTE", label: "Suporte" },
     { value: "COMERCIAL", label: "Comercial" },
@@ -155,7 +157,7 @@ export function Form() {
 
   return (
     <Dialog.Root open={isOpen} onOpenChange={handleCloseDialog}>
-      <Dialog.Content title={`Tickets de Atendimento`} icon={<Ticket />} text={`#${data?.numero}`}>
+      <Dialog.Content title={`Tickets de Atendimento`} icon={<Ticket />} text={`#${data?.numero || ""}`}>
         <FormRoot onSubmit={handleSubmit(submitTicket)}>
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1">
@@ -278,7 +280,7 @@ export function Form() {
                     name="prioridade"
                     render={({ field }) => (
                       <Select 
-                        disabled={!isMaster}
+                        disabled={!isMaster || ticketFechado}
                         label="Prioridade"
                         text="Prioridade"
                         options={selectOptionsPrioridade}
@@ -326,7 +328,7 @@ export function Form() {
               )}
             </div>
 
-            {data && (
+            {data && !ticketFechado && (
               <div className="mt-4 flex-1">
                 <MensagensTicketForm />
               </div>
