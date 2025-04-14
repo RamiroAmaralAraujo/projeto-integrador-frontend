@@ -28,16 +28,18 @@ export function PopoverPerfilForm({ children }: { children: React.ReactNode }) {
             className={`border-t flex  justify-center  p-3 hover:bg-gray-200 shadow-md ${expanded ? "justify-center items-center" : ""}`}
           >
             {possuiFoto ? (
-              <div className="w-10 h-10 rounded-full overflow-hidden flex items-center justify-center">
+              <div className="w-14  rounded-full overflow-hidden flex items-center justify-center">
                 <img
                   src={`https://core-commerce.s3.sa-east-1.amazonaws.com/${userData?.foto_url}`}
                   alt="Foto do usuário"
-                  className="w-full h-full object-cover"
+                  className="w-full object-cover"
                 />
               </div>
             ) : (
-              <div className="w-10 h-10 rounded-full bg-brand-blue-500 text-white flex items-center justify-center">
-                <UserRound />
+              <div className="w-10 h-10 overflow-hidden flex items-center justify-center">
+                <div className="w-full h-full rounded-full bg-brand-blue-500 text-white flex items-center justify-center">
+                  <UserRound />
+                </div>
               </div>
             )}
             <div

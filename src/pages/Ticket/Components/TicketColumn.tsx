@@ -103,8 +103,9 @@ export function TableTicket() {
             return (
               <div className="flex justify-center items-center">
                 <span
+                title={prioridade} 
                 className={`w-8 h-8 flex justify-center items-center ${
-                    prioridade === "BAIXA" ? "bg-brand-blue-300": prioridade === "MEDIA" ? "bg-yellow-500" : prioridade === "ALTA" ? "bg-orange-500" : prioridade === "URGENTE" ? "bg-red-500": "bg-gray-500"
+                    prioridade === "BAIXA" ? "bg-blue-500": prioridade === "MEDIA" ? "bg-yellow-500" : prioridade === "ALTA" ? "bg-orange-500" : prioridade === "URGENTE" ? "bg-red-500": "bg-gray-500"
                   }  text-white font-bold  rounded-full`}
                 >
                   {prioridade === 'BAIXA' ? <PiCaretCircleDown size={19}/>: prioridade === "MEDIA" ? <LiaCircle size={19}/> : prioridade === "ALTA" ?  <PiCaretCircleUp size={19}/> : prioridade === "URGENTE" ? <LiaExclamationCircleSolid size={19} /> : <PiQuestion size={19} /> }   
@@ -142,6 +143,7 @@ export function TableTicket() {
           return (
             <div className="flex justify-center items-center">
               <span
+                title={status} 
                 className={`w-8 h-8 flex justify-center items-center ${
                   status === "ABERTO" ? "bg-gray-500": status === "ANDAMENTO" ? "bg-yellow-500" :  "bg-brand-blue-500" 
                 } text-white font-bold py-1 px-2 rounded-full`}
