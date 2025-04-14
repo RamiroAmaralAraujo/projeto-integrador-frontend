@@ -1,5 +1,5 @@
 import { ActionsTable } from "@/components/ActionsTableCell";
-import AlertDeletePedido from "@/components/AlertDeletePedido/index";
+import AlertDeletePedido from "@/components/Alerts/AlertDeletePedido/index";
 import { DataTablePedidos } from "@/components/DataTablePedidos";
 import { PedidosData, usePedidos } from "@/hook/queries/usePedidos";
 import { useRemove } from "@/hook/queries/usePedidos";
@@ -10,7 +10,7 @@ import { ArrowUpDown } from "lucide-react";
 import { PackagePlus, PackageMinus } from "lucide-react";
 import { TipoMovimentacao } from "@/enums/TipoMovimentacao";
 import { useShareAlertPedidosStore } from "@/store/ShareAlertPedidosStore"
-import ShareAlertPedidos from "@/components/AlertSharePedido"
+import ShareAlertPedidos from "@/components/Alerts/AlertSharePedido"
 
 export function TablePedidos() {
   const { useRead: useReadPedidos } = usePedidos();

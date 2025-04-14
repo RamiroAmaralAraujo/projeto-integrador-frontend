@@ -1,6 +1,6 @@
 import { ActionsTable } from "@/components/ActionsTableCell";
-import AlertDelete from "@/components/AlertDelete";
-import AlertSelectEmpresa from "@/components/AlertSelectEmpresa";
+import AlertDelete from "@/components/Alerts/AlertDelete";
+import AlertSelectEmpresa from "@/components/Alerts/AlertSelectEmpresa";
 import { DataTableEmpresas } from "@/components/DataTableEmpresas";
 import {
   EmpresasData,

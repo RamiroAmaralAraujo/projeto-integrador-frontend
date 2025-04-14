@@ -1,6 +1,6 @@
 import { ActionsTable } from "@/components/ActionsTableCell"
-import AlertDeleteDuplicata from "@/components/AlertDeleteDuplicata/index"
-import ShareAlertDuplicatass from "@/components/AlertShareDuplicata"
+import AlertDeleteDuplicata from "@/components/Alerts/AlertDeleteDuplicata/index"
+import ShareAlertDuplicatass from "@/components/Alerts/AlertShareDuplicata"
 import { DataTableDuplicatas } from "@/components/DataTableDuplicatas"
 import { DuplicatasData, useDuplicatas } from "@/hook/queries/useDuplicatas"
 import { useRemove } from "@/hook/queries/useDuplicatas"

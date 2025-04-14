@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 import { ActionsTable } from '.'
-import { Pencil, Trash, CheckCircle, Printer, UserRoundSearch, Search  } from 'lucide-react'
+import { Pencil, Trash, CheckCircle, Printer, UserRoundSearch, Search, TicketCheck, Smile  } from 'lucide-react'
 
 interface ActionsTableCellProps {
   defaultActions?: boolean
@@ -10,14 +10,16 @@ interface ActionsTableCellProps {
   onSelectEmpresa?: () => void
   onIdentificaResp?: () => void
   onInformacao?: () => void
+  onFinalizar?: () => void
+  onAvaliar?: () => void
   children?: ReactNode
 }
 
 export function ActionsTableCell(props: ActionsTableCellProps) {
-  const { defaultActions = true, children, onEdit, onDelete, onSelectEmpresa, onIdentificaResp, onInformacao, onPrint } = props
+  const { defaultActions = true, children, onEdit, onDelete, onSelectEmpresa, onIdentificaResp, onInformacao, onFinalizar,onAvaliar, onPrint } = props
 
   return (
-    <div className="flex items-center justify-center gap-2">
+    <div className="flex items-center gap-2">
       {defaultActions && (
         <>
           {onEdit && (
@@ -54,7 +56,7 @@ export function ActionsTableCell(props: ActionsTableCellProps) {
           )}
 
           {onInformacao && (
-            <div className='bg-gray-300 rounded-full text-brand-blue-500 hover:bg-gray-200 '>
+            <div className='bg-gray-300 rounded-full hover:bg-gray-200 text-green-50 hover:text-brand-blue-500'>
               <ActionsTable.Action icon={<Search  size={20} />} onClick={onInformacao} />
             </div>
           )}
@@ -67,8 +69,16 @@ export function ActionsTableCell(props: ActionsTableCellProps) {
               />
             </div>
           )}
-
-          
+          {onFinalizar && (
+            <div className='bg-gray-300 rounded-full text-green-50 hover:bg-green-300 hover:text-green-700 '>
+              <ActionsTable.Action icon={<TicketCheck size={20} />} onClick={onFinalizar} />
+            </div>
+          )}
+          {onAvaliar && (
+            <div className='bg-gray-300 rounded-full text-green-50 hover:bg-green-300 hover:text-green-700 '>
+              <ActionsTable.Action icon={<Smile size={20} />} onClick={onAvaliar} />
+            </div>
+          )}               
         </>
       )}
 

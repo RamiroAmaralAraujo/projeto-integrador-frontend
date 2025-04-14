@@ -12,16 +12,16 @@ import { CreateTicketData, UpdateTicketData } from '@/pages/Ticket/Components/Fo
 export interface TicketData {
   id:        string
   usuarioID: string
-  titulo:    string
-  descricao: string
-  prioridade: Prioridade
-  status:     StatusTicket
-  responsavelId: string
-  avaliacao:    number
-  numero:    string
-  categoria:  CategoriaTicket
-  createdAt:  Date
-  updatedAt:  Date
+  titulo?:    string
+  descricao?: string
+  prioridade?: Prioridade
+  status?:     StatusTicket
+  responsavelId?: string
+  avaliacao?:    number
+  numero?:    string
+  categoria?:  CategoriaTicket
+  createdAt?:  Date
+  updatedAt?:  Date
   
 }
 
@@ -129,6 +129,28 @@ export function useSelectResponsavel() {
   })
 }
 
+export function useFinalizaAtendimento() {
+  const queryCliente = useQueryClient()
+  return useMutation<any, AxiosError, UpdateTicketData>(update, {
+    onSuccess(_: UpdateTicketData) {
+      queryCliente.invalidateQueries({ queryKey: ['TICKET'] })
+      toast.success('Ticket Finalizado com Sucesso!')
+    },
+    onError() {console.log("erro")},
+  })
+}
+
+export function useAvaliaTicket() {
+  const queryCliente = useQueryClient()
+  return useMutation<any, AxiosError, UpdateTicketData>(update, {
+    onSuccess(_: UpdateTicketData) {
+      queryCliente.invalidateQueries({ queryKey: ['TICKET'] })
+      toast.success('Ticket Avaliado com Sucesso!')
+    },
+    onError() {console.log("erro")},
+  })
+}
+
 export function useReadTicket(id: string) {
   return useQuery<TicketData>({
     queryKey: ['TICKET', id],
@@ -147,5 +169,7 @@ export function useTicket() {
     useRemove,
     useSelectResponsavel,
     useReadTicket,
+    useFinalizaAtendimento,
+    useAvaliaTicket,
   }
 }

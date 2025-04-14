@@ -1,5 +1,5 @@
 import { ActionsTable } from "@/components/ActionsTableCell";
-import AlertDeleteProduto from "@/components/AlertDeleteProduto/index";
+import AlertDeleteProduto from "@/components/Alerts/AlertDeleteProduto/index";
 import { DataTableProdutos } from "@/components/DataTableProdutos";
 import { ProdutosData, useProdutos } from "@/hook/queries/useProdutos";
 import { useRemove } from "@/hook/queries/useProdutos";

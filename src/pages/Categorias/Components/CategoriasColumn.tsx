@@ -1,5 +1,5 @@
 import { ActionsTable } from "@/components/ActionsTableCell";
-import AlertDeleteCategoria from "@/components/AlertDeleteCategoria/index";
+import AlertDeleteCategoria from "@/components/Alerts/AlertDeleteCategoria/index";
 import { DataTableCategorias } from "@/components/DataTableCategorias";
 import { CategoriasData, useCategorias } from "@/hook/queries/useCategorias";
 import { useRemove } from "@/hook/queries/useCategorias";
