@@ -3,9 +3,9 @@ import {
   AtendimentosData,
   useAtendimentos,
 } from "@/hook/queries/useAtendimentos";
-import { ColumnDef } from "@tanstack/react-table";
+import { ColumnDef, Row } from "@tanstack/react-table";
 import { Angry, Frown, Meh, Smile, Laugh, ArrowUpDown } from "lucide-react";
-import { FaWhatsapp } from "react-icons/fa";
+import { FaWhatsapp , FaTelegram } from "react-icons/fa";
 import { useAuth } from "@/Context/AuthContext";
 import { useEmpresas } from "@/hook/queries/useEmpresas";
 
@@ -14,6 +14,8 @@ import { toZonedTime } from "date-fns-tz";
 import { ptBR } from "date-fns/locale/pt-BR";
 
 export function TableAtendimentos() {
+  const { user } = useAuth();
+
   const { useRead: useReadEmpresas } = useEmpresas();
   const { data: empresas } = useReadEmpresas();
 
@@ -49,47 +51,6 @@ export function TableAtendimentos() {
       header: "Protocolo",
     },
     {
-      accessorKey: "telefone",
-      header: "Telefone",
-      cell: ({ row }) => {
-        const { user } = useAuth(); // Obtém o usuário do contexto
-        const telefone = row.getValue("telefone") as string;
-        const protocolo = row.getValue("protocolo") as string;
-        const nome = row.getValue("nome") as string;
-        const empresa = getEmpresaNome(row.getValue("empresaId") as string);
-        const nota = row.getValue("nota") as number;
-        const data = row.getValue("createdAt") as string;
-        const responsavel = user?.userName || "Irineu";
-
-        // Formatando a data para exibição
-        const formattedDate = new Date(data).toLocaleString("pt-BR", {
-          day: "2-digit",
-          month: "2-digit",
-          year: "numeric",
-          hour: "2-digit",
-          minute: "2-digit",
-        });
-
-        // Mensagem aprimorada com mais contexto
-        const mensagem = `Olá, ${nome}! Tudo bem? 😊\n\nMeu nome é ${responsavel} e faço parte da equipe de atendimento da CoreCommerce.\n\nNotamos que o atendimento realizado em *${formattedDate}* para a empresa *${empresa}* com o protocolo *#${protocolo}* recebeu uma nota de *${nota}/5* e não atingiu nossas expectativas de qualidade. Gostaríamos de entender melhor o que aconteceu para podermos melhorar nossos serviços.\n\nPoderia compartilhar um pouco mais sobre a sua experiência? Estamos aqui para ajudar e garantir a melhor experiência para você!\n\nDesde já, agradecemos sua colaboração e feedback! 💙`;
-        const linkWhatsapp = `https://wa.me/${telefone}?text=${encodeURIComponent(mensagem)}`;
-
-        return (
-          <div className="flex gap-2 justify-center items-center">
-            <a
-              href={linkWhatsapp}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-green-500 hover:underline"
-            >
-              {formatPhone(telefone)}
-            </a>
-            <FaWhatsapp size={20} color="green" />
-          </div>
-        );
-      },
-    },
-    {
       accessorKey: "nome",
       header: ({ column }) => {
         return (
@@ -113,6 +74,65 @@ export function TableAtendimentos() {
           </span>
         </div>
       ),
+    },
+    {
+      accessorKey: "telefone",
+      header: "Telefone",
+      cell: ({ row }) => {
+        const telefone = row.getValue("telefone") as string;
+        const protocolo = row.getValue("protocolo") as string;
+        const nome = row.getValue("nome") as string;
+        const empresa = getEmpresaNome(row.getValue("empresaId") as string);
+        const nota = row.getValue("nota") as number;
+        const data = row.getValue("createdAt") as string;
+        const isWhatsApp = row.getValue("plataforma") === "WHATSAPP";
+    
+        const responsavel = user?.userName || "Irineu";
+    
+        const formattedDate = new Date(data).toLocaleString("pt-BR", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+    
+        const mensagem = `Olá, ${nome}! Tudo bem? 😊\n\nMeu nome é ${responsavel} e faço parte da equipe de atendimento da CoreCommerce.\n\nNotamos que o atendimento realizado em *${formattedDate}* para a empresa *${empresa}* com o protocolo *#${protocolo}* recebeu uma nota de *${nota}/5* e não atingiu nossas expectativas de qualidade. Gostaríamos de entender melhor o que aconteceu para podermos melhorar nossos serviços.\n\nPoderia compartilhar um pouco mais sobre a sua experiência? Estamos aqui para ajudar e garantir a melhor experiência para você!\n\nDesde já, agradecemos sua colaboração e feedback! 💙`;
+    
+        const linkWhatsapp = `https://wa.me/${telefone}?text=${encodeURIComponent(mensagem)}`;
+    
+        return (
+          <div className="flex gap-2 justify-center items-center">
+            <a
+              href={isWhatsApp ? linkWhatsapp : `https://t.me/${telefone}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`hover:underline ${isWhatsApp ? "hover:text-green-500" : "hover:text-blue-500"}`}
+            >
+              {isWhatsApp ? formatPhone(telefone) : `@${telefone}`}
+            </a>
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: "plataforma",
+      header: "Plataforma",
+      cell: ({ row }: { row: Row<AtendimentosData> }) => {
+        const plataforma = row.getValue("plataforma") as string;
+        return (
+          <div className="flex justify-center items-center">
+            <span
+            title={plataforma} 
+            className={`w-8 h-8 flex justify-center items-center ${
+              plataforma === "WHATSAPP" ? "bg-green-500": plataforma === "TELEGRAM" ? "bg-blue-500" :  ""
+              }  text-white font-bold  rounded-full`}
+            >
+              {plataforma === 'WHATSAPP' ? <FaWhatsapp size={22}/>: plataforma === "TELEGRAM" ? <FaTelegram size={22}/> : ""}   
+            </span>
+          </div>
+        );
+      },
     },
     {
       accessorKey: "empresaId",

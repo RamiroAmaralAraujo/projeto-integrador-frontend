@@ -18,6 +18,8 @@ import * as React from "react";
 import { Skeleton } from "../ui/skeleton";
 import { Select } from "../ui/select";
 import { Input } from "../ui/input";
+import { AuthContext } from "@/Context/AuthContext";
+import SelectFilter from "../ui/selectFilter";
 
 interface TableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -38,15 +40,63 @@ export function DataTableTicket<TData, TValue>({
   );
 
   const [pageIndex, setPageIndex] = useState<number>(0);
-  const [pageSize] = useState<number>(5); 
+  const [pageSize] = useState<number>(5);
 
   const categoria = Array.from(
     new Set(data.map((item: any) => item.categoria))
   ).filter(Boolean);
 
+  const { user } = React.useContext(AuthContext);
+  const userId = user?.sub;
+  const isMaster = user?.master;
+
+  const [showMeusAtendimentos, setShowMeusAtendimentos] = useState(true);
+  const [showNaoAtribuidos, setShowNaoAtribuidos] = useState(false);
+
+  const [startDate, setStartDate] = useState<string | null>(null);
+  const [endDate, setEndDate] = useState<string | null>(null);
+
+  const [statusFiltro, setStatusFiltro] = useState<
+    "abertos" | "fechados" | "todos"
+  >("abertos");
+
+  const filteredData = React.useMemo(() => {
+    const start = startDate ? new Date(startDate) : null;
+    const end = endDate ? new Date(endDate) : null;
+    if (end) {
+      end.setDate(end.getDate() + 1); // torna o filtro de data final inclusivo
+    }
+
+    return data
+      .filter((item: any) => {
+        if (statusFiltro === "abertos") return item.status !== "FECHADO";
+        if (statusFiltro === "fechados") return item.status === "FECHADO";
+        return true; // "todos"
+      })
+      .filter((item: any) =>
+        isMaster && showMeusAtendimentos ? item.responsavelId === userId : true
+      )
+      .filter((item: any) =>
+        isMaster && showNaoAtribuidos ? !item.responsavelId : true
+      )
+      .filter((item: any) => {
+        const itemDate = new Date(item.createdAt);
+        return (!start || itemDate >= start) && (!end || itemDate < end);
+      });
+  }, [
+    data,
+    showMeusAtendimentos,
+    showNaoAtribuidos,
+    startDate,
+    endDate,
+    userId,
+    isMaster,
+    statusFiltro,
+  ]);
+
   const table = useReactTable({
     getPaginationRowModel: getPaginationRowModel(),
-    data,
+    data: filteredData,
     columns,
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
@@ -82,29 +132,87 @@ export function DataTableTicket<TData, TValue>({
   return (
     <div>
       <div className="flex items-center py-4 w-28">
-      <Input
-          label="Filtro de Nº Ticket"
-          value={
-            (table.getColumn("numero")?.getFilterValue() as string) ?? ""
-          }
-          onChange={(event) =>
-            table.getColumn("numero")?.setFilterValue(event.target.value)
-          }
-        />
-        <Select
-          label="Categorias"
-          text=""
-          value={
-            (table.getColumn("categoria")?.getFilterValue() as string) ?? ""
-          }
-          onChange={(event) =>
-            table.getColumn("categoria")?.setFilterValue(event.target.value)
-          }
-          options={[
-            { value: "", label: "Todas as Categorias" },
-            ...categoria.map((categoria) => ({ value: categoria, label: categoria })),
-          ]}
-        />
+        <div className="flex gap-4">
+          <Input
+            label="Filtro de Nº Ticket"
+            value={
+              (table.getColumn("numero")?.getFilterValue() as string) ?? ""
+            }
+            onChange={(event) =>
+              table.getColumn("numero")?.setFilterValue(event.target.value)
+            }
+          />
+          <Select
+            label="Categorias"
+            text=""
+            value={
+              (table.getColumn("categoria")?.getFilterValue() as string) ?? ""
+            }
+            onChange={(event) =>
+              table.getColumn("categoria")?.setFilterValue(event.target.value)
+            }
+            options={[
+              { value: "", label: "Todas as Categorias" },
+              ...categoria.map((categoria) => ({
+                value: categoria,
+                label: categoria,
+              })),
+            ]}
+          />
+          <Input
+            type="date"
+            label="Data Inicial"
+            value={startDate ?? ""}
+            onChange={(event) => setStartDate(event.target.value || null)}
+          />
+          <Input
+            type="date"
+            label="Data Final"
+            value={endDate ?? ""}
+            onChange={(event) => setEndDate(event.target.value || null)}
+          />
+
+          <Select
+            label="Status"
+            text="Selecione o status"
+            value={statusFiltro}
+            onChange={(event) =>
+              setStatusFiltro(
+                event.target.value as "abertos" | "fechados" | "todos"
+              )
+            }
+            options={[
+              { value: "abertos", label: "Abertos" },
+              { value: "fechados", label: "Fechados" },
+              { value: "todos", label: "Todos" },
+            ]}
+          />
+
+          {isMaster && (
+            <>
+              <div>
+                <SelectFilter
+                  label="Meus Tickets"
+                  isSelected={showMeusAtendimentos}
+                  onClick={() => {
+                    setShowMeusAtendimentos(!showMeusAtendimentos);
+                    if (!showMeusAtendimentos) setShowNaoAtribuidos(false);
+                  }}
+                />
+              </div>
+              <div>
+                <SelectFilter
+                  label="Novos"
+                  isSelected={showNaoAtribuidos}
+                  onClick={() => {
+                    setShowNaoAtribuidos(!showNaoAtribuidos);
+                    if (!showNaoAtribuidos) setShowMeusAtendimentos(false);
+                  }}
+                />
+              </div>
+            </>
+          )}
+        </div>
       </div>
       <div className="overflow-x-auto shadow-md rounded-2xl mr-14 max-h-[500px]  overflow-y-auto  ">
         <table className="w-full text-sm text-left text-base-text ">

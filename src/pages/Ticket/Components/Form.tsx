@@ -274,13 +274,14 @@ export function Form() {
                     )}
                   />
                 </div>
-                <div className="flex-1">
+                {isMaster && (
+                  <div className="flex-1">
                   <Controller
                     control={control}
                     name="prioridade"
                     render={({ field }) => (
                       <Select 
-                        disabled={!isMaster || ticketFechado}
+                        disabled={ ticketFechado}
                         label="Prioridade"
                         text="Prioridade"
                         options={selectOptionsPrioridade}
@@ -290,6 +291,8 @@ export function Form() {
                     )}
                   />
                 </div>
+                
+                )}
 
                 <div className="flex-1">
                   <Input

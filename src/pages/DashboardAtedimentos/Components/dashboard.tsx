@@ -8,6 +8,8 @@ import { CardAtendimentosExcelentes } from "./components/CardAtendimentosExcelen
 import { CardAtendimentosMedia } from "./components/CardAtendimentosMedia";
 import { Grafico } from "./components/GraficoAtednimentos";
 import { GraficoPizzaAtendimentos } from "./components/GraficoPizzaAtendimento";
+import { GraficoPizzaPlataformaAtendimentos } from "./components/GraficoPizzaPlataformaAtendimento";
+import { GraficoBarrasAtendimentos } from "./components/GraficoBarrasAtendimentos";
 
 export function DashboardAtendimentos() {
   return (
@@ -33,6 +35,17 @@ export function DashboardAtendimentos() {
         <div className="w-1/3 bg-gray-50 rounded-xl shadow-lg flex justify-center items-center mr-14">
           <GraficoPizzaAtendimentos />
         </div>
+      </div>
+
+      <div className="flex gap-4 w-full h-80 justify-around mt-4 ">
+        <div className="w-1/3 bg-gray-50 rounded-xl shadow-lg flex justify-center items-center ">
+          <GraficoPizzaPlataformaAtendimentos />
+        </div>
+
+        <div className="w-2/3 bg-gray-50 rounded-xl shadow-lg flex justify-center items-center mr-14 ">
+          <GraficoBarrasAtendimentos/>
+        </div>
+
       </div>
     </Page.Root>
   );

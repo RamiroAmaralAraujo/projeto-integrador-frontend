@@ -38,7 +38,7 @@ export function AuthenticatedMasterLayout() {
   if (user?.master) {
     return (
       <>
-        <div className=" min-h-screen flex bg-slate-200">
+        <div className="h-screen flex bg-slate-200 overflow-hidden">
           <SidebarForm>
             <div>
               <SidebarItem
@@ -102,7 +102,7 @@ export function AuthenticatedMasterLayout() {
               <SidebarItem 
                 id="Geral"
                 icon={<MessageCircleMore />}
-                text="ChatWhatsapp"
+                text="Ominichannel"
                 url="/atendimentos"
                 alert
               />
@@ -111,13 +111,13 @@ export function AuthenticatedMasterLayout() {
                 icon={<LayoutDashboard />}
                 text="Monitoramento"
                 subItems={[
-                  { text: "Atendimentos", url: "/dashboard/atendimentos" },
+                  { text: "Ominichannel", url: "/dashboard/atendimentos" },
                 ]}
                 alert
               />
             </div>
           </SidebarForm>
-          <div className="max-w-[1440px] m-auto  w-full h-screen">
+          <div className="flex-1 overflow-y-auto p-4  w-full">
             <Outlet />
           </div>
         </div>

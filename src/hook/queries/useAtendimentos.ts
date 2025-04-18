@@ -1,5 +1,6 @@
 import { useQuery} from 'react-query'
 import { api } from '../../service/api'
+import { PlataformaAtendimento } from '@/enums/PlataformaAtendimento'
 
 
 export interface AtendimentosData {
@@ -10,6 +11,7 @@ export interface AtendimentosData {
   nota:            number
   createdAt:       Date
   empresaId:       string
+  plataforma:      PlataformaAtendimento
 
 }
 

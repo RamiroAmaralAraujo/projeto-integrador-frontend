@@ -129,6 +129,21 @@ export function DataTableAtendimentos<TData, TValue>({
             ...empresas.map((empresa) => ({ value: empresa, label: empresa })),
           ]}
         />
+        <Select
+          label=""
+          text="Plataforma"
+          value={
+            (table.getColumn("plataforma")?.getFilterValue() as string) ?? ""
+          }
+          onChange={(event) =>
+            table.getColumn("plataforma")?.setFilterValue(event.target.value)
+          }
+          options={[
+            { value: "", label: "Todas as Plataformas" },
+            { value: "WHATSAPP", label: "WhatsApp" },
+            { value: "TELEGRAM", label: "Telegram" },
+          ]}
+        />
         <Input
           type="date"
           label="Data Inicial"
