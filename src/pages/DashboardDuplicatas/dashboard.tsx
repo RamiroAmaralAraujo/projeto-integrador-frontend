@@ -17,7 +17,7 @@ export function DashboardDuplicatas() {
   return (
     <Page.Root>
       <Page.Header>
-        <Page.Title title="Dashboard" />
+        <Page.Title title="Dashboard Financeiro" />
         <SelectEmpresaButton />
       </Page.Header>
 

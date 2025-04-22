@@ -24,13 +24,13 @@ import { PrintLayout } from "./layout/PrintLayout";
 import PrintPedidomodel from "./pages/PrintPedidoModel/PrintPedidoModel";
 import { SolucoesSistemaPDV } from "./pages/SolucoesSistemaPDV";
 import { Atendimentos } from "./pages/Atendimentos/Index";
-import { DashboardConstruction } from "./pages/DashboardConstruction/dashboard";
 import { AuthenticatedMasterLayout } from "./layout/AuthenticatedMasterLayout";
 import { Usuarios } from "./pages/Usuarios/Index";
 import { DashboardAtendimentos } from "./pages/DashboardAtedimentos/Components/dashboard";
 import { ForgotPassword } from "./pages/ForgotPassword/Index";
 import { ResetPassword } from "./pages/ResetPassword/Index";
 import { Ticket } from "./pages/Ticket";
+import { DashboardGeral } from "./pages/DashboardConstruction/dashboard";
 
 export const router = createBrowserRouter([
   {
@@ -109,7 +109,7 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "/dashboard/geral",
-        element: <DashboardConstruction />,
+        element: <DashboardGeral />,
       },
       {
         path: "/dashboard/duplicatas",

@@ -1,19 +1,50 @@
-import { Page } from '@/components/Page'
-import constructionAnimate from '../../assets/constructionAnimate.svg'
+import { Page } from "@/components/Page";
 
-export function DashboardConstruction() {
+import { SelectEmpresaButton } from "@/components/SelectEmpresaButton/SelectEmpresaButton";
+
+import { useContext } from "react";
+import { AuthContext } from "@/Context/AuthContext";
+import { CardPendentes } from "../DashboardDuplicatas/Components/CardPendentes";
+import { CardRecebidas } from "../DashboardDuplicatas/Components/CardRecebidas";
+import { CardPagos } from "../DashboardDuplicatas/Components/CardPagos";
+import { CardBalanco } from "../DashboardDuplicatas/Components/CardBalanco";
+import { useNavigate } from "react-router-dom";
+
+
+
+
+export function DashboardGeral() {
+  const { empresaSelecionada } = useContext(AuthContext);
+  const navigate = useNavigate();
+
   return (
     <Page.Root>
       <Page.Header>
-        <Page.Title title="Dashboard" />
+        <Page.Title title="Dashboard Geral" />
+        <SelectEmpresaButton />
       </Page.Header>
-      <div className='flex flex-col w-full justify-center items-center'>
-        <div className=' '>
-          <h4 className=' font-bold text-brand-blue-400 text-center'>Essa funcionalidade ainda não está disponivel.</h4>
-          <span className=' font-semibold text-brand-blue-400 text-center'>Logo você poderá utilizar esse dashboard, por favor aguarde.</span>
+
+      
+        <div className={empresaSelecionada ? "cursor-pointer" : "opacity-45"}>
+          <div className="mt-10  " onClick={() => navigate('/dashboard/duplicatas')}>
+            <h3 className="text-xl font-bold text-brand-blue-500">Financeiro</h3>
+            <div className="flex gap-4 mr-14 mt-4 hover:opacity-75">
+              <CardPendentes />
+              <CardRecebidas />
+              <CardPagos />
+              <CardBalanco />
+            </div>
+          </div>
+          <div className="mt-10">
+          <h3 className="text-xl font-bold text-brand-blue-500">Pedidos</h3>
+            <div className="flex gap-4 mr-14 mt-4 hover:opacity-75">
+              <CardPendentes />
+              <CardRecebidas />
+              <CardPagos />
+              <CardBalanco />
+            </div>
+          </div>
         </div>
-        <img src={constructionAnimate} alt="Animação Bild" width={700} className='bg-gray-50 rounded-xl' />
-      </div>
     </Page.Root>
   );
 }
