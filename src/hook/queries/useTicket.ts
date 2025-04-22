@@ -5,9 +5,9 @@ import { AuthContext } from '@/Context/AuthContext'
 import { useContext } from 'react'
 import { toast } from 'react-toastify'
 import { Prioridade } from '@/enums/Prioridade'
-import { StatusTicket } from '@/enums/StatusTicket'
 import { CategoriaTicket } from '@/enums/CategoriaTicket'
 import { CreateTicketData, UpdateTicketData } from '@/pages/Ticket/Components/Form'
+import { Status } from '@/enums/Status'
 
 export interface TicketData {
   id:        string
@@ -15,7 +15,7 @@ export interface TicketData {
   titulo?:    string
   descricao?: string
   prioridade?: Prioridade
-  status?:     StatusTicket
+  status?:     Status
   responsavelId?: string
   avaliacao?:    number
   numero?:    string
