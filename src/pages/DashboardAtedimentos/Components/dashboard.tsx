@@ -15,7 +15,7 @@ export function DashboardAtendimentos() {
   return (
     <Page.Root>
       <Page.Header>
-        <Page.Title title="Dashboard" />
+        <Page.Title title="Dashboard Ominichannel" />
         <div className="opacity-0">
           <SelectEmpresaButton />
         </div>
@@ -37,12 +37,12 @@ export function DashboardAtendimentos() {
         </div>
       </div>
 
-      <div className="flex gap-4 w-full h-80 justify-around mt-4 ">
+      <div className="flex gap-4 w-full h-96 justify-around mt-4 ">
         <div className="w-1/3 bg-gray-50 rounded-xl shadow-lg flex justify-center items-center ">
           <GraficoPizzaPlataformaAtendimentos />
         </div>
 
-        <div className="w-2/3 bg-gray-50 rounded-xl shadow-lg flex justify-center items-center mr-14 ">
+        <div className="w-2/3 bg-gray-50 rounded-xl shadow-lg flex justify-center items-center mr-14 p-6 ">
           <GraficoBarrasAtendimentos/>
         </div>
 

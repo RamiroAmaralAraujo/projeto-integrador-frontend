@@ -10,7 +10,7 @@ export function Atendimentos() {
     <>
       <Page.Root>
         <Page.Header>
-          <Page.Title title="Atendimentos" />
+          <Page.Title title="Ominichannel" />
           <div className='py-8'>
           
           </div>

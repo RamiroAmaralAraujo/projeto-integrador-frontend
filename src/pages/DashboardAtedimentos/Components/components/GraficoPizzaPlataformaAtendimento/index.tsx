@@ -19,7 +19,7 @@ export function GraficoPizzaPlataformaAtendimentos() {
   // Dados para o gráfico com valores numéricos no "value" e nomes nas "name"
   const sales = [
     {
-      name: 'WharsApp', 
+      name: 'WhatsApp', 
       value: WhatsApp,     
       color: 'green-500',     
     },
