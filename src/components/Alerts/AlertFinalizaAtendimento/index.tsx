@@ -7,8 +7,8 @@ import { AxiosError } from 'axios'
 import { AuthContext } from '@/Context/AuthContext'
 
 import { TicketData } from '@/hook/queries/useTicket'
-import { StatusTicket } from '@/enums/StatusTicket'
 import { useFinalizaAtendimentoStore } from '@/store/SelectFinalizaTicketStore/index.'
+import { Status } from '@/enums/Status'
 
 
 interface AlertFinalizaAtendimentoProps {
@@ -42,7 +42,7 @@ export default function AlertFinalizaAtendimento(props: AlertFinalizaAtendimento
       try {
         const updatedTicket = {
           ...FinalizaTicket,
-          status: 'FECHADO' as StatusTicket,  
+          status: 'FECHADO' as Status,  
         }
   
         onFinalizaAtendimento(updatedTicket)

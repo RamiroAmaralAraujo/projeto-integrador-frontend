@@ -7,7 +7,7 @@ import { AxiosError } from 'axios'
 import { AuthContext } from '@/Context/AuthContext'
 import { useSelectResponsavelStore } from '@/store/SelectResponsavelStore'
 import { TicketData } from '@/hook/queries/useTicket'
-import { StatusTicket } from '@/enums/StatusTicket'
+import { Status } from '@/enums/Status'
 
 
 interface AlertSelectResponsavelProps {
@@ -42,7 +42,7 @@ export default function AlertSelectResponsavel(props: AlertSelectResponsavelProp
         const updatedTicket = {
           ...responsavel,
           responsavelId: datauser.sub,
-          status: 'ANDAMENTO' as StatusTicket,  
+          status: 'ANDAMENTO' as Status,  
         }
   
         onSelectResponsavel(updatedTicket)
