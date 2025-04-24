@@ -4,13 +4,23 @@ interface SelectableDivProps {
   label: string;
   isSelected: boolean;
   onClick: () => void;
+  widthClass?: string;  // padrão: w-28
+  heightClass?: string; // padrão: h-11
 }
 
-const SelectFilter: React.FC<SelectableDivProps> = ({ label, isSelected, onClick }) => {
+const SelectFilter: React.FC<SelectableDivProps> = ({
+  label,
+  isSelected,
+  onClick,
+  widthClass = "w-28",
+  heightClass = "h-11",
+}) => {
   return (
     <div
-      className={`w-28 h-11 flex justify-center items-center text-sm font-bold cursor-pointer rounded-xl text-center text-brand-blue-500   ${
-        isSelected ? "border-2 border-brand-blue-500 bg-brand-blue-500 text-white hover:bg-brand-blue-400"  : "border-2 border-brand-blue-500 hover:bg-brand-blue-200"
+      className={`${widthClass} ${heightClass} flex justify-center items-center text-sm font-bold cursor-pointer rounded-xl text-center text-brand-blue-500 border-2 ${
+        isSelected
+          ? "bg-brand-blue-500 text-white border-brand-blue-500 hover:bg-brand-blue-400"
+          : "border-brand-blue-500 hover:bg-brand-blue-200"
       }`}
       onClick={onClick}
     >

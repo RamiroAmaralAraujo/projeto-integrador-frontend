@@ -103,7 +103,10 @@ export function AuthenticatedMasterLayout() {
                 id="Geral"
                 icon={<MessageCircleMore />}
                 text="Ominichannel"
-                url="/atendimentos"
+                subItems={[
+                  { text: "Atendimentos", url: "/ominichannel/atendimentos" },
+                  { text: "Chat", url: "/ominichannel/chat" },
+                ]}
                 alert
               />
               <SidebarItem

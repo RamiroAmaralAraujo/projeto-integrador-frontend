@@ -31,6 +31,7 @@ import { ForgotPassword } from "./pages/ForgotPassword/Index";
 import { ResetPassword } from "./pages/ResetPassword/Index";
 import { Ticket } from "./pages/Ticket";
 import { DashboardGeral } from "./pages/DashboardConstruction/dashboard";
+import { ChatAtendimentos } from "./pages/ChatAtendimentos";
 
 export const router = createBrowserRouter([
   {
@@ -164,8 +165,12 @@ export const router = createBrowserRouter([
         element: <PrintPedidomodel />,
       },
       {
-        path: "/atendimentos",
+        path: "/ominichannel/atendimentos",
         element: <Atendimentos />,
+      },
+      {
+        path: "/ominichannel/chat",
+        element: <ChatAtendimentos />,
       },
       {
         path: "/usuarios",

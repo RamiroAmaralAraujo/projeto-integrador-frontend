@@ -54,6 +54,12 @@ async function readempresa(data: EmpresasData) {
   return response.data
 }
 
+async function readempresabyid(id: string) {
+  const response = await api.get(`empresas/${id}`)
+  return response.data
+}
+
+
 
 
 
@@ -75,6 +81,16 @@ export function useRead() {
     onError() {},
   })
 }
+
+export function useReadEmpresaById(id: string) {
+  return useQuery<EmpresasData>({
+    queryKey: ['EMPRESAS', id],
+    queryFn: () => readempresabyid(id), 
+    onSuccess() {},
+    onError() {},
+  })
+}
+
 
 export function useCreate() {
   const queryCliente = useQueryClient()
@@ -128,6 +144,7 @@ export function useEmpresas() {
     useRead,
     useCreate,
     useUpdate,
-    useSelectEmpresa
+    useSelectEmpresa,
+    useReadEmpresaById
   }
 }
