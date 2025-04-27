@@ -34,7 +34,7 @@ export function ChatSidebar() {
 
   const atendimentosData = data?.filter((atendimento: any) => {
     const statusMatch =
-      allowedStatus.length === 0 || allowedStatus.includes(atendimento.status);
+      (allowedStatus.length === 0 || allowedStatus.includes(atendimento.status)) && atendimento.supHumano === true;
 
     const searchMatch =
       atendimento.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
