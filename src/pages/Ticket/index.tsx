@@ -4,6 +4,7 @@ import { Page } from '@/components/Page'
 import { TableTicket } from './Components/TicketColumn';
 import { Form } from './Components/Form';
 import { useTicketStore } from '@/store/Ticket/Index';
+import { Notificacao } from '@/components/Notificacao/Index';
 
 export function Ticket() {
 
@@ -14,9 +15,7 @@ export function Ticket() {
       <Page.Root>
         <Page.Header>
           <Page.Title title="Tickets" />
-          <div className='py-8'>
-          
-          </div>
+          <Notificacao />
         </Page.Header>
 
         <Form/>

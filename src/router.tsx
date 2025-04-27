@@ -30,7 +30,7 @@ import { DashboardAtendimentos } from "./pages/DashboardAtedimentos/Components/d
 import { ForgotPassword } from "./pages/ForgotPassword/Index";
 import { ResetPassword } from "./pages/ResetPassword/Index";
 import { Ticket } from "./pages/Ticket";
-import { DashboardGeral } from "./pages/DashboardConstruction/dashboard";
+import { DashboardGeral } from "./pages/DashboardGeral";
 import { ChatAtendimentos } from "./pages/ChatAtendimentos";
 
 export const router = createBrowserRouter([

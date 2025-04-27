@@ -5,6 +5,7 @@ import { FormPedidos } from "./Components/Form";
 import { TablePedidos } from './Components/PedidosColumn';
 import { usePedidosStore } from '@/store/Pedidos/Index';
 import { SelectEmpresaButton } from '@/components/SelectEmpresaButton/SelectEmpresaButton';
+import { Notificacao } from '@/components/Notificacao/Index';
 
 export function Pedidos() {
 
@@ -15,7 +16,10 @@ export function Pedidos() {
       <Page.Root>
         <Page.Header>
           <Page.Title title="Pedidos" />
-          <SelectEmpresaButton />
+          <div className="flex justify-end items-center">
+            <Notificacao />
+            <SelectEmpresaButton />
+          </div>
         </Page.Header>
 
         <FormPedidos />

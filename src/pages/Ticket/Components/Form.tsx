@@ -96,8 +96,10 @@ export function Form() {
     if (TicketId) {
       await updateTicket({ id: TicketId, ...payload });
       queryClient.invalidateQueries({ queryKey: ["TICKET"] });
+      queryClient.invalidateQueries(["NOTIFICACAOTICKET"]);
     } else {
       await createTicket(payload);
+      queryClient.invalidateQueries(["NOTIFICACAOTICKET"]);
     }
 
     
@@ -274,24 +276,23 @@ export function Form() {
                     )}
                   />
                 </div>
-                {isMaster && (
+                {isMaster && data?.prioridade !== "ANALISE" && (
                   <div className="flex-1">
-                  <Controller
-                    control={control}
-                    name="prioridade"
-                    render={({ field }) => (
-                      <Select 
-                        disabled={ ticketFechado}
-                        label="Prioridade"
-                        text="Prioridade"
-                        options={selectOptionsPrioridade}
-                        error={errors.prioridade}
-                        {...field}
-                      />
-                    )}
-                  />
-                </div>
-                
+                    <Controller
+                      control={control}
+                      name="prioridade"
+                      render={({ field }) => (
+                        <Select 
+                          disabled={ticketFechado}
+                          label="Prioridade"
+                          text="Prioridade"
+                          options={selectOptionsPrioridade}
+                          error={errors.prioridade}
+                          {...field}
+                        />
+                      )}
+                    />
+                  </div>
                 )}
 
                 <div className="flex-1">

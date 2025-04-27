@@ -5,6 +5,7 @@ import { FormCategorias } from "./Components/Form";
 import { TableCategorias } from './Components/CategoriasColumn';
 import { useCategoriasStore } from '@/store/Categorias/Index';
 import { SelectEmpresaButton } from '@/components/SelectEmpresaButton/SelectEmpresaButton';
+import { Notificacao } from '@/components/Notificacao/Index';
 
 export function Categorias() {
 
@@ -15,7 +16,10 @@ export function Categorias() {
       <Page.Root>
         <Page.Header>
           <Page.Title title="Categorias" />
-          <SelectEmpresaButton />
+          <div className="flex justify-end items-center">
+            <Notificacao />
+            <SelectEmpresaButton />
+          </div>
         </Page.Header>
 
         <FormCategorias />

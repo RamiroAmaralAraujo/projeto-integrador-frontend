@@ -28,7 +28,8 @@ export function MensagensTicketForm() {
     };
 
     try {
-      const response = await fetch(`https://core-commerce-api.onrender.com/ticketmensagem`, {
+      const apiUrl = import.meta.env.VITE_API;
+      const response = await fetch(`${apiUrl}ticketmensagem`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

@@ -33,7 +33,7 @@ export function SelectEmpresaButton() {
                       empresaSelecionada.empresaNome
                     )
                   ) : (
-                    <FaRegQuestionCircle className="text-white" size={25} />
+                    <FaRegQuestionCircle className="text-white" size={22} />
                   )}
                 </span>
               </div>

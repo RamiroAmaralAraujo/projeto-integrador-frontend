@@ -1,14 +1,15 @@
-import { Fragment, useContext, useRef } from 'react'
-import { Transition } from '@headlessui/react'
-import { AlertTriangle } from 'lucide-react'
-import { UseMutateAsyncFunction } from 'react-query'
-import { AxiosError } from 'axios'
+import { Fragment, useContext, useRef, useState } from "react";
+import { Transition } from "@headlessui/react";
+import { AlertTriangle } from "lucide-react";
+import { UseMutateAsyncFunction } from "react-query";
+import { AxiosError } from "axios";
 
-import { AuthContext } from '@/Context/AuthContext'
-import { useSelectResponsavelStore } from '@/store/SelectResponsavelStore'
-import { TicketData } from '@/hook/queries/useTicket'
-import { Status } from '@/enums/Status'
-
+import { AuthContext } from "@/Context/AuthContext";
+import { useSelectResponsavelStore } from "@/store/SelectResponsavelStore";
+import { TicketData } from "@/hook/queries/useTicket";
+import { Status } from "@/enums/Status";
+import { Select } from "@/components/ui/select";
+import { Prioridade } from "@/enums/Prioridade";
 
 interface AlertSelectResponsavelProps {
   onSelectResponsavel: UseMutateAsyncFunction<
@@ -16,25 +17,27 @@ interface AlertSelectResponsavelProps {
     AxiosError<unknown, any>,
     TicketData,
     unknown
-  >
+  >;
 }
 
-export default function AlertSelectResponsavel(props: AlertSelectResponsavelProps) {
-  const { onSelectResponsavel } = props
+export default function AlertSelectResponsavel(
+  props: AlertSelectResponsavelProps
+) {
+  const { onSelectResponsavel } = props;
 
-  const {user} = useContext(AuthContext)
-  const datauser = user 
+  const { user } = useContext(AuthContext);
+  const datauser = user;
 
+  const cancelButtonRef = useRef(null);
 
-
-  const cancelButtonRef = useRef(null)
-
+  const [prioridadeSelecionada, setPrioridadeSelecionada] =
+    useState<string>("");
 
   const {
     responsavel,
     isOpen,
     actions: { handleCloseDialog },
-  } = useSelectResponsavelStore()
+  } = useSelectResponsavelStore();
 
   function handleSubmit() {
     if (responsavel && datauser) {
@@ -42,23 +45,29 @@ export default function AlertSelectResponsavel(props: AlertSelectResponsavelProp
         const updatedTicket = {
           ...responsavel,
           responsavelId: datauser.sub,
-          status: 'ANDAMENTO' as Status,  
-        }
-  
-        onSelectResponsavel(updatedTicket)
+          status: "ANDAMENTO" as Status,
+          prioridade: prioridadeSelecionada as Prioridade, // aqui!
+        };
+
+        onSelectResponsavel(updatedTicket);
       } catch (error) {
-        console.log("erro", error)
+        console.log("erro", error);
       } finally {
-        handleCloseDialog()
+        handleCloseDialog();
       }
     }
+    
   }
-  
 
-
+  const selectOptionsPrioridade = [
+    { value: "BAIXA", label: "Baixa" },
+    { value: "MEDIA", label: "Média" },
+    { value: "ALTA", label: "Alta" },
+    { value: "URGENTE", label: "Urgente" },
+  ];
 
   return (
-    < Transition.Root show={isOpen} as={Fragment}>
+    <Transition.Root show={isOpen} as={Fragment}>
       <div className="fixed z-10 inset-0 overflow-y-auto">
         <div className="flex items-center justify-center min-h-screen pt-4 px-4 text-center sm:block sm:p-0">
           <Transition.Child
@@ -70,12 +79,20 @@ export default function AlertSelectResponsavel(props: AlertSelectResponsavelProp
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="fixed inset-0 transition-opacity" aria-hidden="true">
+            <div
+              className="fixed inset-0 transition-opacity"
+              aria-hidden="true"
+            >
               <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
             </div>
           </Transition.Child>
 
-          <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+          <span
+            className="hidden sm:inline-block sm:align-middle sm:h-screen"
+            aria-hidden="true"
+          >
+            &#8203;
+          </span>
 
           <Transition.Child
             as={Fragment}
@@ -90,17 +107,46 @@ export default function AlertSelectResponsavel(props: AlertSelectResponsavelProp
               <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                 <div className="sm:flex sm:items-start">
                   <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-brand-blue-100 sm:mx-0 sm:h-10 sm:w-10">
-                    <AlertTriangle className="h-6 w-6 text-brand-blue-400" aria-hidden="true" />
+                    <AlertTriangle
+                      className="h-6 w-6 text-brand-blue-400"
+                      aria-hidden="true"
+                    />
                   </div>
                   <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                    <h3 className="text-lg leading-6 font-medium text-gray-900">Atribuição de responsável</h3>
+                    <h3 className="text-lg leading-6 font-medium text-gray-900">
+                      Atribuição de responsável
+                    </h3>
                     <div className="mt-2 flex gap-2">
-                      <p className="text-sm text-gray-500 whitespace-nowrap ">Você está selecionando o Ticket</p><span className='text-sm text-brand-blue-400 font-bold'>{responsavel?.numero}</span>
+                      <p className="text-sm text-gray-500 whitespace-nowrap ">
+                        Você está selecionando o Ticket
+                      </p>
+                      <span className="text-sm text-brand-blue-400 font-bold">
+                        {responsavel?.numero}
+                      </span>
                     </div>
 
-                    <span className="text-sm text-gray-500">Após a seleção, você se torna responsavel por esse Ticket, e deverá acompanhar o mesmo até sua finalização.</span>
-                    <span className="text-sm text-gray-500 font-medium ml-1">Tem certeza deseja stribuir responsabilidade ao ticket em questão?</span>
-
+                    <span className="text-sm text-gray-500">
+                      Após a seleção, você se torna responsavel por esse Ticket,
+                      e deverá acompanhar o mesmo até sua finalização.
+                    </span>
+                    <div className="w-full flex justify-center items-center mt-4 mb-4">
+                      
+                        <Select
+                          label="Prioridade"
+                          text="Prioridade"
+                          options={selectOptionsPrioridade}
+                          value={prioridadeSelecionada}
+                          onChange={(e) =>
+                            setPrioridadeSelecionada(e.target.value)
+                          }
+                        />
+                      
+                    </div>
+                    <span className="text-sm text-gray-500 font-medium ml-1">
+                      Selecione qual o nivel de prioridade deve ser atribuido ao
+                      ticket. Tem certeza deseja atribuir responsabilidade ao
+                      ticket em questão?
+                    </span>
                   </div>
                 </div>
               </div>
@@ -124,7 +170,7 @@ export default function AlertSelectResponsavel(props: AlertSelectResponsavelProp
             </div>
           </Transition.Child>
         </div>
-      </div >
-    </Transition.Root >
-  )
+      </div>
+    </Transition.Root>
+  );
 }

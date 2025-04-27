@@ -36,7 +36,12 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
             type="text"
             value={search}
             onChange={(e) => !disabled && setSearch(e.target.value)}
-            onFocus={() => !disabled && setIsOpen(true)}
+            onFocus={() => {
+              if (!disabled){
+                setIsOpen(true)
+                setSearch("")
+              }
+            } }
             placeholder={text}
             disabled={disabled}
             className={`peer w-full border px-3 py-2 rounded-[7px] text-brand-blue-500 focus:outline-none bg-transparent placeholder:text-brand-blue-500

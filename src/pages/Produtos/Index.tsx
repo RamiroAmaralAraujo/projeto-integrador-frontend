@@ -5,6 +5,7 @@ import { FormProdutos } from "./Components/Form";
 import { TableProdutos } from './Components/ProdutosColumn';
 import { useProdutosStore } from '@/store/Produtos/Index';
 import { SelectEmpresaButton } from '@/components/SelectEmpresaButton/SelectEmpresaButton';
+import { Notificacao } from '@/components/Notificacao/Index';
 
 export function Produtos() {
 
@@ -15,7 +16,10 @@ export function Produtos() {
       <Page.Root>
         <Page.Header>
           <Page.Title title="Produtos" />
-          <SelectEmpresaButton />
+          <div className="flex justify-end items-center">
+            <Notificacao />
+            <SelectEmpresaButton />
+          </div>
         </Page.Header>
 
         <FormProdutos />

@@ -5,6 +5,7 @@ import { FormDuplicatas } from "./Components/Form";
 import { TablePagaveis } from './Components/PagaveisColumn';
 import { useDuplicatasStore } from '@/store/Duplicatas/Index';
 import { SelectEmpresaButton } from '@/components/SelectEmpresaButton/SelectEmpresaButton';
+import { Notificacao } from '@/components/Notificacao/Index';
 
 export function Finaceiro() {
 
@@ -15,7 +16,10 @@ export function Finaceiro() {
       <Page.Root>
         <Page.Header>
           <Page.Title title="Financeiro" />
-          <SelectEmpresaButton />
+          <div className="flex justify-end items-center">
+            <Notificacao />
+            <SelectEmpresaButton />
+          </div>
         </Page.Header>
 
         <FormDuplicatas />

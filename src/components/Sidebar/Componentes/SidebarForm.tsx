@@ -41,13 +41,17 @@ export default function SidebarForm({ children }: SidebarProps) {
               </div>
               
 
-            <SidebarContext.Provider value={{ expanded }}>
-              <ul className="flex-1 px-3 ">{children}</ul>
+              <SidebarContext.Provider value={{ expanded }}>
+              <div className="flex-1 overflow-y-auto px-3">
+                <ul>{children}</ul>
+              </div>
             </SidebarContext.Provider>
 
 
             <SidebarContext.Provider value={{ expanded }}>
-              <PopoverPerfil />
+              <div className=" flex-shrink-0">
+                <PopoverPerfil />
+              </div>
             </SidebarContext.Provider>
 
 

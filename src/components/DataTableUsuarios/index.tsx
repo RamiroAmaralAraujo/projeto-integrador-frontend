@@ -135,7 +135,7 @@ export function DataTableUsuarios<TData, TValue>({
             {!isLoading && table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <tr
-                  className="bg-white border-b hover:brightness-90 text-center"
+                  className="bg-white border-b hover:bg-gray-200 transition-colors text-center"
                   key={row.id}
                 >
                   {row.getVisibleCells().map((cell) => (
@@ -163,7 +163,7 @@ export function DataTableUsuarios<TData, TValue>({
                 ).map((item) => (
                   <tr
                     key={item}
-                    className="bg-white border-b hover:brightness-90"
+                    className="bg-white border-b hover:bg-gray-200 transition-colors"
                   >
                     {Array.from(
                       { length: table.getAllColumns().length },

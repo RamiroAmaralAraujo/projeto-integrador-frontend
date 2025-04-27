@@ -9,6 +9,7 @@ import { CardRecebidas } from "../DashboardDuplicatas/Components/CardRecebidas";
 import { CardPagos } from "../DashboardDuplicatas/Components/CardPagos";
 import { CardBalanco } from "../DashboardDuplicatas/Components/CardBalanco";
 import { useNavigate } from "react-router-dom";
+import { Notificacao } from "@/components/Notificacao/Index";
 
 
 
@@ -21,7 +22,10 @@ export function DashboardGeral() {
     <Page.Root>
       <Page.Header>
         <Page.Title title="Dashboard Geral" />
-        <SelectEmpresaButton />
+        <div className="flex justify-end items-center">
+            <Notificacao />
+            <SelectEmpresaButton />
+          </div>
       </Page.Header>
 
       

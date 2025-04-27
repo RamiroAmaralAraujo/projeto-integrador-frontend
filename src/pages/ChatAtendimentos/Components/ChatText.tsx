@@ -45,8 +45,9 @@ export function ChatText() {
 
     try {
       console.log("Payload sendo enviado:", payload);
+      const apiUrl = import.meta.env.VITE_API;
       const response = await fetch(
-        "http://localhost:3000/atendimento-mensagem",
+        `${apiUrl}atendimento-mensagem`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -73,7 +74,7 @@ export function ChatText() {
 
 
       const responseAtendimento = await fetch(
-        `http://localhost:3000/atendimento/${atendimentoId}`,
+        `${apiUrl}atendimento/${atendimentoId}`,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },

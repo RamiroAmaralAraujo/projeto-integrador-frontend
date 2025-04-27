@@ -9,6 +9,7 @@ import { CardPagos } from './Components/CardPagos';
 import { CardBalanco } from './Components/CardBalanco';
 import { useContext } from 'react';
 import { AuthContext } from '@/Context/AuthContext';
+import { Notificacao } from '@/components/Notificacao/Index';
 
 export function DashboardDuplicatas() {
 
@@ -18,7 +19,10 @@ export function DashboardDuplicatas() {
     <Page.Root>
       <Page.Header>
         <Page.Title title="Dashboard Financeiro" />
-        <SelectEmpresaButton />
+        <div className="flex justify-end items-center">
+            <Notificacao />
+            <SelectEmpresaButton />
+          </div>
       </Page.Header>
 
 

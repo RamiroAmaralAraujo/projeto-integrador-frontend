@@ -1,69 +1,71 @@
-import { Fragment, useContext, useRef } from 'react'
-import { Transition } from '@headlessui/react'
-import { MessageCircleMore} from 'lucide-react'
-import { UseMutateAsyncFunction } from 'react-query'
-import { AxiosError } from 'axios'
+import { Fragment, useContext, useRef } from "react";
+import { Transition } from "@headlessui/react";
+import { MessageCircleMore } from "lucide-react";
+import { UseMutateAsyncFunction } from "react-query";
+import axios, { AxiosError } from "axios";
 
-import { AuthContext } from '@/Context/AuthContext'
+import { AuthContext } from "@/Context/AuthContext";
 
-import { Status } from '@/enums/Status'
-import { AtendimentosData } from '@/hook/queries/useAtendimentos'
-import { useFinalizaChatStore } from '@/store/FinalizaChatStore/Index'
-
+import { Status } from "@/enums/Status";
+import { AtendimentosData } from "@/hook/queries/useAtendimentos";
+import { useFinalizaChatStore } from "@/store/FinalizaChatStore/Index";
 
 interface AlertFinalizaChatProps {
-    onFinalizaChat: UseMutateAsyncFunction<
+  onFinalizaChat: UseMutateAsyncFunction<
     any,
     AxiosError<unknown, any>,
     AtendimentosData,
     unknown
-  >
+  >;
 }
 
 export default function AlertFinalizaChat(props: AlertFinalizaChatProps) {
-  const { onFinalizaChat } = props
+  const { onFinalizaChat } = props;
 
-  const {user} = useContext(AuthContext)
-  const datauser = user 
+  const { user } = useContext(AuthContext);
+  const datauser = user;
 
+  const cancelButtonRef = useRef(null);
 
+  const { FinalizaChat, isOpen, actions } = useFinalizaChatStore();
 
-  const cancelButtonRef = useRef(null)
+  console.log(FinalizaChat, "atendimentoid");
 
+  const handleCloseDialog = actions?.handleCloseDialog;
 
-  const {
-    FinalizaChat,
-    isOpen,
-    actions,
-  } = useFinalizaChatStore()
-
-
-  console.log(FinalizaChat, "atendimentoid")
-
-  const handleCloseDialog = actions?.handleCloseDialog
-
-  function handleSubmit() {
+  async function handleSubmit() {
     if (FinalizaChat && datauser) {
       try {
-        const updatedTicket: AtendimentosData = {
+        const updatedAtendimento: AtendimentosData = {
           ...FinalizaChat,
-          status: 'FECHADO' as Status,  
+          status: "FECHADO" as Status,
+        };
+
+        await onFinalizaChat(updatedAtendimento);
+
+        if (FinalizaChat.telefone) {
+          await axios.post("http://localhost:4000/api/redirecionar-feedback", {
+            telefone: FinalizaChat.telefone,
+          });
+          console.log("✅ Cliente redirecionado para o feedback no WhatsApp!");
+        } else {
+          console.warn(
+            "⚠️ Telefone não encontrado para redirecionar para o feedback."
+          );
         }
-  
-        onFinalizaChat(updatedTicket)
       } catch (error) {
-        console.log("erro", error)
+        console.error(
+          "❌ Erro ao finalizar e redirecionar para feedback:",
+          error
+        );
       } finally {
-        handleCloseDialog?.()
+        handleCloseDialog?.();
       }
     }
   }
-  
-
-
 
   return (
-    < Transition.Root show={isOpen} as={Fragment}>
+    <Transition.Root show={isOpen} as={Fragment}>
       <div className="fixed z-10 inset-0 overflow-y-auto">
         <div className="flex items-center justify-center min-h-screen pt-4 px-4 text-center sm:block sm:p-0">
           <Transition.Child
@@ -75,12 +77,20 @@ export default function AlertFinalizaChat(props: AlertFinalizaChatProps) {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="fixed inset-0 transition-opacity" aria-hidden="true">
+            <div
+              className="fixed inset-0 transition-opacity"
+              aria-hidden="true"
+            >
               <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
             </div>
           </Transition.Child>
 
-          <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+          <span
+            className="hidden sm:inline-block sm:align-middle sm:h-screen"
+            aria-hidden="true"
+          >
+            &#8203;
+          </span>
 
           <Transition.Child
             as={Fragment}
@@ -95,17 +105,32 @@ export default function AlertFinalizaChat(props: AlertFinalizaChatProps) {
               <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                 <div className="sm:flex sm:items-start">
                   <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-brand-blue-200 sm:mx-0 sm:h-10 sm:w-10">
-                    <MessageCircleMore className="h-6 w-6 text-brand-blue-500" aria-hidden="true" />
+                    <MessageCircleMore
+                      className="h-6 w-6 text-brand-blue-500"
+                      aria-hidden="true"
+                    />
                   </div>
                   <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                    <h3 className="text-lg leading-6 font-medium text-brand-blue-500">Finalizar Atendimento</h3>
+                    <h3 className="text-lg leading-6 font-medium text-brand-blue-500">
+                      Finalizar Atendimento
+                    </h3>
                     <div className="mt-2 flex gap-2">
-                      <p className="text-sm text-gray-500 whitespace-nowrap ">Você está selecionando o Protocolo</p><span className='text-sm text-brand-blue-500 font-bold'>{ FinalizaChat?.protocolo} </span>
+                      <p className="text-sm text-gray-500 whitespace-nowrap ">
+                        Você está selecionando o Protocolo
+                      </p>
+                      <span className="text-sm text-brand-blue-500 font-bold">
+                        {FinalizaChat?.protocolo}{" "}
+                      </span>
                     </div>
 
-                    <span className="text-sm text-gray-500">Após a confirmação, o atendimento selecionado será Finalizado e as trocas de mensagens para esse assunto serão bloqueadas.</span>
-                    <span className="text-sm text-gray-500 font-medium ml-1">Tem certeza que deseja finalizar o atendimento em questão?</span>
-
+                    <span className="text-sm text-gray-500">
+                      Após a confirmação, o atendimento selecionado será
+                      Finalizado e as trocas de mensagens para esse assunto
+                      serão bloqueadas.
+                    </span>
+                    <span className="text-sm text-gray-500 font-medium ml-1">
+                      Tem certeza que deseja finalizar o atendimento em questão?
+                    </span>
                   </div>
                 </div>
               </div>
@@ -129,7 +154,7 @@ export default function AlertFinalizaChat(props: AlertFinalizaChatProps) {
             </div>
           </Transition.Child>
         </div>
-      </div >
-    </Transition.Root >
-  )
+      </div>
+    </Transition.Root>
+  );
 }
