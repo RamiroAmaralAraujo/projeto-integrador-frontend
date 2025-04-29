@@ -115,6 +115,7 @@ export function AuthenticatedMasterLayout() {
                 text="Monitoramento"
                 subItems={[
                   { text: "Ominichannel", url: "/dashboard/atendimentos" },
+                  { text: "Tickets", url: "/dashboard/tickets" },
                 ]}
                 alert
               />

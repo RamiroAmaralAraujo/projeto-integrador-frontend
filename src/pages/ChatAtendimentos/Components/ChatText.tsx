@@ -40,7 +40,8 @@ export function ChatText() {
     };
 
     const payloadAtendimento = {
-      status: "ANDAMENTO"
+      status: "ANDAMENTO",
+      emFila: true
     }
 
     try {

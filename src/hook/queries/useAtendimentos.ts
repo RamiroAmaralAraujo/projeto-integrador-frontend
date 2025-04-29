@@ -6,17 +6,19 @@ import { AxiosError } from "axios";
 import { toast } from "react-toastify";
 
 export interface AtendimentosData {
-  id: string;
-  protocolo: string;
-  telefone: string;
-  nome: string;
-  nota: number;
-  createdAt: Date;
-  empresaId: string;
-  plataforma: PlataformaAtendimento;
-  status: Status;
-  fotoperfil: string;
-  supHumano: boolean;
+  id:              string;
+  protocolo:       string;
+  telefone:        string;
+  nome:            string;
+  nota:            number;
+  createdAt:       Date;
+  updatedAt:       Date;
+  empresaId:       string;
+  plataforma:      PlataformaAtendimento;
+  status:          Status;
+  fotoperfil:      string;
+  supHumano:       boolean;
+  emFila:          boolean;
 }
 
 async function read() {

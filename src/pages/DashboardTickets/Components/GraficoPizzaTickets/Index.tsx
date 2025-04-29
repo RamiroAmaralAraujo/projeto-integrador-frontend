@@ -1,35 +1,35 @@
-import { useRead } from "@/hook/queries/useAtendimentos";
+import { useRead } from "@/hook/queries/useTicket";
 import { DonutChart } from "@tremor/react";
 import PlaceHolderDonuts from "@/assets/PlaceHolderDonuts.jpg"
 
-interface GraficoPizzaAtendimentosProps {
+interface GraficoPizzaTicketsProps {
   startDate: string;
   endDate: string;
 }
 
-export function GraficoPizzaAtendimentos({ startDate, endDate }: GraficoPizzaAtendimentosProps) {
+export function GraficoPizzaTickets({ startDate, endDate }: GraficoPizzaTicketsProps) {
   const { data } = useRead();
-  const atendimentos = data;
+  const tickets = data;
 
-  if (!atendimentos) {
+  if (!tickets) {
     return <div>Loading...</div>;
   }
 
   
-  const filteredAtendimentos = atendimentos.filter((atendimento) => {
-    const dataCriacao = new Date(atendimento.createdAt);
+  const filteredTickets = tickets.filter((ticket) => {
+    const dataCriacao = ticket.createdAt ? new Date(ticket.createdAt) : new Date(0);
     return (
       dataCriacao >= new Date(startDate) && dataCriacao <= new Date(endDate + "T23:59:59")
     );
   });
 
   
-  const Nota5 = filteredAtendimentos.filter((atendimento) => atendimento.nota === 5).length;
-  const Nota4 = filteredAtendimentos.filter((atendimento) => atendimento.nota === 4).length;
-  const Nota3 = filteredAtendimentos.filter((atendimento) => atendimento.nota === 3).length;
-  const Nota2 = filteredAtendimentos.filter((atendimento) => atendimento.nota === 2).length;
-  const Nota1 = filteredAtendimentos.filter((atendimento) => atendimento.nota === 1).length;
-  const NotaNull = filteredAtendimentos.filter((atendimento) => atendimento.nota === 0).length;
+  const Nota5 = filteredTickets.filter((ticket) => ticket.avaliacao === 5).length;
+  const Nota4 = filteredTickets.filter((ticket) => ticket.avaliacao === 4).length;
+  const Nota3 = filteredTickets.filter((ticket) => ticket.avaliacao === 3).length;
+  const Nota2 = filteredTickets.filter((ticket) => ticket.avaliacao === 2).length;
+  const Nota1 = filteredTickets.filter((ticket) => ticket.avaliacao === 1).length;
+  const NotaNull = filteredTickets.filter((ticket) => ticket.avaliacao === 0).length;
 
   
   const sales = [
@@ -101,9 +101,9 @@ export function GraficoPizzaAtendimentos({ startDate, endDate }: GraficoPizzaAte
   return (
     <div className="w-full h-full justify-center items-center flex flex-col">
       <h3 className="p-6 text-tremor-content dark:text-dark-tremor-content font-semibold text-lg">
-        Avaliação por Atendimentos
+        Avaliação por Tickets
       </h3>
-      {filteredAtendimentos.length > 0 ?(
+      {filteredTickets.length > 0 ?(
         <DonutChart
           className="h-3/4 font-bold text-lg"
           data={sales}

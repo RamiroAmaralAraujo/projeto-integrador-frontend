@@ -42,7 +42,7 @@ export default function AlertFinalizaAtendimento(props: AlertFinalizaAtendimento
       try {
         const updatedTicket = {
           ...FinalizaTicket,
-          status: 'FECHADO' as Status,  
+          status: 'FECHADO' as Status, 
         }
   
         onFinalizaAtendimento(updatedTicket)

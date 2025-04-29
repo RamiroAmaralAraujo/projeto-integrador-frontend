@@ -1,43 +1,50 @@
-import { useRead } from '@/hook/queries/useAtendimentos';
+import { useRead } from '@/hook/queries/useTicket';
 import { DonutChart } from '@tremor/react';
 import PlaceHolderDonuts from "@/assets/PlaceHolderDonuts.jpg"
 
-interface GraficoPizzaPlataformaAtendimentosProps {
+interface GraficoPizzaPlataformaTicketsProps {
   startDate: string;
   endDate: string;
 }
 
-export function GraficoPizzaPlataformaAtendimentos({ startDate, endDate }: GraficoPizzaPlataformaAtendimentosProps) {
+export function GraficoPizzaTicketsCategoria({ startDate, endDate }: GraficoPizzaPlataformaTicketsProps) {
   const { data } = useRead();
-  const atendimentos = data;
+  const tickets = data;
 
-  if (!atendimentos) {
+  if (!tickets) {
     return <div>Loading...</div>;
   }
 
-  // Filtra atendimentos pelo período
-  const atendimentosFiltrados = atendimentos.filter((atendimento) => {
-    const createdAt = new Date(atendimento.createdAt);
+  // Filtra tickets pelo período
+  const ticketsFiltrados = tickets.filter((ticket) => {
+    const createdAt = ticket.createdAt ? new Date(ticket.createdAt) : null;
     return (
+      createdAt !== null &&
       createdAt >= new Date(startDate) &&
       createdAt <= new Date(endDate + "T23:59:59")
     );
   });
 
-  const WhatsApp = atendimentosFiltrados.filter(atendimento => atendimento.plataforma === "WHATSAPP").length;
-  const Telegram = atendimentosFiltrados.filter(atendimento => atendimento.plataforma === "TELEGRAM").length;
+  const Financeiro = ticketsFiltrados.filter(ticket => ticket.categoria === "FINANCEIRO").length;
+  const Comercial = ticketsFiltrados.filter(ticket => ticket.categoria === "COMERCIAL").length;
+  const Suporte = ticketsFiltrados.filter(ticket => ticket.categoria === "SUPORTE").length;
 
   const sales = [
     {
-      name: 'WhatsApp',
-      value: WhatsApp,
+      name: 'Financeiro',
+      value: Financeiro,
       color: 'green-500',
     },
     {
-      name: 'Telegram',
-      value: Telegram,
+      name: 'Comercial',
+      value: Comercial,
       color: 'blue-500',
     },
+    {
+        name: 'Suporte',
+        value: Suporte,
+        color: 'red-500',
+      },
   ];
 
   const colors = sales.map(sale => sale.color);
@@ -78,9 +85,9 @@ export function GraficoPizzaPlataformaAtendimentos({ startDate, endDate }: Grafi
   return (
     <div className="w-full h-full justify-center items-center flex flex-col">
       <h3 className="p-6 text-tremor-content dark:text-dark-tremor-content font-semibold text-lg">
-        Atendimentos por Plataforma
+        Tickets por Categoria
       </h3>
-      {atendimentosFiltrados.length > 0 ? (
+      {ticketsFiltrados.length > 0 ? (
         <DonutChart
           className="h-3/4 font-bold text-lg"
           data={sales}

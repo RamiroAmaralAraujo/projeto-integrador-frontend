@@ -1,14 +1,27 @@
 import { useRead } from "@/hook/queries/useAtendimentos";
 import { MessageSquareHeart } from "lucide-react";
 
-export function CardAtendimentosExcelentes() {
+interface CardAtendimentosExcelentesProps {
+  startDate: string;
+  endDate: string;
+}
+
+export function CardAtendimentosExcelentes({ startDate, endDate }: CardAtendimentosExcelentesProps) {
   const { data: atendimentos } = useRead();
 
   if (!atendimentos) {
     return <div>Carregando...</div>;
   }
 
-  const atendimentosExcelentes = atendimentos.filter(
+  // Filtrando os atendimentos com base nas datas
+  const filteredAtendimentos = atendimentos.filter((atendimento) => {
+    const dataCriacao = new Date(atendimento.createdAt);
+    return (
+      dataCriacao >= new Date(startDate) && dataCriacao <= new Date(endDate + "T23:59:59")
+    );
+  });
+
+  const atendimentosExcelentes = filteredAtendimentos.filter(
     (atendimento) => atendimento.nota === 5
   );
 

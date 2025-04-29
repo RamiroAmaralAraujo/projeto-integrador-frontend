@@ -32,6 +32,7 @@ import { ResetPassword } from "./pages/ResetPassword/Index";
 import { Ticket } from "./pages/Ticket";
 import { DashboardGeral } from "./pages/DashboardGeral";
 import { ChatAtendimentos } from "./pages/ChatAtendimentos";
+import { DashboardTickets } from "./pages/DashboardTickets";
 
 export const router = createBrowserRouter([
   {
@@ -119,6 +120,10 @@ export const router = createBrowserRouter([
       {
         path: "/dashboard/atendimentos",
         element: <DashboardAtendimentos />,
+      },
+      {
+        path: "/dashboard/tickets",
+        element: <DashboardTickets/>,
       },
       {
         path: "/loading",

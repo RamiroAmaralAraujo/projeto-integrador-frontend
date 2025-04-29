@@ -1,16 +1,27 @@
 import { useRead } from "@/hook/queries/useAtendimentos";
 import { MessageSquareWarning } from "lucide-react";
 
-export function CardAtendimentosCriticos() {
+interface CardAtendimentosCriticosProps {
+  startDate: string;
+  endDate: string;
+}
+
+export function CardAtendimentosCriticos({ startDate, endDate }: CardAtendimentosCriticosProps) {
   const { data: atendimentos } = useRead();
 
   if (!atendimentos) {
     return <div>Carregando...</div>;
   }
 
-  const atendimentosCriticos = atendimentos.filter(
-    (atendimento) => atendimento.nota === 1
-  );
+  // Filtrando os atendimentos críticos com base nas datas
+  const atendimentosCriticos = atendimentos.filter((atendimento) => {
+    const dataCriacao = new Date(atendimento.createdAt);
+    return (
+      atendimento.nota === 1 &&
+      dataCriacao >= new Date(startDate) &&
+      dataCriacao <= new Date(endDate + "T23:59:59")
+    );
+  });
 
   const somatorioAtendimentosCriticos = atendimentosCriticos.length;
 

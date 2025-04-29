@@ -41,8 +41,8 @@ export function ChatSidebar() {
       atendimento.protocolo.toLowerCase().includes(searchTerm.toLowerCase()) ||
       atendimento.telefone.toLowerCase().includes(searchTerm.toLowerCase());
 
-    return statusMatch && searchMatch;
-  });
+    return statusMatch && searchMatch 
+  }).filter(atendimento => atendimento.supHumano)
 
   const handleSelectAtendimento = (id: string) => {
     setAtendimentoId(id);
@@ -98,19 +98,26 @@ export function ChatSidebar() {
         </p>
       )}
 
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 overflow-auto">
         {atendimentosData?.map((atendimento) => {
           const isSelected = atendimento.id === selectedId;
+          const fechado = atendimento.status === "FECHADO"
 
           return (
             <div
               key={atendimento.id}
               onClick={() => handleSelectAtendimento(atendimento.id)}
-              className={`p-4 rounded-xl shadow-lg cursor-pointer transition-all ${
-                isSelected
-                  ? "bg-brand-blue-400 text-white"
-                  : "bg-blue-100 hover:bg-blue-200"
-              }`}
+              className={`p-4 rounded-xl shadow-lg cursor-pointer transition-all
+                ${
+                  fechado
+                    ? isSelected
+                      ? "bg-gray-400 text-white"
+                      : "bg-gray-100 hover:bg-gray-200"
+                    : isSelected
+                    ? "bg-brand-blue-400 text-white"
+                    : "bg-blue-100 hover:bg-blue-200"
+                }`}
+              
             >
               <div className="flex justify-around items-center">
                 <div>

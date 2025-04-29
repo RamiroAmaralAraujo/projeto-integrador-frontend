@@ -1,8 +1,8 @@
 import { AreaChart } from "@tremor/react";
-import skeletonGrafico from "../../../../../assets/skeletonGrafico.png";
+import skeletonGrafico from "@/assets/skeletonGrafico.png";
 import { format } from "date-fns";
 import { useState} from "react";
-import { useRead } from "@/hook/queries/useAtendimentos";
+import { useRead } from "@/hook/queries/useTicket";
 import { Select } from "@/components/ui/select";
 
 interface GraficoProps {
@@ -10,8 +10,8 @@ interface GraficoProps {
   endDate: string;
 }
 
-export function Grafico({ startDate, endDate }: GraficoProps) {
-  const { data: atendimento } = useRead();
+export function GraficoTickets({ startDate, endDate }: GraficoProps) {
+  const { data: ticket } = useRead();
 
   
 
@@ -19,11 +19,11 @@ export function Grafico({ startDate, endDate }: GraficoProps) {
 
   
 
-  if (!atendimento) {
+  if (!ticket) {
     return (
       <div className="bg-gray-50 w-full rounded-xl shadow-lg opacity-50">
         <h3 className="p-6 text-tremor-content dark:text-dark-tremor-content font-semibold text-lg">
-          Atendimentos Realizados (Dia)
+          Tickets Realizados (Dia)
         </h3>
         <div className="w-full flex justify-center items-center opacity-45">
           <img src={skeletonGrafico} width={650} alt="Skeleton" />
@@ -32,9 +32,9 @@ export function Grafico({ startDate, endDate }: GraficoProps) {
     );
   }
 
-  // Filtra os atendimentos com base no intervalo de datas
-  const filteredAtendimentos = atendimento.filter((atendimento) => {
-    const dataCriacao = new Date(atendimento.createdAt);
+  // Filtra os tickets com base no intervalo de datas
+  const filteredTickets = ticket.filter((ticket) => {
+    const dataCriacao = new Date(ticket.createdAt ?? "");
     if (startDate && endDate) {
       return (
         dataCriacao >= new Date(startDate) &&
@@ -44,21 +44,21 @@ export function Grafico({ startDate, endDate }: GraficoProps) {
     return true;
   });
 
-  // Ordena os atendimentos por data de criação
-  filteredAtendimentos.sort(
-    (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+  // Ordena os tickets por data de criação
+  filteredTickets.sort(
+    (a, b) => new Date(a.createdAt ?? 0).getTime() - new Date(b.createdAt ?? 0).getTime()
   );
 
-  // Objeto auxiliar para contar o número de atendimentos por data e por nota
+  // Objeto auxiliar para contar o número de tickets por data e por nota
   const acumuladoPorData: { [key: string]: { [key: string]: number } } = {};
 
-  filteredAtendimentos.forEach((atendimento) => {
+  filteredTickets.forEach((ticket) => {
     // Formata a data para considerar apenas o dia
     const dataCriacao = format(
-      new Date(atendimento.createdAt).setHours(0, 0, 0, 0),
+      new Date(ticket.createdAt ?? "").setHours(0, 0, 0, 0),
       "dd/MM/yy"
     );
-    const nota = String(atendimento.nota);
+    const nota = String(ticket.avaliacao);
 
     // Inicializa o objeto de data se não existir
     if (!acumuladoPorData[dataCriacao]) {
@@ -86,7 +86,7 @@ export function Grafico({ startDate, endDate }: GraficoProps) {
         "Nota 3": acumuladoPorData[date]["3"],
         "Nota 4": acumuladoPorData[date]["4"],
         "Nota 5": acumuladoPorData[date]["5"],
-        "Sem Nota": acumuladoPorData[date]["0"],
+        "Sem Avaliação": acumuladoPorData[date]["0"],
       };
     } else {
       const total =
@@ -107,14 +107,14 @@ export function Grafico({ startDate, endDate }: GraficoProps) {
   const dataFormatter = (number: number | bigint) => `${number}`;
 
   const selectOptions = [
-    { value: "notas", label: "Atendimentos/Nota" },
-    { value: "todos", label: "Todos Atendimentos" },
+    { value: "notas", label: "Tickets/Nota" },
+    { value: "todos", label: "Todos Tickets" },
   ];
 
   return (
     <div className="bg-gray-50 w-full rounded-xl shadow-lg p-2 pr-6 flex flex-col items-center">
       <h3 className="p-6 text-tremor-content dark:text-dark-tremor-content font-semibold text-lg">
-          ({filteredAtendimentos.length}) Atendimentos Realizados nesse período
+          ({filteredTickets.length}) Tickets Realizados nesse período
         </h3>
       <div className="w-full flex justify-center items-center ">
         <div className="flex gap-3">
@@ -141,7 +141,7 @@ export function Grafico({ startDate, endDate }: GraficoProps) {
         yAxisWidth={65}
         categories={
           modoGrafico === "notas"
-            ? ["Nota 1", "Nota 2", "Nota 3", "Nota 4", "Nota 5", "Sem Nota"]
+            ? ["Nota 1", "Nota 2", "Nota 3", "Nota 4", "Nota 5", "Sem Avaliação"]
             : ["Total"]
         }
         colors={["blue","red", "orange", "yellow", "green", "gray"]}

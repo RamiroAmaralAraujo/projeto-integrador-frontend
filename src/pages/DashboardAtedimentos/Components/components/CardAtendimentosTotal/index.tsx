@@ -1,14 +1,25 @@
 import { useRead } from "@/hook/queries/useAtendimentos";
 import { MessageSquareText } from "lucide-react";
 
-export function CardAtendimentosTotal() {
+interface CardAtendimentosTotalProps {
+  startDate: string;
+  endDate: string;
+}
+
+export function CardAtendimentosTotal({ startDate, endDate }: CardAtendimentosTotalProps) {
   const { data: atendimentosData } = useRead();
 
   if (!atendimentosData) {
     return <div>Carregando...</div>;
   }
 
-  const somatorioAtendimentos = atendimentosData.length;
+  // Filtrando os atendimentos de acordo com as datas passadas como propriedades
+  const filteredAtendimentos = atendimentosData.filter((atendimento) => {
+    const dataCriacao = new Date(atendimento.createdAt);
+    return dataCriacao >= new Date(startDate) && dataCriacao <= new Date(endDate + "T23:59:59");
+  });
+
+  const somatorioAtendimentos = filteredAtendimentos.length;
 
   return (
     <>

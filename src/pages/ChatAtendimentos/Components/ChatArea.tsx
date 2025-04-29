@@ -190,9 +190,11 @@ export function ChatArea() {
                 </div>
               </div>
 
-              <div className="flex justify-end">
+              {atendimento.status !== 'FECHADO' && (
+                <div className="flex justify-end">
                 <ChatFinaliza />
               </div>
+              )}
             </>
           )}
         </div>
