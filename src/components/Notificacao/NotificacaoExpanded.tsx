@@ -1,7 +1,10 @@
-import { Bell, Check, X } from "lucide-react";
+import { Ticket, Check, MessageCircle, X } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { useRead as useReadNotificacao, useUpdate } from "@/hook/queries/useNotificacaoTicketStatus";
+import {
+  useRead as useReadNotificacao,
+  useUpdate,
+} from "@/hook/queries/useNotificacaoStatus";
 import { queryClient } from "@/service/reactQuery";
 import { useContext } from "react";
 import { AuthContext } from "@/Context/AuthContext";
@@ -13,15 +16,14 @@ export function NotificacaoExpanded() {
   const usuario = user?.sub;
 
   const { mutate } = useUpdate();
-
-   const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleMarkAsRead = (notificacaoId: string) => {
     mutate(
       { id: notificacaoId, isRead: true },
       {
         onSuccess: () => {
-          queryClient.invalidateQueries(["NOTIFICACAOTICKET"]);
+          queryClient.invalidateQueries(["NOTIFICACAO"]);
         },
       }
     );
@@ -31,7 +33,7 @@ export function NotificacaoExpanded() {
     notificacao.forEach((notificacao) => {
       if (!notificacao.isRead) handleMarkAsRead(notificacao.id);
     });
-    queryClient.invalidateQueries(["NOTIFICACAOTICKET"]);
+    queryClient.invalidateQueries(["NOTIFICACAO"]);
   };
 
   const handleMarkExcluida = (notificacaoId: string) => {
@@ -58,7 +60,9 @@ export function NotificacaoExpanded() {
   return (
     <div className="relative w-[400px] shadow-xl rounded-3xl mr-14 bg-white max-h-[400px] overflow-y-auto">
       <div className="sticky top-0 z-[9999] bg-gray-50 flex justify-between py-4 px-6 border-b border-gray-200">
-        <span className="font-bold text-brand-blue-500 flex items-center">Notificações</span>
+        <span className="font-bold text-brand-blue-500 flex items-center">
+          Notificações
+        </span>
         {novasNotificacoes.length > 0 && (
           <button
             onClick={handleMarkAllAsRead}
@@ -70,7 +74,10 @@ export function NotificacaoExpanded() {
       </div>
 
       {/* NOVAS NOTIFICAÇÕES */}
-      <div className="divide-y-2 divide-gray-200" onClick={() => navigate('/tickets')}>
+      <div
+        className="divide-y-2 divide-gray-200"
+        onClick={() => navigate("/tickets")}
+      >
         {novasNotificacoes.length > 0 ? (
           novasNotificacoes.map((notificacao) => (
             <div
@@ -78,18 +85,43 @@ export function NotificacaoExpanded() {
               className="flex gap-6 py-4 px-8 bg-white items-center cursor-pointer"
               onClick={() => notificacao.ticketId ?? null}
             >
-              <Bell
-                className={`w-8 h-8 ${notificacao.ticket?.status === "ABERTO" ? "text-red-500" : "text-brand-blue-500"}`}
-              />
+              {notificacao.atendimento?.status === "ABERTO" ? (
+                <MessageCircle
+                  className={`w-8 h-8 ${
+                    notificacao.atendimento.status === "ABERTO"
+                      ? "text-red-500"
+                      : "text-brand-blue-500"
+                  }`}
+                />
+              ) : (
+                <Ticket
+                  className={`w-8 h-8 ${
+                    notificacao.ticket?.status === "ABERTO"
+                      ? "text-red-500"
+                      : "text-brand-blue-500"
+                  }`}
+                />
+              )}
+
               <div className="flex-1 flex flex-col gap-2">
                 <p className="text-sm leading-relaxed text-brand-blue-500">
                   <span>
-                    {notificacao.ticket?.status === "ABERTO"
-                      ? "Ticket criado, Nº"
-                      : "Seu Ticket de Nº"}
+                    {notificacao.ticket
+                      ? notificacao.ticket.status === "ABERTO"
+                        ? "Ticket criado, Nº"
+                        : "Seu Ticket de Nº"
+                      : notificacao.atendimento?.status === "ABERTO"
+                        ? "Novo Chat, Nº"
+                        : "Atendimento atualizado, Nº"}
                   </span>
-                  <span className="font-bold"> #{notificacao.ticket?.numero}</span>
-                  {notificacao.ticket?.status !== "ABERTO" && " foi atualizado."}
+                  <span className="font-bold">
+                    #
+                    {notificacao.ticket?.numero ||
+                      notificacao.atendimento?.protocolo}
+                  </span>
+                  {notificacao.ticket?.status === "ANDAMENTO" &&
+                    !notificacao.atendimento &&
+                    " foi atualizado."}
                 </p>
                 <div className="text-xxs flex text-zinc-400 items-center gap-1">
                   <span>
@@ -124,7 +156,9 @@ export function NotificacaoExpanded() {
       {/* NOTIFICAÇÕES LIDAS */}
       {notificacoesLidas.length > 0 && (
         <div className="bg-gray-100">
-          <div className="text-xs font-bold text-zinc-500 uppercase px-6 pt-4 pb-2">Lidas</div>
+          <div className="text-xs font-bold text-zinc-500 uppercase px-6 pt-4 pb-2">
+            Lidas
+          </div>
           <div className="divide-y divide-gray-300">
             {notificacoesLidas.map((notificacao) => (
               <div
@@ -133,9 +167,24 @@ export function NotificacaoExpanded() {
               >
                 <div className="flex-1 flex flex-col gap-2">
                   <p className="text-sm leading-relaxed text-gray-500">
-                    <span>Seu Ticket de Nº</span>
-                    <span className="font-bold"> #{notificacao.ticket?.numero}</span>{" "}
-                    atualizado.
+                  <span>
+                    {notificacao.ticket
+                      ? notificacao.ticket.status === "ABERTO"
+                        ? "Ticket criado, Nº"
+                        : "Seu Ticket de Nº"
+                      : notificacao.atendimento?.status === "ABERTO"
+                        ? "Novo Chat, Nº"
+                        : "Atendimento atualizado, Nº"}
+                  </span>
+                    <span className="font-bold">
+                      
+                      #
+                      {notificacao.ticket?.numero ||
+                        notificacao.atendimento?.protocolo}
+                    </span>
+                    {notificacao.ticket?.status === "ANDAMENTO" &&
+                    !notificacao.atendimento &&
+                    " foi atualizado."}
                   </p>
                   <div className="text-xxs flex text-zinc-400 items-center gap-1">
                     <span>

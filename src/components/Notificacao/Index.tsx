@@ -2,7 +2,7 @@ import { Bell, BellDot } from "lucide-react";
 import { useState } from "react";
 import { NotificacaoExpanded } from "./NotificacaoExpanded";
 import { useQueryClient } from "react-query";
-import { useRead as useReadNotificacao } from "@/hook/queries/useNotificacaoTicketStatus";
+import { useRead as useReadNotificacao } from "@/hook/queries/useNotificacaoStatus";
 
 export function Notificacao() {
   const [mostrarDetalhes, setMostrarDetalhes] = useState(false);

@@ -1,8 +1,8 @@
 import { Input } from "@/components/ui/input";
 import SelectFilter from "@/components/ui/selectFilter";
-import { useAtendimentos } from "@/hook/queries/useAtendimentos";
+import { AtendimentosData, useAtendimentos } from "@/hook/queries/useAtendimentos";
 import { useChatStore } from "@/store/MensagemAtendimentoStore";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { FaTelegram, FaWhatsapp } from "react-icons/fa";
 
 export function ChatSidebar() {
@@ -32,17 +32,23 @@ export function ChatSidebar() {
     .filter(([_, isActive]) => isActive)
     .map(([status]) => status);
 
-  const atendimentosData = data?.filter((atendimento: any) => {
-    const statusMatch =
-      (allowedStatus.length === 0 || allowedStatus.includes(atendimento.status)) && atendimento.supHumano === true;
-
-    const searchMatch =
-      atendimento.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      atendimento.protocolo.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      atendimento.telefone.toLowerCase().includes(searchTerm.toLowerCase());
-
-    return statusMatch && searchMatch 
-  }).filter(atendimento => atendimento.supHumano)
+    const atendimentosData = useMemo(() => {
+      if (!data) return [];
+      return data
+        .filter((atendimento: AtendimentosData) => {
+          const statusMatch =
+            (allowedStatus.length === 0 || allowedStatus.includes(atendimento.status)) &&
+            atendimento.supHumano;
+    
+          const searchMatch =
+            atendimento.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            atendimento.protocolo.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            atendimento.telefone.toLowerCase().includes(searchTerm.toLowerCase());
+    
+          return statusMatch && searchMatch;
+        })
+        .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()); // <- ordenação decrescente por data
+    }, [data, allowedStatus, searchTerm]);
 
   const handleSelectAtendimento = (id: string) => {
     setAtendimentoId(id);

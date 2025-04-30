@@ -1,12 +1,14 @@
 import { Page } from "@/components/Page";
 import { ChatSidebar } from "./Components/ChatSidebar";
 import { ChatArea } from "./Components/ChatArea";
+import { Notificacao } from "@/components/Notificacao/Index";
 
 export function ChatAtendimentos() {
   return (
     <Page.Root>
       <Page.Header>
         <Page.Title title="Ominichannel Chat" />
+        <Notificacao />
       </Page.Header>
 
       <div className="w-full  h-[800px] flex justify-center items-center gap-4">
