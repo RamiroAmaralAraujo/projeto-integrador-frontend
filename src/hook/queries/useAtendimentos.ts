@@ -44,6 +44,7 @@ export function useRead() {
     queryFn: () => read(),
     onSuccess() {},
     onError() {},
+    refetchInterval: 5000
   });
 }
 

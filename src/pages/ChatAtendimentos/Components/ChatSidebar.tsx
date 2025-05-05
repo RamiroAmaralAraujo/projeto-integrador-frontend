@@ -15,6 +15,11 @@ export function ChatSidebar() {
 
   const [searchTerm, setSearchTerm] = useState("");
 
+  const hasAtendimentoNovo = useMemo(() => {
+    if (!data) return false;
+    return data.some((atendimento) => atendimento.status === "ABERTO" && atendimento.supHumano);
+  }, [data]);
+
   const [statusFilters, setStatusFilters] = useState({
     ABERTO: true,
     FECHADO: false,
@@ -73,6 +78,7 @@ export function ChatSidebar() {
             label="Novos"
             isSelected={statusFilters.ABERTO}
             onClick={() => toggleStatus("ABERTO")}
+            alert={hasAtendimentoNovo}
           />
         </div>
 

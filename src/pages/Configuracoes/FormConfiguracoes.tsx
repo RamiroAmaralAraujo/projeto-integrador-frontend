@@ -7,12 +7,16 @@ import { useReadUsuario } from "@/hook/queries/useUsuarios";
 import { api } from "@/service/api";
 import { toast } from "react-toastify";
 import { UploadFotoPerfil } from "@/components/UploadFotoPerfil/UploadFotoPerfil";
+import { Select } from "@/components/ui/select";
+import { useIBGELocalidades } from "@/hook/queries/useIBGElocalidades";
 
 export function FormConfiguracoes() {
   const { user } = useContext(AuthContext);
   const userId = user?.sub ?? "";
 
   const { data: userData, isLoading, refetch } = useReadUsuario(userId);
+
+  const { estados, cidades, fetchCidades } = useIBGELocalidades();
 
   const [isEditing, setIsEditing] = useState(false);
   const [username, setUsername] = useState("");
@@ -34,6 +38,7 @@ export function FormConfiguracoes() {
       setEstado(userData.estado || "");
       setCep(userData.cep || "");
       setFoto_url(userData.foto_url || "");
+
     }
   }, [userData]);
 
@@ -161,19 +166,27 @@ export function FormConfiguracoes() {
           </div>
           <div className="grid-cols-2 flex gap-2 mb-4">
             <div className="w-full">
-              <Input
-                label="Cidade"
-                value={cidade}
-                onChange={(e) => setCidade(e.target.value)}
+            <Select
+                text={userData?.cidade?.toString() || "Cidade"}
+                options={cidades}
+                onChange={(e) => {
+                  const selectedCidade = e.target.value;
+                  setCidade(selectedCidade); 
+                }}
+                
               />
             </div>
             <div className="w-full">
-              <Input
-                label="UF"
-                maxLength={2}
-                value={estado}
-                onChange={(e) => setEstado(e.target.value)}
-              />
+            <Select
+              text={userData?.estado?.toString() || "UF"}
+              options={estados}
+              
+              onChange={(e) => {
+                const selectedUf = e.target.value;
+                setEstado(selectedUf); 
+                fetchCidades(selectedUf);
+              }}
+            />
             </div>
             <div className="w-full">
               <Input

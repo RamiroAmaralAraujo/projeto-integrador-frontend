@@ -4,8 +4,9 @@ interface SelectableDivProps {
   label: string;
   isSelected: boolean;
   onClick: () => void;
-  widthClass?: string;  // padrão: w-28
+  widthClass?: string; // padrão: w-28
   heightClass?: string; // padrão: h-11
+  alert?: boolean;
 }
 
 const SelectFilter: React.FC<SelectableDivProps> = ({
@@ -14,6 +15,7 @@ const SelectFilter: React.FC<SelectableDivProps> = ({
   onClick,
   widthClass = "w-28",
   heightClass = "h-11",
+  alert,
 }) => {
   return (
     <div
@@ -25,6 +27,9 @@ const SelectFilter: React.FC<SelectableDivProps> = ({
       onClick={onClick}
     >
       <span>{label}</span>
+      {alert && (
+        <span className="ml-2 w-4 h-4 bg-red-500 rounded-full animate-pulse" />
+      )}
     </div>
   );
 };

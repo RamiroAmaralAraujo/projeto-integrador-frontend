@@ -5,9 +5,7 @@ import {
   Building,
   MapPinned,
   MapPin,
-  Building2,
   Home,
-  Flag,
 } from "lucide-react";
 import { TiBusinessCard } from "react-icons/ti";
 
@@ -24,6 +22,8 @@ import { AuthContext } from "@/Context/AuthContext";
 import { queryClient } from "@/service/reactQuery";
 import { UploadImage } from "@/components/UploadImage/UploadImage";
 import { RegistroEmpresas } from "@/components/RegistroEmpresas/RegistroEmpresas";
+import { useIBGELocalidades } from "@/hook/queries/useIBGElocalidades";
+import { Select } from "@/components/ui/select";
 
 const CreateEmpresasSchema = z.object({
   id: z.string().optional(),
@@ -45,6 +45,8 @@ export type UpdateEmpresasData = CreateEmpresasData;
 
 export function Form() {
   const { user } = useContext(AuthContext);
+
+  const { estados, cidades, fetchCidades } = useIBGELocalidades();
 
   const {
     handleSubmit,
@@ -105,7 +107,7 @@ export function Form() {
     } else {
       reset();
     }
-  }, [data, setValue, reset]);  
+  }, [data, setValue, reset]);
 
   const handleUploadLogoSuccess = (fileName: string) => {
     setValue("logo_url", fileName);
@@ -149,20 +151,25 @@ export function Form() {
           </div>
           <div className="grid-cols-2 flex gap-2">
             <div className="w-full">
-              <Input
-                icon={<Building2 size={20} />}
-                label="Cidade"
+              <Select
+                text={data?.cidade?.toString() || "Cidade"}
+                options={cidades}
                 {...register("cidade")}
                 error={errors.cidade}
               />
             </div>
 
-            <Input
-              icon={<Flag size={20} />}
-              label="UF"
-              maxLength={2}
+            <Select
+              text={data?.uf?.toString() || "UF"}
+              options={estados}
               {...register("uf")}
               error={errors.uf}
+              onChange={(e) => {
+                const selectedUf = e.target.value;
+                setValue("uf", selectedUf);
+                setValue("cidade", ""); // limpa cidade ao trocar UF
+                fetchCidades(selectedUf);
+              }}
             />
 
             <Input
