@@ -29,7 +29,7 @@ export default function AlertFinalizaChat(props: AlertFinalizaChatProps) {
 
   const { FinalizaChat, isOpen, actions } = useFinalizaChatStore();
 
-  console.log(FinalizaChat, "atendimentoid");
+  
 
   const handleCloseDialog = actions?.handleCloseDialog;
 
@@ -43,9 +43,14 @@ export default function AlertFinalizaChat(props: AlertFinalizaChatProps) {
 
         await onFinalizaChat(updatedAtendimento);
 
-        if (FinalizaChat.telefone) {
+        if (FinalizaChat.telefone && FinalizaChat.plataforma === "WHATSAPP") {
           await axios.post("http://localhost:4000/api/redirecionar-feedback", {
             telefone: FinalizaChat.telefone,
+          });
+          console.log("✅ Cliente redirecionado para o feedback no WhatsApp!");
+        } else if (FinalizaChat.telefone && FinalizaChat.plataforma === "TELEGRAM") {
+          await axios.post("http://localhost:4040/api/redirecionar-feedback", {
+            userId: FinalizaChat.telefone,
           });
           console.log("✅ Cliente redirecionado para o feedback no WhatsApp!");
         } else {
