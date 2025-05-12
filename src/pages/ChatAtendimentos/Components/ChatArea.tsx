@@ -167,6 +167,7 @@ export function ChatArea() {
 
   const status = atendimento?.status;
   const possuiFoto = atendimento?.fotoperfil !== null
+  const plataforma = atendimento?.plataforma;
 
   return (
     <div className="flex flex-col h-full p-6 bg-white rounded-3xl shadow-xl">
@@ -178,11 +179,21 @@ export function ChatArea() {
                 onClick={() => setMostrarDetalhes((prev) => !prev)}
                 className="flex justify-start items-center w-full cursor-pointer hover:opacity-80 transition"
               >
-                <img
-                  className="w-16 h-16 rounded-full"
-                  src={ possuiFoto ? `https://core-commerce.s3.sa-east-1.amazonaws.com/${atendimento.fotoperfil}` : IconeUsuario}
-                  alt=""
-                />
+                {plataforma === "WHATSAPP" ? (
+                  <img
+                    className="w-16 rounded-full object-cover"
+                    src={
+                      possuiFoto
+                        ? `https://core-commerce.s3.sa-east-1.amazonaws.com/${atendimento?.fotoperfil}`
+                        : IconeUsuario
+                    }
+                    alt="Foto do usuário"
+                  />
+                ) : plataforma === "TELEGRAM" ? (
+                  <div className="w-16 h-16 rounded-full bg-brand-blue-500 flex items-center justify-center text-white font-bold">
+                    <span className="font-light text-4xl">{atendimento?.nome.slice(0, 2).toUpperCase()}</span>
+                  </div>
+                ) : null}
                 <div className="ml-4">
                   <h2 className="text-2xl font-semibold">
                     {atendimento?.nome}

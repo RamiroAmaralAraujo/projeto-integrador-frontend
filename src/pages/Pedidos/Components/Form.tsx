@@ -42,6 +42,7 @@ export function FormPedidos() {
     register,
     setValue,
     reset,
+    watch,
     formState: { errors },
   } = useForm<CreatePedidosData>({
     defaultValues: {
@@ -62,10 +63,8 @@ export function FormPedidos() {
   }));
 
   const { useCreate, useUpdate } = usePedidos();
-  const { mutateAsync: createPedidos, isLoading: isLoadingCreatePedidos } =
-    useCreate();
-  const { mutateAsync: updatePedidos, isLoading: isLoadingUpdatePedidos } =
-    useUpdate();
+  const { mutateAsync: createPedidos, isLoading: isLoadingCreatePedidos } = useCreate();
+  const { mutateAsync: updatePedidos, isLoading: isLoadingUpdatePedidos } = useUpdate();
 
   const { useRead } = useProdutos();
   const { data: produtos } = useRead();
@@ -73,10 +72,7 @@ export function FormPedidos() {
   useEffect(() => {
     if (data) {
       setValue("observacao", data.observacao || "");
-      setValue(
-        "data",
-        data.data ? new Date(data.data).toISOString().split("T")[0] : ""
-      );
+      setValue("data", data.data ? new Date(data.data).toISOString().split("T")[0] : "");
       setValue("produtos", data.produtos || [{ produtoId: "", quantidade: 1 }]);
       settipo(data.tipo || TipoMovimentacao.SAIDA);
     } else {
@@ -99,9 +95,7 @@ export function FormPedidos() {
       return;
     }
 
-    dataDate.setTime(
-      dataDate.getTime() + dataDate.getTimezoneOffset() * 60 * 1000
-    );
+    dataDate.setTime(dataDate.getTime() + dataDate.getTimezoneOffset() * 60 * 1000);
     dataDate.setHours(0, 0, 0, 0);
 
     if (dataDate.getDate() !== parseInt(newPedidos.data.split("-")[2])) {
@@ -121,12 +115,11 @@ export function FormPedidos() {
       await createPedidos({ empresaId: empresaId, ...newPedidos });
     }
 
-    reset(); // Limpa os campos após a criação de um novo pedido
+    reset();
     handleCloseDialog();
   }
 
-  const isLoadingCreateOrUpdatePedidos =
-    isLoadingCreatePedidos || isLoadingUpdatePedidos;
+  const isLoadingCreateOrUpdatePedidos = isLoadingCreatePedidos || isLoadingUpdatePedidos;
 
   const selectOptions =
     produtos?.map((produto) => ({
@@ -134,39 +127,31 @@ export function FormPedidos() {
       label: produto.nome,
     })) || [];
 
+  const produtosForm = watch("produtos") || [];
+
+  const totalPedido = produtosForm.reduce((acc, item) => {
+    const produto = produtos?.find((p) => p.id === item.produtoId);
+    if (!produto) return acc;
+    return acc + produto.preco * item.quantidade;
+  }, 0);
+
   return (
     <Dialog.Root open={isOpen} onOpenChange={handleCloseDialog}>
       <Dialog.Content title="Cadastro Pedidos" icon={<ClipboardPlus />}>
         <FormRoot onSubmit={handleSubmit(submitPedidos)}>
           <div className="flex flex-col gap-4">
             <div className="flex gap-2 w-full mt-4 mb-4">
-              <Input
-                type="date"
-                label="Data*"
-                {...register("data")}
-                error={errors.data}
-              />
-              <ToggleTipoPedido
-                value={tipo}
-                onChange={(value: TipoMovimentacao) => settipo(value)}
-              />
-            </div>
-            <div className="w-full">
-              <Input
-                icon={<AlignLeft size={20} />}
-                type="text"
-                label="Observação"
-                {...register("observacao")}
-                error={errors.observacao}
-              />
+              <Input type="date" label="Data*" {...register("data")} error={errors.data} />
+              <ToggleTipoPedido value={tipo} onChange={(value: TipoMovimentacao) => settipo(value)} />
             </div>
 
-            {/* Lista de produtos adicionados */}
+            <Input icon={<AlignLeft size={20} />} type="text" label="Observação" {...register("observacao")} error={errors.observacao} />
+
             <div className="w-full">
               <h2 className="text-xl mb-4">Produtos Adicionados</h2>
               <div className="border rounded-2xl p-4 h-80 overflow-y-scroll overflow-x-hidden">
                 {fields.map((field, index) => (
-                  <div key={field.id} className="flex items-center gap-2 mb-2 ">
+                  <div key={field.id} className="flex items-center gap-2 mb-2">
                     <Controller
                       control={control}
                       name={`produtos.${index}.produtoId`}
@@ -180,6 +165,7 @@ export function FormPedidos() {
                         />
                       )}
                     />
+
                     <Controller
                       control={control}
                       name={`produtos.${index}.quantidade`}
@@ -194,19 +180,25 @@ export function FormPedidos() {
                       )}
                     />
 
-                    {/* Botão de remover com ícone */}
+                    <Input
+                      type="text"
+                      customSize="w-[150px]"
+                      label="Total"
+                      value={(() => {
+                        const produtoId = watch(`produtos.${index}.produtoId`);
+                        const quantidade = watch(`produtos.${index}.quantidade`) || 0;
+                        const produto = produtos?.find((p) => p.id === produtoId);
+                        return produto
+                          ? `R$ ${(produto.preco * quantidade).toFixed(2)}`
+                          : "R$ 0,00";
+                      })()}
+                      readOnly
+                    />
+
                     <button
                       type="button"
-                      onClick={() => {
-                        if (fields.length > 1) {
-                          remove(index);
-                        }
-                      }}
-                      className={`text-red-600 ${
-                        fields.length <= 1
-                          ? "opacity-50 cursor-not-allowed"
-                          : ""
-                      }`}
+                      onClick={() => fields.length > 1 && remove(index)}
+                      className={`text-red-600 ${fields.length <= 1 ? "opacity-50 cursor-not-allowed" : ""}`}
                       disabled={fields.length <= 1}
                     >
                       <div className="bg-gray-300 rounded-full hover:bg-gray-200 text-red-700 p-2">
@@ -219,18 +211,17 @@ export function FormPedidos() {
 
               <button
                 type="button"
-                onClick={() =>
-                  append({
-                    produtoId: "",
-                    quantidade: 1,
-                  })
-                }
+                onClick={() => append({ produtoId: "", quantidade: 1 })}
                 className="mt-4 text-blue-600"
               >
                 <div className="bg-gray-300 rounded-full hover:bg-gray-200 text-brand-blue-400 p-2">
                   <Plus size={20} />
                 </div>
               </button>
+            </div>
+
+            <div className="text-right mt-4 font-bold text-lg">
+              Total do Pedido: R$ {totalPedido.toFixed(2)}
             </div>
           </div>
 

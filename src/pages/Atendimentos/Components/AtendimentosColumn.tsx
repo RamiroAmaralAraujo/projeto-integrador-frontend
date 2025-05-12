@@ -77,7 +77,7 @@ export function TableAtendimentos() {
     },
     {
       accessorKey: "telefone",
-      header: "Telefone",
+      header: "Contato",
       cell: ({ row }) => {
         const telefone = row.getValue("telefone") as string;
         const protocolo = row.getValue("protocolo") as string;

@@ -74,7 +74,8 @@ export function UploadImage({ onUploadSuccess }: UploadImageProps) {
         const formData = new FormData();
         formData.append('file', file);
 
-        const response = await axios.post<{ fileName: string }>('https://core-commerce-api.onrender.com/upload', formData, {
+        const apiUrl = import.meta.env.VITE_API;
+        const response = await axios.post<{ fileName: string }>(`${apiUrl}upload`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },

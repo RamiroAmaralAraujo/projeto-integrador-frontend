@@ -256,8 +256,7 @@ export function FormDuplicatas() {
           <div className='grid-cols-2 flex  gap-2'>
             <div className='w-full'>
               <Input
-
-                defaultValue={data ? data.pessoaRef?.toString() ?? '' : ''}
+                value={data?.pessoaRef || ''}
                 icon={<UsersRound size={20} />}
                 label='Pessoa / Empresa*'
                 {...register('pessoaRef')}
@@ -266,8 +265,7 @@ export function FormDuplicatas() {
             </div>
             <div className='w-full'>
               <Input
-
-                defaultValue={data ? data.responsavel?.toString() ?? '' : ''}
+                value={data?.responsavel || ''}
                 icon={<UserRound size={20} />}
                 label='Nome do Responsável'
                 {...register('responsavel')}
@@ -278,8 +276,7 @@ export function FormDuplicatas() {
           <div className='grid-cols-2 flex  gap-2'>
             <div className='w-full'>
               <Input
-                defaultValue={data ? data.valorLiq?.toFixed(2) : ''}
-
+                value={data?.valorLiq?.toString() || '0'}
                 accept='number'
                 icon={<Wallet size={20} />}
                 label='Valor Liquido*'
@@ -293,7 +290,7 @@ export function FormDuplicatas() {
             <div className='w-full'>
               <Input
                 accept='number'
-                defaultValue={data ? data.desconto?.toFixed(2) : ''}
+                value={data?.desconto?.toString() || '0'}
                 icon={<BadgeDollarSign size={20} />}
                 label='Desconto R$*'
                 {...register("desconto", {
@@ -306,7 +303,7 @@ export function FormDuplicatas() {
             <div className='w-full'>
               <Input
                 accept='number'
-                defaultValue={data ? data.descontoPorcento?.toFixed(2) : ''}
+                value={data?.descontoPorcento?.toString() || '0'}
                 icon={<BadgePercent size={20} />}
                 label='Desconto %*'
                 {...register("descontoPorcento", {
@@ -323,7 +320,7 @@ export function FormDuplicatas() {
               <Input
                 readOnly={true}
                 accept='number'
-                value={data ? data.valorFinal?.toString() : (valorFinalAuto !== '0' ? valorFinalAuto : '')}
+                value={data?.valorFinal?.toString() || '0'}
                 icon={<DollarSign size={20} />}
                 label='Valor Final*'
                 {...register("valorFinal", {
@@ -335,7 +332,7 @@ export function FormDuplicatas() {
             <div className='w-full'>
               <Input
                 accept='number'
-                defaultValue={data ? data.acresc?.toFixed(2) : ''}
+                value={data?.acrescPorcento?.toString() || '0'}
                 icon={<BadgeDollarSign size={20} />}
                 label='Acrescimo R$*'
                 {...register("acrescPorcento", {
@@ -349,7 +346,7 @@ export function FormDuplicatas() {
             <div className='w-full'>
               <Input
                 accept='number'
-                defaultValue={data ? data.acresc?.toFixed(2) : ''}
+                value={data?.acresc?.toString() || '0'}
                 icon={<BadgePercent size={20} />}
                 label='Acrescimo %*'
                 {...register("acresc", {
@@ -364,7 +361,7 @@ export function FormDuplicatas() {
           <Input
 
             icon={<AlignLeft size={20} />}
-            defaultValue={data ? data.descricao?.toString() ?? '' : ''}
+            value={data?.descricao || ''}
             type='text'
             label='Descrição*'
             {...register('descricao')}

@@ -1,12 +1,6 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Store,
-  Building,
-  MapPinned,
-  MapPin,
-  Home,
-} from "lucide-react";
+import { Store, Building, MapPinned, MapPin, Home } from "lucide-react";
 import { TiBusinessCard } from "react-icons/ti";
 
 import { useEmpresasStore } from "@/store/Empresas/Index";
@@ -24,6 +18,7 @@ import { UploadImage } from "@/components/UploadImage/UploadImage";
 import { RegistroEmpresas } from "@/components/RegistroEmpresas/RegistroEmpresas";
 import { useIBGELocalidades } from "@/hook/queries/useIBGElocalidades";
 import { Select } from "@/components/ui/select";
+import { Controller } from "react-hook-form";
 
 const CreateEmpresasSchema = z.object({
   id: z.string().optional(),
@@ -53,6 +48,7 @@ export function Form() {
     register,
     reset,
     setValue,
+    control,
     formState: { errors },
   } = useForm<CreateEmpresasData>({
     resolver: zodResolver(CreateEmpresasSchema),
@@ -151,25 +147,36 @@ export function Form() {
           </div>
           <div className="grid-cols-2 flex gap-2">
             <div className="w-full">
-              <Select
-                text={data?.cidade?.toString() || "Cidade"}
-                options={cidades}
-                {...register("cidade")}
-                error={errors.cidade}
+              <Controller
+                control={control}
+                name="cidade"
+                render={({ field }) => (
+                  <Select
+                    text={field.value || "Cidade"}
+                    options={cidades}
+                    error={errors.cidade}
+                    onChange={(e) => field.onChange(e.target.value)}
+                  />
+                )}
               />
             </div>
 
-            <Select
-              text={data?.uf?.toString() || "UF"}
-              options={estados}
-              {...register("uf")}
-              error={errors.uf}
-              onChange={(e) => {
-                const selectedUf = e.target.value;
-                setValue("uf", selectedUf);
-                setValue("cidade", ""); // limpa cidade ao trocar UF
-                fetchCidades(selectedUf);
-              }}
+            <Controller
+              control={control}
+              name="uf"
+              render={({ field }) => (
+                <Select
+                  text={field.value || "UF"}
+                  options={estados}
+                  error={errors.uf}
+                  onChange={(e) => {
+                    const selectedUf = e.target.value;
+                    field.onChange(selectedUf);
+                    setValue("cidade", ""); // limpa cidade ao trocar UF
+                    fetchCidades(selectedUf);
+                  }}
+                />
+              )}
             />
 
             <Input

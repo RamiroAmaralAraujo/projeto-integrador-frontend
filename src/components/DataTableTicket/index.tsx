@@ -66,7 +66,7 @@ export function DataTableTicket<TData, TValue>({
     if (end) {
       end.setDate(end.getDate() + 1); // torna o filtro de data final inclusivo
     }
-
+  
     return data
       .filter((item: any) => {
         if (statusFiltro === "abertos") return item.status !== "FECHADO";
@@ -82,7 +82,8 @@ export function DataTableTicket<TData, TValue>({
       .filter((item: any) => {
         const itemDate = new Date(item.createdAt);
         return (!start || itemDate >= start) && (!end || itemDate < end);
-      });
+      })
+      .sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()); // ordena do mais novo para o mais velho
   }, [
     data,
     showMeusAtendimentos,
@@ -93,6 +94,7 @@ export function DataTableTicket<TData, TValue>({
     isMaster,
     statusFiltro,
   ]);
+  
 
   const table = useReactTable({
     getPaginationRowModel: getPaginationRowModel(),

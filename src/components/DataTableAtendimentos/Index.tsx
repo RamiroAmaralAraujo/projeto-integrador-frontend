@@ -78,19 +78,22 @@ export function DataTableAtendimentos<TData, TValue>({
     if (!isLoading) {
       setOldData(data);
 
-      // Aplica a filtragem por data
-      const filtered = data.filter((item: any) => {
-        const itemDate = new Date(item.createdAt); // Ajuste caso o formato de `data` seja diferente
-        const start = startDate ? new Date(startDate) : null;
-        const end = endDate ? new Date(endDate) : null;
+      const filtered = data
+        .filter((item: any) => {
+          const itemDate = new Date(item.createdAt);
+          const start = startDate ? new Date(startDate) : null;
+          const end = endDate ? new Date(endDate) : null;
 
-        // Adiciona 1 dia na data final apenas para comparação
-        if (end) {
-          end.setDate(end.getDate() + 1);
-        }
+          if (end) {
+            end.setDate(end.getDate() + 1);
+          }
 
-        return (!start || itemDate >= start) && (!end || itemDate < end); // Note que `end` agora é exclusivo
-      });
+          return (!start || itemDate >= start) && (!end || itemDate < end);
+        })
+        .sort(
+          (a: any, b: any) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        ); // do mais novo para o mais velho
 
       setFilteredData(filtered);
     }

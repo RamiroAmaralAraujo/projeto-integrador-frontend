@@ -85,6 +85,11 @@ export function ChatText() {
       createdAt: new Date().toISOString(),
     };
 
+    const payloadTelegram = {
+      mensagem,
+      userId: atendimento?.telefone,
+    }
+
     const payloadWpp = {
       mensagem,
       numero: atendimento?.telefone,
@@ -104,11 +109,21 @@ export function ChatText() {
         body: JSON.stringify(payload),
       });
 
-      await fetch("http://localhost:4000/api/send-message", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payloadWpp),
-      });
+      if(atendimento?.plataforma === 'WHATSAPP'){
+        await fetch("http://localhost:4000/api/send-message", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payloadWpp),
+        });
+      }
+
+      if(atendimento?.plataforma === 'TELEGRAM'){
+        await fetch("http://localhost:4040/api/send-message", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payloadTelegram),
+        });
+      }
 
       await fetch(`${apiUrl}atendimento/${atendimentoId}`, {
         method: "PATCH",
