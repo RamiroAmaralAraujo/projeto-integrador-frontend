@@ -1,414 +1,365 @@
-import { useForm } from 'react-hook-form'
-// import { zodResolver } from '@hookform/resolvers/zod'
-import { ClipboardPlus, UsersRound, UserRound, Wallet, BadgePercent, DollarSign, AlignLeft, BadgeDollarSign } from 'lucide-react';
-
-
-
-
-import { Dialog } from '@/components/Dialog'
-import { FormRoot } from '../../../components/FormRoot'
-import { Input } from '@/components/ui/input'
-
-
-import { z } from 'zod'
-import { SetStateAction, useContext, useEffect, useState } from 'react'
-import { AuthContext } from '@/Context/AuthContext'
-import { useDuplicatas } from '@/hook/queries/useDuplicatas'
-import { useDuplicatasStore } from '@/store/Duplicatas/Index'
-import { ToggleTipoDuplicata } from '@/components/ToggleTipoPagamento/ToggleTipoPagamento'
-import { UploadImage } from '@/components/UploadImage/UploadImage'
+import { useForm, Controller } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { ClipboardPlus, UsersRound, UserRound, Wallet, BadgeDollarSign, BadgePercent, DollarSign, AlignLeft } from 'lucide-react';
+import { Dialog } from '@/components/Dialog';
+import { FormRoot } from '../../../components/FormRoot';
+import { Input } from '@/components/ui/input';
+import { ToggleTipoDuplicata } from '@/components/ToggleTipoPagamento/ToggleTipoPagamento';
+import { UploadImage } from '@/components/UploadImage/UploadImage';
 import { RegistroDuplicatas } from '@/components/RegistroDuplicatas/RegistroDuplicatas';
-import { queryClient } from '@/service/reactQuery';
 import SignaturePad from '@/components/SignaturePad/SignaturePad';
-
-
-
+import { useContext, useEffect } from 'react';
+import { useDuplicatas } from '@/hook/queries/useDuplicatas';
+import { useDuplicatasStore } from '@/store/Duplicatas/Index';
+import { AuthContext } from '@/Context/AuthContext';
+import { queryClient } from '@/service/reactQuery';
+import { z } from 'zod';
 
 const CreateDuplicatasSchema = z.object({
   id: z.string().optional(),
   tipoPag: z.boolean(),
-  pessoaRef: z.string().nonempty('Não é possivel cria uma duplicata sem informar a pessoa referente.'),
-  vencimento: z.string(),
-  data_Pag_Receb: z.string().nullable(),
-  descricao: z.string(),
-  valorLiq: z.number(),
-  desconto: z.number(),
-  descontoPorcento: z.number(),
-  acresc: z.number(),
-  acrescPorcento: z.number(),
-  valorFinal: z.number(),
-  responsavel: z.string(),
-  comp_url: z.string(),
-  ass_url: z.string(),
-  documento: z.number(),
+  pessoaRef: z.string().nonempty('Informe a pessoa/empresa.'),
+  vencimento: z.string().nonempty('Vencimento obrigatório'),
+  data_Pag_Receb: z.string().nullable().optional(),
+  descricao: z.string().nonempty('Descrição obrigatória'),
+  valorLiq: z.number().min(0),
+  desconto: z.number().min(0),
+  descontoPorcento: z.number().min(0),
+  acresc: z.number().min(0),
+  acrescPorcento: z.number().min(0),
+  valorFinal: z.number().min(0),
+  responsavel: z.string().optional(),
+  comp_url: z.string().optional(),
+  ass_url: z.string().optional(),
   empresaId: z.string().optional(),
-})
+});
 
-export type CreateDuplicatasData = z.infer<typeof CreateDuplicatasSchema>
-export type UpdateDuplicatasData = CreateDuplicatasData
-
-
-
+type CreateDuplicatasData = z.infer<typeof CreateDuplicatasSchema>;
 
 export function FormDuplicatas() {
+  const { empresaSelecionada } = useContext(AuthContext);
+  const { data, handleCloseDialog, isOpen } = useDuplicatasStore(state => ({
+    data: state.duplicatas,
+    handleCloseDialog: state.actions.handleCloseDialog,
+    isOpen: state.isOpen
+  }));
+  const { useCreate, useUpdate } = useDuplicatas();
+  const { mutateAsync: createDuplicatas, isLoading: loadingCreate } = useCreate();
+  const { mutateAsync: updateDuplicatas, isLoading: loadingUpdate } = useUpdate();
 
-  const [valorLiquido, setValorLiquido] = useState('0');
-  const [desconto, setDesconto] = useState('0');
-  const [acrescimo, setAcrescimo] = useState('0');
-  const [valorFinalAuto, setValorFinalAuto] = useState('0');
-  const [descontoPorcento, setDescontoPorcento] = useState('0')
-  const [acrescimoPorcento, setAcrescimoPorcento] = useState('0')
-
-  const [tipoPag, setTipoPag] = useState<boolean>(false)
-
-  const { empresaSelecionada } = useContext(AuthContext)
   const {
+    control,
     handleSubmit,
-    register,
     reset,
+    watch,
     setValue,
-    formState: { errors },
+    formState: { errors }
   } = useForm<CreateDuplicatasData>({
-    // resolver: zodResolver(CreateDuplicatasSchema),
-  })
-
-  const { data, handleCloseDialog, isOpen } = useDuplicatasStore((state) => {
-    return {
-      data: state.duplicatas,
-      handleCloseDialog: state.actions.handleCloseDialog,
-      isOpen: state.isOpen,
+    resolver: zodResolver(CreateDuplicatasSchema),
+    defaultValues: {
+      id: undefined,
+      tipoPag: false,
+      pessoaRef: '',
+      responsavel: '',
+      vencimento: '',
+      data_Pag_Receb: null,
+      descricao: '',
+      valorLiq: 0,
+      desconto: 0,
+      descontoPorcento: 0,
+      acresc: 0,
+      acrescPorcento: 0,
+      valorFinal: 0,
+      comp_url: '',
+      ass_url: '',
+      empresaId: empresaSelecionada?.id
     }
-  })
-  const { useCreate, useUpdate } = useDuplicatas()
-  const { mutateAsync: createDuplicatas, isLoading: isLoadingCreateDuplicatas } = useCreate()
-  const { mutateAsync: updateDuplicatas, isLoading: isLoadingUpdateDuplicatas } = useUpdate()
+  });
 
-  const handleChangeValorLiquido = (e: { target: { value: SetStateAction<string> } }) => {
-    setValorLiquido(e.target.value);
-    calcularValorFinal();
+  // Reação aos dados de edição
+  useEffect(() => {
+    if (data) {
+      const defaultVenc = data.vencimento ? new Date(data.vencimento).toISOString().split('T')[0] : '';
+      const defaultPag = data.data_Pag_Receb ? new Date(data.data_Pag_Receb).toISOString().split('T')[0] : '';
+      reset({
+        id: data.id,
+        tipoPag: data.tipoPag,
+        pessoaRef: data.pessoaRef,
+        responsavel: data.responsavel || '',
+        vencimento: defaultVenc,
+        data_Pag_Receb: defaultPag || undefined,
+        descricao: data.descricao,
+        valorLiq: Number(data.valorLiq),
+        desconto: Number(data.desconto),
+        descontoPorcento: Number(data.descontoPorcento),
+        acresc: Number(data.acresc),
+        acrescPorcento: Number(data.acrescPorcento),
+        valorFinal: Number(data.valorFinal),
+        comp_url: data.comp_url || undefined,
+        ass_url: data.ass_url || undefined,
+        empresaId: data.empresaId || empresaSelecionada?.id
+      });
+    } else if (!isOpen) {
+      reset();
+    }
+  }, [data, isOpen, reset]);
+
+  // Cálculo inline do valor final
+  const handleRecalculate = (liquido: number, desc: number, descPorc: number, acre: number, acrePorc: number) => {
+    const valor = liquido - desc + acre - (descPorc / 100) * liquido + (acrePorc / 100) * liquido;
+    setValue('valorFinal', parseFloat(valor.toFixed(2)), { shouldDirty: true });
   };
 
-  const handleChangeDesconto = (e: { target: { value: SetStateAction<string> } }) => {
-    setDesconto(e.target.value);
-    calcularValorFinal();
-  };
+  const liquido = watch('valorLiq');
+  const desc = watch('desconto');
+  const descPorc = watch('descontoPorcento');
+  const acre = watch('acresc');
+  const acrePorc = watch('acrescPorcento');
 
-  const handleChangeDescontoPorcento = (e: { target: { value: SetStateAction<string> } }) => {
-    setDescontoPorcento(e.target.value);
-    calcularValorFinal();
-  };
+  useEffect(() => {
+    handleRecalculate(liquido, desc, descPorc, acre, acrePorc);
+  }, [liquido, desc, descPorc, acre, acrePorc]);
 
-  const handleChangeAcrescimo = (e: { target: { value: SetStateAction<string> } }) => {
-    setAcrescimo(e.target.value);
-    calcularValorFinal();
-  };
-
-  const handleChangeAcrescimoPorcento = (e: { target: { value: SetStateAction<string> } }) => {
-    setAcrescimoPorcento(e.target.value);
-    calcularValorFinal();
-  };
-
-  const calcularValorFinal = () => {
-    const liquido = parseFloat(valorLiquido) || 0;
-    const desc = parseFloat(desconto) || 0;
-    const acre = parseFloat(acrescimo) || 0;
-    const descPorcento = parseFloat(descontoPorcento) || 0
-    const acrePorcento = parseFloat(acrescimoPorcento) || 0
-    const valorFinal = (liquido - desc + acre - ((descPorcento / 100) * liquido) + ((acrePorcento / 100) * liquido));
-    setValorFinalAuto(valorFinal.toFixed(2).toString());
-  };
-
-
-
-
-
+  // Conversão de datas para ISO
   function parseDate(dateString: string): Date | null {
     const date = new Date(dateString);
-    // Verifica se a data é válida
     return isNaN(date.getTime()) ? null : date;
   }
 
-  async function submitDuplicatas(newDuplicatas: CreateDuplicatasData) {
-    const vencimentoDate = parseDate(newDuplicatas.vencimento);
-    if (!vencimentoDate) {
-      console.error("Data de vencimento inválida!");
-      return;
+  async function submitDuplicatas(formData: CreateDuplicatasData) {
+    // Ajuste de datas (mesma lógica antiga)
+    const vencDate = parseDate(formData.vencimento);
+    if (vencDate) {
+      vencDate.setTime(vencDate.getTime() + vencDate.getTimezoneOffset() * 60000);
+      vencDate.setHours(0,0,0,0);
+      if (vencDate.getDate() !== parseInt(formData.vencimento.split('-')[2])) {
+        vencDate.setDate(parseInt(formData.vencimento.split('-')[2]));
+      }
+      formData.vencimento = vencDate.toISOString();
     }
-
-    // Define o fuso horário para 'America/Sao_Paulo'
-    vencimentoDate.setTime(vencimentoDate.getTime() + vencimentoDate.getTimezoneOffset() * 60 * 1000);
-    // Define a hora para 03:00:00
-    vencimentoDate.setHours(0, 0, 0, 0);
-
-    // Verifica se o dia foi definido corretamente
-    if (vencimentoDate.getDate() !== parseInt(newDuplicatas.vencimento.split('-')[2])) {
-      // Se não for o dia correto, ajusta para o dia correto
-      vencimentoDate.setDate(parseInt(newDuplicatas.vencimento.split('-')[2]));
-    }
-
-    newDuplicatas.vencimento = vencimentoDate.toISOString();
-
-    // O mesmo para a data de Pagamento/Recebimento
-    if (newDuplicatas.data_Pag_Receb !== null) {
-      const dataPagRecebDate = parseDate(newDuplicatas.data_Pag_Receb)
-      if (dataPagRecebDate) {
-        dataPagRecebDate.setTime(dataPagRecebDate.getTime() + dataPagRecebDate.getTimezoneOffset() * 60 * 1000);
-        dataPagRecebDate.setHours(0, 0, 0, 0);
-
-        // Verifica e ajusta o dia, se necessário
-        if (dataPagRecebDate.getDate() !== parseInt(newDuplicatas.data_Pag_Receb.split('-')[2])) {
-          dataPagRecebDate.setDate(parseInt(newDuplicatas.data_Pag_Receb.split('-')[2]));
+    if (formData.data_Pag_Receb) {
+      const pagDate = parseDate(formData.data_Pag_Receb as string);
+      if (pagDate) {
+        pagDate.setTime(pagDate.getTime() + pagDate.getTimezoneOffset() * 60000);
+        pagDate.setHours(0,0,0,0);
+        if (pagDate.getDate() !== parseInt((formData.data_Pag_Receb as string).split('-')[2])) {
+          pagDate.setDate(parseInt((formData.data_Pag_Receb as string).split('-')[2]));
         }
-
-        newDuplicatas.data_Pag_Receb = dataPagRecebDate.toISOString();
+        formData.data_Pag_Receb = pagDate.toISOString();
       } else {
-        newDuplicatas.data_Pag_Receb = null;
+        formData.data_Pag_Receb = null;
       }
     }
 
-    newDuplicatas.tipoPag = tipoPag ? true : false;
-
-    const duplicatasId = data?.id;
-    const empresaId = empresaSelecionada?.id;
-
-    calcularValorFinal();
-
-    newDuplicatas.valorFinal = parseFloat(valorFinalAuto);
-    newDuplicatas.valorLiq = parseFloat(valorLiquido);
-    newDuplicatas.desconto = parseFloat(desconto);
-    newDuplicatas.descontoPorcento = parseFloat(descontoPorcento);
-    newDuplicatas.acresc = parseFloat(acrescimo);
-    newDuplicatas.acrescPorcento = parseFloat(acrescimoPorcento);
-
-    if (duplicatasId) {
-      await updateDuplicatas({ id: duplicatasId, ...newDuplicatas });
-      queryClient.invalidateQueries({ queryKey: ['DUPLICATAS'] })
+    formData.empresaId = empresaSelecionada?.id;
+    if (formData.id) {
+      await updateDuplicatas(formData);
+      queryClient.invalidateQueries(['DUPLICATAS']);
     } else {
-      await createDuplicatas({ empresaId: empresaId, ...newDuplicatas });
+      await createDuplicatas(formData);
     }
     handleCloseDialog();
   }
 
-
-
-  const isLoadingCreateOrUpdateDuplicatas =
-    isLoadingCreateDuplicatas || isLoadingUpdateDuplicatas
-
-  useEffect(() => {
-    if (!isOpen) {
-      reset();
-      setValorFinalAuto('');
-    }
-  }, [isOpen, reset]);
-
-  useEffect(() => {
-    if (data) {
-      setValorLiquido(data.valorLiq.toString());
-      setDesconto(data.desconto.toString());
-      setAcrescimo(data.acresc.toString());
-      setDescontoPorcento(data.descontoPorcento.toString());
-      setAcrescimoPorcento(data.acrescPorcento.toString());
-      calcularValorFinal();
-    } else {
-      setValorLiquido('0');
-      setDesconto('0');
-      setAcrescimo('0');
-      setDescontoPorcento('0');
-      setAcrescimoPorcento('0');
-      setValorFinalAuto('0');
-    }
-  }, [data]);
-
-  useEffect(() => {
-    calcularValorFinal();
-  }, [valorLiquido, desconto, acrescimo, valorFinalAuto, descontoPorcento, acrescimoPorcento]);
-
-
-  useEffect(() => {
-    if (data) {
-      setTipoPag(data.tipoPag);
-    } else {
-      setTipoPag(false);
-    }
-  }, [data]);
-
-
-
-
-  const handleUploadSuccess = (fileName: string) => {
-    setValue('comp_url', fileName);
-  };
-
-  const handleUploadAssinaturaSuccess = (fileName: string) => {
-    setValue('ass_url', fileName);
-  };
-
-  const defaultVencimento = data && data.vencimento ? new Date(data.vencimento).toISOString().split('T')[0] : '';
-  const defaultPagamento = data && data.data_Pag_Receb ? new Date(data.data_Pag_Receb).toISOString().split('T')[0] : '';
-
-
-
   return (
     <Dialog.Root open={isOpen} onOpenChange={handleCloseDialog}>
-      <Dialog.Content title='Cadastro Duplicatas' icon={<ClipboardPlus />}>
+      <Dialog.Content title="Cadastro Duplicatas" icon={<ClipboardPlus />}>
         <FormRoot onSubmit={handleSubmit(submitDuplicatas)}>
-
-          <div className='grid-cols-2 flex  gap-2'>
-            <div className='w-full'>
-              <Input
-                value={data?.pessoaRef || ''}
-                icon={<UsersRound size={20} />}
-                label='Pessoa / Empresa*'
-                {...register('pessoaRef')}
-                error={errors.pessoaRef}
-              />
-            </div>
-            <div className='w-full'>
-              <Input
-                value={data?.responsavel || ''}
-                icon={<UserRound size={20} />}
-                label='Nome do Responsável'
-                {...register('responsavel')}
-                error={errors.responsavel}
-              />
-            </div>
+          <div className="grid grid-cols-2 gap-2">
+            <Controller
+              control={control}
+              name="pessoaRef"
+              render={({ field }) => (
+                <Input
+                  icon={<UsersRound size={20} />}
+                  label="Pessoa / Empresa*"
+                  value={field.value}
+                  onChange={field.onChange}
+                  error={errors.pessoaRef}
+                />
+              )}
+            />
+            <Controller
+              control={control}
+              name="responsavel"
+              render={({ field }) => (
+                <Input
+                  icon={<UserRound size={20} />}
+                  label="Responsável"
+                  value={field.value}
+                  onChange={field.onChange}
+                  error={errors.responsavel}
+                />
+              )}
+            />
           </div>
-          <div className='grid-cols-2 flex  gap-2'>
-            <div className='w-full'>
-              <Input
-                value={data?.valorLiq?.toString() || '0'}
-                accept='number'
-                icon={<Wallet size={20} />}
-                label='Valor Liquido*'
-                {...register("valorLiq", {
-                  valueAsNumber: true,
-                })}
-                onChange={handleChangeValorLiquido}
-                error={errors.valorLiq}
-              />
-            </div>
-            <div className='w-full'>
-              <Input
-                accept='number'
-                value={data?.desconto?.toString() || '0'}
-                icon={<BadgeDollarSign size={20} />}
-                label='Desconto R$*'
-                {...register("desconto", {
-                  valueAsNumber: true,
-                })}
-                onChange={handleChangeDesconto}
-                error={errors.desconto}
-              />
-            </div>
-            <div className='w-full'>
-              <Input
-                accept='number'
-                value={data?.descontoPorcento?.toString() || '0'}
-                icon={<BadgePercent size={20} />}
-                label='Desconto %*'
-                {...register("descontoPorcento", {
-                  valueAsNumber: true,
-                })}
-                onChange={handleChangeDescontoPorcento}
-                error={errors.descontoPorcento}
-              />
-            </div>
 
+          <div className="grid grid-cols-3 gap-2">
+            <Controller
+              control={control}
+              name="valorLiq"
+              render={({ field }) => (
+                <Input
+                  accept="number"
+                  icon={<Wallet size={20} />}
+                  label="Valor Líquido*"
+                  value={field.value.toString()}
+                  onChange={e => {
+                    const v = parseFloat(e.target.value) || 0;
+                    field.onChange(v);
+                  }}
+                  error={errors.valorLiq}
+                />
+              )}
+            />
+            <Controller
+              control={control}
+              name="desconto"
+              render={({ field }) => (
+                <Input
+                  accept="number"
+                  icon={<BadgeDollarSign size={20} />}
+                  label="Desconto R$*"
+                  value={field.value.toString()}
+                  onChange={e => {
+                    const v = parseFloat(e.target.value) || 0;
+                    field.onChange(v);
+                  }}
+                  error={errors.desconto}
+                />
+              )}
+            />
+            <Controller
+              control={control}
+              name="descontoPorcento"
+              render={({ field }) => (
+                <Input
+                  accept="number"
+                  icon={<BadgePercent size={20} />}
+                  label="Desconto %*"
+                  value={field.value.toString()}
+                  onChange={e => {
+                    const v = parseFloat(e.target.value) || 0;
+                    field.onChange(v);
+                  }}
+                  error={errors.descontoPorcento}
+                />
+              )}
+            />
           </div>
-          <div className='grid-cols-2 flex  gap-2'>
-            <div className='w-full'>
-              <Input
-                readOnly={true}
-                accept='number'
-                value={data?.valorFinal?.toString() || '0'}
-                icon={<DollarSign size={20} />}
-                label='Valor Final*'
-                {...register("valorFinal", {
-                  valueAsNumber: true,
-                })}
-                error={errors.valorFinal}
-              />
-            </div>
-            <div className='w-full'>
-              <Input
-                accept='number'
-                value={data?.acrescPorcento?.toString() || '0'}
-                icon={<BadgeDollarSign size={20} />}
-                label='Acrescimo R$*'
-                {...register("acrescPorcento", {
-                  valueAsNumber: true,
-                })}
-                onChange={handleChangeAcrescimo}
-                error={errors.acresc}
-              />
-            </div>
 
-            <div className='w-full'>
-              <Input
-                accept='number'
-                value={data?.acresc?.toString() || '0'}
-                icon={<BadgePercent size={20} />}
-                label='Acrescimo %*'
-                {...register("acresc", {
-                  valueAsNumber: true,
-                })}
-                onChange={handleChangeAcrescimoPorcento}
-                error={errors.acrescPorcento}
-              />
-            </div>
-
+          <div className="grid grid-cols-3 gap-2">
+            <Controller
+              control={control}
+              name="valorFinal"
+              render={({ field }) => (
+                <Input
+                  icon={<DollarSign size={20} />}
+                  label="Valor Final*"
+                  value={field.value.toString()}
+                  readOnly
+                  error={errors.valorFinal}
+                />
+              )}
+            />
+            <Controller
+              control={control}
+              name="acresc"
+              render={({ field }) => (
+                <Input
+                  accept="number"
+                  icon={<BadgeDollarSign size={20} />}
+                  label="Acréscimo R$*"
+                  value={field.value.toString()}
+                  onChange={e => {
+                    const v = parseFloat(e.target.value) || 0;
+                    field.onChange(v);
+                  }}
+                  error={errors.acresc}
+                />
+              )}
+            />
+            <Controller
+              control={control}
+              name="acrescPorcento"
+              render={({ field }) => (
+                <Input
+                  accept="number"
+                  icon={<BadgePercent size={20} />}
+                  label="Acréscimo %*"
+                  value={field.value.toString()}
+                  onChange={e => {
+                    const v = parseFloat(e.target.value) || 0;
+                    field.onChange(v);
+                  }}
+                  error={errors.acrescPorcento}
+                />
+              )}
+            />
           </div>
-          <Input
 
-            icon={<AlignLeft size={20} />}
-            value={data?.descricao || ''}
-            type='text'
-            label='Descrição*'
-            {...register('descricao')}
-            error={errors.descricao}
+          <Controller
+            control={control}
+            name="descricao"
+            render={({ field }) => (
+              <Input
+                icon={<AlignLeft size={20} />}
+                label="Descrição*"
+                value={field.value}
+                onChange={field.onChange}
+                error={errors.descricao}
+              />
+            )}
           />
-          <div className='grid-cols-3 flex  gap-2'>
-            <Input
 
-              type='date'
-              defaultValue={defaultVencimento}
-              label='Vencimento*'
-              {...register('vencimento')}
-              error={errors.vencimento}
+          <div className="grid grid-cols-3 gap-2">
+            <Controller
+              control={control}
+              name="vencimento"
+              render={({ field }) => (
+                <Input
+                  type="date"
+                  label="Vencimento*"
+                  value={field.value}
+                  onChange={field.onChange}
+                  error={errors.vencimento}
+                />
+              )}
             />
-            <Input
-
-              defaultValue={defaultPagamento}
-              type='date'
-              label='Data Pagamento/Recebimento'
-              {...register('data_Pag_Receb')}
-              error={errors.data_Pag_Receb}
+            <Controller
+              control={control}
+              name="data_Pag_Receb"
+              render={({ field }) => (
+                <Input
+                  type="date"
+                  label="Data Pagamento/Recebimento"
+                  value={field.value || ''}
+                  onChange={field.onChange}
+                  error={errors.data_Pag_Receb}
+                />
+              )}
             />
-            <div className='w-full justify-center flex'>
-              <ToggleTipoDuplicata
-                value={tipoPag}
-                onChange={(value) => setTipoPag(value)}
-              />
-            </div>
-
-
+            <Controller
+              control={control}
+              name="tipoPag"
+              render={({ field }) => (
+                <ToggleTipoDuplicata
+                  value={field.value}
+                  onChange={field.onChange}
+                />
+              )}
+            />
           </div>
 
-
-
-          <div className='flex gap-2'>
-            <div className='w-full h-full flex gap-2'>
-              <UploadImage onUploadSuccess={handleUploadSuccess} />
-              <SignaturePad onUploadSuccess={handleUploadAssinaturaSuccess} />
-              <div className='h-76'>
-                <RegistroDuplicatas />
-              </div>
-            </div>
+          <div className="flex gap-2">
+            <UploadImage onUploadSuccess={file => setValue('comp_url', file)} />
+            <SignaturePad onUploadSuccess={file => setValue('ass_url', file)} />
+            <RegistroDuplicatas />
           </div>
-          <Dialog.Actions isLoading={isLoadingCreateOrUpdateDuplicatas} />
+
+          <Dialog.Actions isLoading={loadingCreate || loadingUpdate} />
         </FormRoot>
       </Dialog.Content>
     </Dialog.Root>
-  )
+  );
 }
-
