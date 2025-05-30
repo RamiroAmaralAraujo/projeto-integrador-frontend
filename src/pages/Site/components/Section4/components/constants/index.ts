@@ -11,16 +11,16 @@ import {
 export const ServiceData = [
   {
     icon: RxCrop,
-    logo: "https://core-commerce.s3.sa-east-1.amazonaws.com/MarlitaLogo.png",
+    logo: "https://core-commerce.s3.sa-east-1.amazonaws.com/Marlita.jpg",
     title: "Marlita Plantas e Cafés",
     content: "Experiência incrível com a Core Commerce! Sistema PDV excelente, suporte excepcional. Recomendo totalmente!",
-    backgroundImage: "https://core-commerce.s3.sa-east-1.amazonaws.com/MarlitaFoto.png",
+    backgroundImage: "https://core-commerce.s3.sa-east-1.amazonaws.com/Marlita2.jpg",
     link: 'https://www.instagram.com/marlita.plantasecafes/',
   },
   {
     icon: RxPencil2,
     title: "Zello Corretora de Seguros",
-    logo: "https://core-commerce.s3.sa-east-1.amazonaws.com/zello.png",
+    logo: "https://core-commerce.s3.sa-east-1.amazonaws.com/zello.jpg",
     content: "Agradecemos ao CoreCommerce por revolucionar nosso sistema gerencial e impulsionar nosso crescimento!",
     backgroundImage: "https://lh3.googleusercontent.com/p/AF1QipP94Lz702cFA7yujg2XjPFJE_jsocqFCIQbX_UP=s680-w680-h510",
     link: 'https://www.instagram.com/zellocorretora/',
@@ -46,7 +46,7 @@ export const ServiceData = [
     title: "Panela Quente Restaurante",
     logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXcfHMA877QdVKpTBdgbnef130_uj7N3aJgg&s",
     content: "Nosso sucesso é fruto da parceria com o CoreCommerce. Agradecemos imensamente pelo suporte e inovação.",
-    backgroundImage: 'https://10619-2.s.cdn12.com/rests/original/104_535924751.jpg',
+    backgroundImage: 'https://moveisdeubaeregiao.com.br/wp-content/uploads/classified-listing/2024/09/2022-07-11.jpg',
     link: 'https://www.instagram.com/panelaquente.uba/',
   },
   {
