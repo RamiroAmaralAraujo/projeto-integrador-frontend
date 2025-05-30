@@ -24,6 +24,7 @@
     "date-fns": "^3.6.0",
     "date-fns-tz": "^3.2.0",
     "flowbite": "^2.3.0",
+    "framer-motion": "^12.15.0",
     "jwt-decode": "^4.0.0",
     "localforage": "^1.10.0",
     "lucide-react": "^0.341.0",
