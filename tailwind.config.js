@@ -1,16 +1,17 @@
-import colors from 'tailwindcss/colors';
+import colors from 'tailwindcss/colors'
 
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-    "./node_modules/@tremor/**/*.{js,ts,jsx,tsx}",
+    './index.html',
+    './src/**/*.{js,ts,jsx,tsx}',
+    './node_modules/@tremor/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
     transparent: 'transparent',
     current: 'currentColor',
     extend: {
+      // === CoreCommerce ===
       container: {
         center: true,
         padding: '2rem',
@@ -32,17 +33,16 @@ export default {
           '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
       },
       colors: {
-        base: {
-          background: '#08264c'
-        },
+        // === CoreCommerce ===
+        base: { background: '#08264c' },
         brand: {
           blue: {
-            100: "#E3EFFF",
-            200: "#A3C0E6",
-            300: "#5B81B3",
-            400: "#284E80",
-            500: "#08264D",
-          }
+            100: '#E3EFFF',
+            200: '#A3C0E6',
+            300: '#5B81B3',
+            400: '#284E80',
+            500: '#08264D',
+          },
         },
         grey: {
           100: '#E1E1E6',
@@ -62,10 +62,49 @@ export default {
         primary: {
           DEFAULT: 'hsl(var(--primary))',
           foreground: 'hsl(var(--primary-foreground))',
+          ...{
+            50: '#E3EFFF',
+            100: '#C8DCFA',
+            200: '#A3C0E6',
+            300: '#7CA2D1',
+            400: '#5F8BBF',
+            500: '#5B81B3',
+            600: '#446A9A',
+            700: '#355785',
+            800: '#284E80',
+            900: '#173864',
+            950: '#08264D',
+          },
         },
         secondary: {
           DEFAULT: 'hsl(var(--secondary))',
           foreground: 'hsl(var(--secondary-foreground))',
+          50: '#F0FDFA',
+          100: '#CCFBF1',
+          200: '#99F6E4',
+          300: '#5EEAD4',
+          400: '#2DD4BF',
+          500: '#14B8A6',
+          600: '#0D9488',
+          700: '#0F766E',
+          800: '#115E59',
+          900: '#134E4A',
+          950: '#042F2E',
+        },
+        accent: {
+          DEFAULT: 'hsl(var(--accent))',
+          foreground: 'hsl(var(--accent-foreground))',
+          50: '#FFF7ED',
+          100: '#FFEDD5',
+          200: '#FED7AA',
+          300: '#FDBA74',
+          400: '#FB923C',
+          500: '#F97316',
+          600: '#EA580C',
+          700: '#C2410C',
+          800: '#9A3412',
+          900: '#7C2D12',
+          950: '#431407',
         },
         destructive: {
           DEFAULT: 'hsl(var(--destructive))',
@@ -74,10 +113,6 @@ export default {
         muted: {
           DEFAULT: 'hsl(var(--muted))',
           foreground: 'hsl(var(--muted-foreground))',
-        },
-        accent: {
-          DEFAULT: 'hsl(var(--accent))',
-          foreground: 'hsl(var(--accent-foreground))',
         },
         popover: {
           DEFAULT: 'hsl(var(--popover))',
@@ -102,12 +137,8 @@ export default {
             DEFAULT: colors.white,
             emphasis: colors.gray[700],
           },
-          border: {
-            DEFAULT: colors.gray[200],
-          },
-          ring: {
-            DEFAULT: colors.gray[200],
-          },
+          border: { DEFAULT: colors.gray[200] },
+          ring: { DEFAULT: colors.gray[200] },
           content: {
             subtle: colors.gray[400],
             DEFAULT: colors.gray[500],
@@ -117,12 +148,31 @@ export default {
           },
         },
 
+        // === Home ===
+        success: {
+          50: '#F0FDF4',
+          500: '#22C55E',
+          700: '#15803D',
+        },
+        warning: {
+          50: '#FFFBEB',
+          500: '#EAB308',
+          700: '#A16207',
+        },
+        error: {
+          50: '#FEF2F2',
+          500: '#EF4444',
+          700: '#B91C1C',
+        },
       },
+
       fontFamily: {
         roboto: ['Roboto'],
         baloo: ['Baloo 2'],
         mavenPro: ['Maven-Pro', 'sans-serif'],
+        sans: ['Inter', 'sans-serif'], // Home
       },
+
       borderRadius: {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
@@ -131,12 +181,18 @@ export default {
         'tremor-default': '0.5rem',
         'tremor-full': '9999px',
       },
+
       fontSize: {
         'tremor-label': ['0.75rem', { lineHeight: '1rem' }],
         'tremor-default': ['0.875rem', { lineHeight: '1.25rem' }],
         'tremor-title': ['1.125rem', { lineHeight: '1.75rem' }],
         'tremor-metric': ['1.875rem', { lineHeight: '2.25rem' }],
       },
+
+      spacing: {
+        '128': '32rem', // Home
+      },
+
       keyframes: {
         'accordion-down': {
           from: { height: '0' },
@@ -146,10 +202,21 @@ export default {
           from: { height: 'var(--radix-accordion-content-height)' },
           to: { height: '0' },
         },
+        fadeIn: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+        slideUp: {
+          '0%': { transform: 'translateY(20px)', opacity: '0' },
+          '100%': { transform: 'translateY(0)', opacity: '1' },
+        },
       },
+
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
+        'fade-in': 'fadeIn 0.5s ease-in-out', // Home
+        'slide-up': 'slideUp 0.5s ease-out', // Home
       },
     },
   },
@@ -183,4 +250,4 @@ export default {
     },
   ],
   plugins: [require('@headlessui/tailwindcss')],
-};
+}

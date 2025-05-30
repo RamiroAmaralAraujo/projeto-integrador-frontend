@@ -7,8 +7,6 @@ import { DashboardDuplicatas } from "./pages/DashboardDuplicatas/dashboard";
 import { Login } from "./pages/login/login";
 import { CadastroUsuario } from "./pages/cadastroUsuario/cadastroUsuario";
 import TermosDeUso from "./pages/termosDeUso/termosDeUso";
-import { Site } from "./pages/Site/site";
-import { PlanoSistemaPDV } from "./pages/PlanoSistemaPDV/planoSistemaPDV";
 import PoliticaDePrivacidade from "./pages/politicaDePrivacidade/politicaDePrivacidade";
 import { Produtos } from "./pages/Produtos/Index";
 import { Categorias } from "./pages/Categorias/Index";
@@ -22,7 +20,6 @@ import { LoadingFullscreen } from "./components/LoadingFull/LoadingFullscreen";
 import PrintDuplicatamodel from "./pages/PrintDuplicataModel/PrintDuplicataModel";
 import { PrintLayout } from "./layout/PrintLayout";
 import PrintPedidomodel from "./pages/PrintPedidoModel/PrintPedidoModel";
-import { SolucoesSistemaPDV } from "./pages/SolucoesSistemaPDV";
 import { Atendimentos } from "./pages/Atendimentos/Index";
 import { AuthenticatedMasterLayout } from "./layout/AuthenticatedMasterLayout";
 import { Usuarios } from "./pages/Usuarios/Index";
@@ -33,6 +30,8 @@ import { Ticket } from "./pages/Ticket";
 import { DashboardGeral } from "./pages/DashboardGeral";
 import { ChatAtendimentos } from "./pages/ChatAtendimentos";
 import { DashboardTickets } from "./pages/DashboardTickets";
+import Home from "./pages/Home";
+import Layout from "./pages/Home/components/Layout";
 
 export const router = createBrowserRouter([
   {
@@ -60,15 +59,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/",
-        element: <Site />,
-      },
-      {
-        path: "/planos/sistema-pdv",
-        element: <PlanoSistemaPDV />,
-      },
-      {
-        path: "/solucoes/sistema-pdv",
-        element: <SolucoesSistemaPDV />,
+        element: <Layout><Home /></Layout>,
       },
     ],
   },

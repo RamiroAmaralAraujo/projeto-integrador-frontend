@@ -1,11 +1,12 @@
 
 import { FloatingWhatsApp } from 'react-floating-whatsapp';
+import logo from '../../assets/Logo.svg';
 
 export function PopupWhatsapp() {
   const options = {
     accountName: "CoreCommerce",
     phoneNumber: "22992081232",
-    avatar: "https://core-commerce.s3.sa-east-1.amazonaws.com/Logo+(1).png",
+    avatar: logo,
     chatMessage: "Olá, como podemos te ajudar?",
     statusMessage: "Online",
     placeholder: "Digite uma mensagem...",
