@@ -70,8 +70,8 @@ export function FormDuplicatas() {
       acresc: 0,
       acrescPorcento: 0,
       valorFinal: 0,
-      comp_url: '',
-      ass_url: '',
+      comp_url: undefined,
+      ass_url: undefined,
       empresaId: empresaSelecionada?.id
     }
   });

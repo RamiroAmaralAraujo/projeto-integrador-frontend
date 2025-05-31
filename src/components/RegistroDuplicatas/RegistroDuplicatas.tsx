@@ -63,7 +63,7 @@ export function RegistroDuplicatas() {
                     <img src={`https://core-commerce.s3.sa-east-1.amazonaws.com/${duplicatas?.ass_url}`} alt="" className="w-14" />
                   </div>
                   <div className="flex justify-center items-center">
-                    <p className="text-xs font-bold text-brand-blue-500 text-nowrap">Assinatura Digital</p>
+                    <p className="text-xs font-bold text-brand-blue-500 text-nowrap"></p>
                     <Download size={15} />
                   </div>
                 </div>
@@ -79,7 +79,7 @@ export function RegistroDuplicatas() {
                   <img src={PlacaHolderAss} alt="" className="w-14" />
                 </div>
                 <div className="flex flex-col justify-center items-center">
-                  <p className="text-sm font-bold text-brand-blue-200 ">Assinatura Digital</p>
+                  <p className="text-xs font-bold text-brand-blue-200 "></p>
                 </div>
               </div>
             </div>
