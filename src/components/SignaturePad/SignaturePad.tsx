@@ -51,7 +51,7 @@ function SignaturePad({ onUploadSuccess }: UploadAssinaturaProps) {
 
   return (
     <div>
-      <h1 className="mt-2 ml-2 absolute text-brand-blue-500">Assinatura Digital</h1>
+      <h1 className="mt-2 ml-2 absolute text-brand-blue-500"></h1>
       <SignatureCanvas
         canvasProps={{ width: 520, height: 242, className: ' sigCanvas flex flex-col items-center justify-around rounded-xl border border-dashed border-base-hover border-brand-blue-500' }}
         ref={sign}
